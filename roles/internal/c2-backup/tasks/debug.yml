@@ -1,0 +1,16 @@
+---
+- name: Display roles
+  debug:
+    var: ansible_role_names
+
+- name: Display group names
+  debug:
+    var: group_names
+
+- name: Display family
+  debug:
+    var: ansible_os_family
+
+- name: Display Distro
+  debug:
+    var: ansible_distribution

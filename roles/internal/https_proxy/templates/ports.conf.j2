@@ -1,0 +1,5 @@
+
+{% for item in https_proxy_roles %}
+# {{ item }}
+Listen {{ https_proxy_roles[item].proxy_port }}
+{% endfor %}

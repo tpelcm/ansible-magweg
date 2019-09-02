@@ -1,0 +1,8 @@
+---
+- name: Alias file
+  template:
+    src: c2.sh.j2
+    dest: /etc/profile.d/c2.sh
+    owner: root
+    group: root
+    mode: 0644

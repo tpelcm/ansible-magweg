@@ -1,0 +1,31 @@
+---
+- name: Configure ports
+  template:
+    src: ports.conf.j2
+    dest: /etc/apache2/ports.conf
+  notify: restart apache
+
+- name: Configure Apache
+  template:
+    src: https_proxy.conf.j2
+    dest: "/etc/apache2/sites-enabled/{{ item }}.conf"
+  notify: restart apache
+  with_items: "{{ https_proxy_roles }}"
+
+- name: Delete obsolete Debian config
+  file:
+   path: "/etc/apache2/sites-enabled/{{ item }}"
+   state: absent
+  notify: restart apache
+  with_items:
+     - 000-default.conf
+     - vhosts.conf
+ 
+- name: Enable mods
+  command: "a2enmod {{ item }}"
+  args:
+    creates: /etc/apache2/mods-enabled/proxy_http.load
+  with_items:
+     - socache_shmcb
+     - proxy
+     - proxy_http 

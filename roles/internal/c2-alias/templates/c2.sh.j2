@@ -1,0 +1,7 @@
+
+{% for item in c2_alias.roles %}
+alias {{ c2_alias_prefix }}-{{ item }}-tail="tail -f {{ c2_alias.roles[item].logs|join(' ') }}"
+{%   for item2 in c2_alias.roles[item].configs %}
+alias {{ c2_alias_prefix }}-{{ item }}-edit-{{ item2 | basename | replace('/','-') | replace('.','-') }}="{{ c2_alias_editor }} {{ item2 }}"
+{%   endfor %}  
+{% endfor %}

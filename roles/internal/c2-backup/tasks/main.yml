@@ -1,0 +1,27 @@
+---
+- name: Check backup installed
+  stat: 
+    path: "/opt/backup/bin"
+  register: backup_bin
+
+- include_tasks: "setup-{{ ansible_os_family }}.yml"
+
+- name: Create backup dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+  with_items: 
+    - /etc/backup
+    - /etc/backup/models
+    - /etc/backup/scripts
+
+- name: Generate example config file
+  command: /opt/backup/bin/backup generate:config --config-file=/etc/backup/config-example.rb
+  args:
+    creates: /etc/backup/config-example.rb
+
+- name: Create backup config
+  template:
+    src: config.rb.j2
+    dest: /etc/backup/config.rb

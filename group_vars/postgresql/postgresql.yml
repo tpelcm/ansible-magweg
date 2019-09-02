@@ -1,0 +1,32 @@
+---
+become: yes
+postgresql_restarted_state: "reloaded"
+postgresql_service_state: started
+postgresql_service_enabled: true
+postgresql_locales:
+  - 'en_US.UTF-8'
+
+postgresql_users:
+  - name: ansible
+    password: supersecure
+    role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
+
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: peer }
+  - { type: local, database: all, user: all, auth_method: peer }
+  - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '1.1.1.0/24', auth_method: md5 }  
+
+postgresql_listen_addresses: '*'
+
+c2_alias:
+  roles:
+    postgresql:
+      logs: ["/var/log/postgresql/*.log"]
+      configs: 
+        - "/etc/postgresql/10/main/pg_hba.conf"
+        - "/etc/postgresql/10/main/postgresql.conf" 
+#        - "{{ postgresql_config_path }}/pg_hba.conf"
+#        - "{{ postgresql_config_path }}/postgresql.conf" 
+# postgresql_config_path is not defined

@@ -1,0 +1,7 @@
+---
+- name: Configure SonarQube backup model
+  template:
+    src: sonar.properties.j2
+    dest: "{{ sonar_home }}/{{ sonar_version_directory }}/conf/sonar.properties"
+    mode: 0755
+    backup: yes

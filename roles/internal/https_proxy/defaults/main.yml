@@ -1,0 +1,12 @@
+---
+https_proxy_etc_ssl_private:
+  Debian: /etc/ssl/private/
+  RedHat: /etc/ssl/
+
+https_proxy_etc_ssl_certs:
+  Debian: /etc/ssl/certs/
+  RedHat: /etc/ssl/
+
+https_log_dir:
+  Debian: /var/log/apache2/
+  RedHat: /var/log/httpd/

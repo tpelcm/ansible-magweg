@@ -1,0 +1,6 @@
+---
+- name: Install backup utility
+  yum:
+    name: "{{ c2_backup_utility[ansible_distribution|lower]['v'+ansible_distribution_major_version]['url'] }}"
+    state: present
+  when: backup_bin.stat.exists == false
