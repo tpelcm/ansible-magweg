@@ -19,9 +19,6 @@
 
 - src: geerlingguy.postgresql
 
-- src: git+https://github.com/onknows/ansible-role-sonar
-  name: ok.sonarqube
-
 - src: geerlingguy.java
 
 - src: git+https://github.com/AutomationWithAnsible/ansible-nginx.git
@@ -40,6 +37,5 @@
 
 - src: marcelnijenhof.firewalld
 
-- src: git+https://github.com/onknows/ansible-sonarqube
-  name: tpelcm.sonarqube
+- src: onknows.sonarqube
 
