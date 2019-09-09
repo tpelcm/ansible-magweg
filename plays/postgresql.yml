@@ -7,7 +7,7 @@
 
   roles:
     - { role: common,                   tags: ["common"] }
-    - { role: geerlingguy.postgresql,   tags: ["postgresql"], when: gi != "true"  }
+    - { role: geerlingguy.postgresql,   tags: ["postgresql"] }
 
   tasks:
     - name: Debian PostgreSQL listen all 
@@ -44,5 +44,5 @@
   handlers:
     - name: postgresql_restart
       service:
-        name: postgresql
+        name: '{{ postgresql_daemon }}'
         state: restarted
