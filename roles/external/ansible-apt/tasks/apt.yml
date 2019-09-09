@@ -1,0 +1,88 @@
+---
+
+- name: APT | Configure cloud init to preserve source list
+  copy:
+    'content="apt_preserve_sources_list: true"
+    dest="/etc/cloud/cloud.cfg.d/91_apt_preserve"'
+  when: apt_cloud_init_preserve_apt_list
+
+- name: APT | Ensure the "standard" sources list /etc/apt/sources.list is updated
+  copy:
+    src: sources_{{ ansible_distribution_release }}.list
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+  when: apt_update_source_list == "copy"
+  register: apt_source_list_updated
+
+- name: APT | Ensure the "mirror" sources list in /etc/apt/sources.list is updated
+  template:
+    src:  sources.list.j2
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+  when: apt_update_source_list == "template"
+  register: apt_source_list_updated
+
+- name: APT | Update the apt cache (source update)
+  apt:
+    update_cache: yes
+  when: apt_source_list_updated is defined and apt_source_list_updated is changed
+
+- name: APT | Update the apt cache (valid cache valid timeout)
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{apt_cache_valid_time}}"
+  ignore_errors: true
+
+- name: APT | Remove packages that are left over dependencies (no longer needed)
+  shell: apt-get -y autoremove
+  when: apt_autoremove
+  environment: 
+    DEBIAN_FRONTEND: "noninteractive"
+  register: apt_autoremove_var
+  changed_when: "'Removing' in apt_autoremove_var.stdout"
+  ignore_errors: yes
+
+- name: APT | Clear local repository of retrieved package files
+  shell: apt-get -y autoclean
+  when: apt_autoclean
+  environment: 
+    DEBIAN_FRONTEND: "noninteractive"
+  register: apt_autoclean_var
+  changed_when: "'Del' in apt_autoclean_var.stdout"
+  ignore_errors: yes
+
+- name: APT | Ensure the apt configuration in /etc/apt/apt.conf.ds/99customsettings is updated
+  template:
+    src: 99customsettings.j2
+    dest: /etc/apt/apt.conf.d/99customsettings
+    owner: root
+    group: root
+    mode: 0644
+
+- name: APT | Make sure the default keys are added
+  apt_key:
+    url: "{{item}}"
+    state: present
+  with_items: "{{ apt_default_key_urls }}"
+
+# TODO: Think about merging both apt-updates to reduce time needed to do apt-update
+- name: APT | Make sure the default respositories are added
+  apt_repository:
+    repo: "{{item}}"
+    state: present
+  with_items: "{{ apt_default_repositories }}"
+  register: repo_add
+
+- name: APT | Update the apt cache (if new repo is added)
+  apt:
+    update_cache: yes
+  when: repo_add is changed
+
+- name: APT | Make sure the default packages are installed
+  apt:
+    pkg: "{{apt_default_packages|join(',')}}"
+    state: present

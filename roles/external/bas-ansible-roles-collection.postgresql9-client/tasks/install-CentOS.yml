@@ -1,0 +1,35 @@
+---
+# Installs PostgreSQL client and related libraries
+
+# If using non-system sources (preferred)
+
+- name: install prerequisites for installing from non-system sources - CentOS
+  yum:
+                 pkg={{ item }}
+        update_cache=yes
+               state=present
+  with_items:
+    - https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+- name: install postgresql client and related libraries from non-system sources - CentOS
+  yum:
+             pkg={{ item }}
+    update_cache=yes
+           state=present
+  with_items:
+    - postgresql95
+    - python-psycopg2
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+# If using system-sources only
+
+- name: install postgresql client and related libraries from system-only sources - CentOS
+  yum:
+             pkg={{ item }}
+    update_cache=yes
+           state=present
+  with_items:
+    - postgresql
+    - python-psycopg2
+  when: BARC_use_non_system_package_sources == false or BARC_use_non_system_package_sources == 'false'

@@ -1,0 +1,19 @@
+[Unit]
+Description=SonarQube {{ sonar_version }}
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sonarqube
+Group=sonarqube
+PermissionsStartOnly=true
+ExecStart=/usr/bin/nohup {{ sonar_java_bin[ansible_os_family] }} -Xms{{ sonar_xms }} -Xmx{{ sonar_xmx }} -Djava.net.preferIPv4Stack=true -jar {{ sonar_home }}/sonarqube/lib/sonar-application.jar
+StandardOutput=syslog
+LimitNOFILE=65536
+LimitNPROC=8192
+TimeoutStartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

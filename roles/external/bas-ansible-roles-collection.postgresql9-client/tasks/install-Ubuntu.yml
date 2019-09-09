@@ -1,0 +1,52 @@
+---
+# Installs PostgreSQL client and related libraries
+
+# If using non-system sources (preferred)
+
+- name: install prerequisites for installing from non-system sources - Ubuntu
+  apt:
+                 pkg={{ item }}
+        update_cache=yes
+    cache_valid_time=3600
+               state=present
+  with_items:
+    - python-apt
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+- name: add postgresql apt-repository - Ubuntu
+  apt_repository:
+    repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+    state=present
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+- name: add postgresql apt signing key - Ubuntu
+  apt_key:
+       id=ACCC4CF8
+      url=https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state=present
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+- name: install postgresql client and related libraries from non-system sources - Ubuntu
+  apt:
+             pkg={{ item }}
+    update_cache=yes
+           state=present
+  with_items:
+    - postgresql-client-9.4
+    - python-psycopg2
+    - libpq-dev
+  when: BARC_use_non_system_package_sources == true or BARC_use_non_system_package_sources == 'True'
+
+# If using system-sources only
+
+- name: install postgresql client and related libraries from system-only sources  - Ubuntu
+  apt:
+                 pkg={{ item }}
+    cache_valid_time=3600
+        update_cache=yes
+               state=present
+  with_items:
+  - postgresql-client
+  - libpq-dev
+  - python-psycopg2
+  when: BARC_use_non_system_package_sources == false or BARC_use_non_system_package_sources == 'False'

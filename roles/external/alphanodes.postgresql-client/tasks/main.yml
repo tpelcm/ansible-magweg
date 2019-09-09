@@ -1,0 +1,24 @@
+- name: Debian variables
+  block:
+    - name: Include OS-specific variables (Debian)
+      include_vars: '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+      when: php_use_pa is undefined or not php_use_pa
+    - name: Include OS-specific variables (Debian with DPA)
+      include_vars: '{{ ansible_distribution }}-pa.yml'
+      when: php_use_pa is defined and php_use_pa
+  when: ansible_distribution == 'Debian'
+  tags: postgresql
+
+- name: Ubuntu variables
+  block:
+    - name: Include OS-specific variables (Ubuntu)
+      include_vars: '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+      when: php_use_pa is undefined or not php_use_pa
+    - name: Include OS-specific variables (Ubuntu with PPA)
+      include_vars: '{{ ansible_distribution }}-pa.yml'
+      when: php_use_pa is defined and php_use_pa
+  when: ansible_distribution == 'Ubuntu'
+  tags: postgresql
+
+- include_tasks: setup.yml
+  tags: postgresql

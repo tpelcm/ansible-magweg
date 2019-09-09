@@ -1,0 +1,8 @@
+---
+# Install PostgreSQL client tools and libraries
+
+- include: install-CentOS.yml
+  when: ansible_distribution == "CentOS"
+
+- include: install-Ubuntu.yml
+  when: ansible_distribution == "Ubuntu"

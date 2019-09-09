@@ -1,0 +1,32 @@
+- name: Be sure postgreSQL client packages (prerequire) are installed
+  apt:
+    name: '{{ postgresql_client_packages_prerequire }}'
+    state: present
+
+- name: Add postgreSQL GPG key
+  apt_key:
+    url: '{{ postgresql_repo_key_url }}'
+    state: present
+
+- name: Add postgreSQL debian repository
+  apt_repository:
+    repo: '{{ postgresql_repo_url }}'
+    update_cache: yes
+    state: present
+
+- name: Be sure postgreSQL client packages are installed
+  apt:
+    name: '{{ postgresql_client_packages }}'
+    state: present
+
+- name: Check if PHP package is required
+  shell: dpkg -s {{ postgresql_client_check_php_package }} | grep 'install ok installed'
+  failed_when: php_installed.rc > 1
+  register: php_installed
+  changed_when: no
+
+- name: Install PHP package (if required)
+  apt:
+    name: '{{ postgresql_client_php_package }}'
+    state: present
+  when: php_installed.rc == 0

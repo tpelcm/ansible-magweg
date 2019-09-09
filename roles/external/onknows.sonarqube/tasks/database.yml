@@ -1,0 +1,38 @@
+---
+- name: Ensure PostgreSQL Python libraries are installed.
+  apt:
+    name: "{{ sonar_python_library }}"
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: SonarQube PostgreSQL user
+  postgresql_user:
+    name: "{{ sonar_database_username }}"
+    password: "{{ sonar_database_password }}"
+    db: "postgres"
+    login_host: "{{ sonar_database_host }}"
+    login_password: "{{ sonar_database_admin_password }}"
+    login_user: "{{ sonar_database_admin_username }}"
+    port: "{{ sonar_database_port }}"
+    state: "{{ item.state | default('present') }}"
+  no_log: true
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: SonarQube PostgreSQL database
+  postgresql_db:
+    name: "{{ sonar_database_name }}"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: 'template0'
+    login_host: "{{ sonar_database_host }}"
+    login_password: "{{ sonar_database_admin_password }}"
+    login_user: "{{ sonar_database_admin_username }}"
+    port: "{{ sonar_database_port }}"
+    owner: "{{ sonar_database_username }}"
+    state: "{{ item.state | default('present') }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true

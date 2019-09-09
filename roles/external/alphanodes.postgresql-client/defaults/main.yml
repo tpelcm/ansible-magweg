@@ -1,0 +1,17 @@
+# defaults file for postgresql client
+---
+
+# if yes, postgresql.org packages are used, else distribution packages
+postgresql_client_use_repo: yes
+
+# which version should be used?
+# if postresql role (server) is available, this version is used
+# possible values: 9.5, 9.6, 10 or 11
+postgresql_client_version: "{{ postgresql_version | default('11') }}"
+postgresql_client_packages:
+ - postgresql-client-{{ postgresql_version | default(postgresql_client_version) }}
+
+postgresql_repo_key_url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+postgresql_repo_url: 'deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main'
+
+php_use_pa: no
