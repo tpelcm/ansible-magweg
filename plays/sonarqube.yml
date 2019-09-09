@@ -8,5 +8,5 @@
     - { role: common,                       tags: ["common"] }
     - { role: alphanodes.postgresql-client, tags: ["postgresql"], when: ansible_os_family == 'Debian' }    
     - { role: bas-ansible-roles-collection.postgresql9-client, tags: ["postgresql"], when: ansible_os_family == 'RedHat' }    
-    - { role: tpelcm.sonarqube,             tags: ["sonarqube"] }
+    - { role: onknows.sonarqube,            tags: ["sonarqube"] }
     - { role: https_proxy,                  tags: ["sonarqube"] }
