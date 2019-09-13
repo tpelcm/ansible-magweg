@@ -1,0 +1,14 @@
+---
+- name: Common packages
+  package:
+    name: '{{ common_packages }}'
+    state: present
+
+- name: NFS mounts
+  mount:
+    path: "{{ item['path'] }}"
+    src: "{{ item['src'] }}"
+    fstype: "{{ item['fstype'] }}"
+    opts: "{{ item['opts'] }}"
+    state: "{{ item['state'] }}"
+  with_items: '{{ nfs_mounts }}'
