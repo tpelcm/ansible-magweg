@@ -4,6 +4,7 @@ dependencies:
   - {role: ansible-agent,           tags: ansible }
   - {role: geerlingguy.pip,         tags: ansible }  
   - {role: ansible-apt,             tags: apt, when: ansible_os_family == 'Debian' }
+  - {role: ajsalminen.hosts,        tags: network }
 #  - {role: ansible-hostname,        tags: hostname }
   - {role: Stouts.sudo,             tags: sudo }
   - {role: ANXS.openssh,            tags: openssh, when: ansible_os_family == 'Debian' }
