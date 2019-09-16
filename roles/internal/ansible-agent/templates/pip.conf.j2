@@ -1,0 +1,6 @@
+[global]
+index = {{ ansible_agent_pip_repository_url }}
+index-url = {{ ansible_agent_pip_repository_url_index }}
+{% if ansible_agent_pip_ca_bundle_url is defined %}
+cert = {{ ansible_agent_pip_ca_trust_store }}/{{ ansible_agent_pip_ca_bundle_url | basename }}
+{% endif %}

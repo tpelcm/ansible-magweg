@@ -1,0 +1,22 @@
+
+- name: Configure pip repo
+  template: 
+    src: pip.conf.j2
+    dest: /etc/pip.conf
+  when: ansible_agent_pip_repository_url is defined
+
+- name: Ansible pip trust store
+  file: 
+    path: "{{ ansible_agent_pip_ca_trust_store }}"
+    state: directory
+  when: ansible_agent_pip_ca_bundle_url is defined
+
+- name: 
+  get_url: 
+    url: "{{ ansible_agent_pip_ca_bundle_url }}"
+    dest: "{{ ansible_agent_pip_ca_trust_store }}/{{ ansible_agent_pip_ca_bundle_url | basename }}"
+  when: ansible_agent_pip_ca_bundle_url is defined
+
+- name: Packages typically required by ansible 
+  package:
+    name: ['python2-pip','python-setuptools','openssl']

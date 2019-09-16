@@ -1,5 +1,8 @@
 ---
 dependencies:
+  - {role: ca,                      tags: ssl }
+  - {role: ansible-agent,           tags: ansible }
+  - {role: geerlingguy.pip,         tags: ansible }  
   - {role: ansible-apt,             tags: apt, when: ansible_os_family == 'Debian' }
 #  - {role: ansible-hostname,        tags: hostname }
   - {role: Stouts.sudo,             tags: sudo }
@@ -8,5 +11,3 @@ dependencies:
 #  - {role: manala.motd,             tags: motd }
   - {role: c2-alias,                tags: alias }
   - {role: marcelnijenhof.firewalld,tags: network, when: ansible_os_family == 'RedHat' }
-
-

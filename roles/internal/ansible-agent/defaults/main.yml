@@ -1,0 +1,2 @@
+---
+ansible_agent_pip_ca_trust_store: /usr/share/pki/ca-trust-store-ansible-agent
