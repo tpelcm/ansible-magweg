@@ -10,7 +10,9 @@ c2_alias:
   roles:
     sonarqube:
       logs: ["{{ sonar_home }}/sonarqube/logs/*.log"]
-      configs: ["{{ sonar_home }}/sonarqube/conf/sonar.properties"] 
+      configs: 
+        - "{{ sonar_home }}/sonarqube/conf/sonar.properties"
+        - "/etc/systemd/system/sonarqube.service" 
 
 https_proxy_roles:
   sonarqube:
@@ -18,3 +20,7 @@ https_proxy_roles:
     proxy_port: 443
     port: "{{ sonar_web_port }}"
     context: "{{ sonar_web_context }}"
+
+sonar_java_bin: 
+  Debian: '{{ adoptopenjdk_java_home }}/bin/java'
+  RedHat: '{{ adoptopenjdk_java_home }}/bin/java'

@@ -1,0 +1,9 @@
+---
+adoptopenjdk:
+  version: "jdk8u222b10_oj9"
+  versions:
+    jdk8u222b10_oj9:
+      url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10_openj9-0.15.1/OpenJDK8U-jdk_x64_linux_openj9_8u222b10_openj9-0.15.1.tar.gz
+      checksum: 20cff719c6de43f8bb58c7f59e251da7c1fa2207897c9a4768c8c669716dc819
+
+adoptopenjdk_java_home_etc_environment: false

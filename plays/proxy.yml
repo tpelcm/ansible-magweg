@@ -1,0 +1,9 @@
+---
+
+- name: proxy.yml | All roles
+  hosts: proxy
+  sudo: True
+
+  roles:
+    - { role: common,   tags: ["common"] }
+    - { role: nfs,      tags: ["nfs"] }
