@@ -39,3 +39,6 @@
 
 - src: onknows.sonarqube
 
+- src: geerlingguy.nfs
+
+- src: ajsalminen.hosts
