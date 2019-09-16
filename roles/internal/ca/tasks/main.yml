@@ -1,0 +1,13 @@
+---
+- name: ca distribute
+  get_url:
+    url: '{{ item }}'
+    dest: '/usr/share/pki/ca-trust-source/anchors/{{ item|basename }}'
+  when: common_corporate_ca_pem_urls is defined
+  with_items: '{{ common_corporate_ca_pem_urls }}'
+  register: cadownload
+
+- name: execute update-ca-trust
+  command: update-ca-trust
+  when: common_corporate_ca_pem_urls is defined
+  when: cadownload.changed
