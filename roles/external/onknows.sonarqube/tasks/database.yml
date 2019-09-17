@@ -15,7 +15,7 @@
     login_user: "{{ sonar_database_admin_username }}"
     port: "{{ sonar_database_port }}"
     state: "{{ item.state | default('present') }}"
-  no_log: true
+  no_log: false
   # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
   vars:
     ansible_ssh_pipelining: true

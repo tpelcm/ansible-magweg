@@ -1,17 +1,10 @@
 # Ansible Role: SonarQube
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-sonar.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-sonar)
-
 An Ansible Role that installs [SonarQube](http://www.sonarqube.org/) on RedHat/CentOS and Debian/Ubuntu Linux servers.
 
 ## Requirements
 
-Requires the `unzip` utility to be installed on the server. Also, different SonarQube versions require different minimum versions of Java:
-
-  - SonarQube 5.0-5.5 requires Java 1.7+
-  - SonarQube 5.6+ requires Java 1.8+
-
-Finally, recent versions of SonarQube also require MySQL 5.6 or later.
+Requires the `unzip` utility to be installed on the server. 
 
 ## Role Variables
 
@@ -50,9 +43,6 @@ JDBC settings for a connection to a MySQL database. Defaults presume the databas
 
 ## Dependencies
 
-  - geerlingguy.java
-  - geerlingguy.mysql
-
 ## Example Playbook
 
     - hosts: all
@@ -67,4 +57,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+This role was created in 2019 by [Onno van der Straaten](https://www.onknows.com/) as a fork of the sonar role created in in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).  
