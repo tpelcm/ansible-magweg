@@ -1,0 +1,64 @@
+---
+# tasks file for bootstrap
+- name: wait for the host
+  wait_for:
+    port: "{{ ansible_port | default('22') }}"
+    host: "{{ (ansible_ssh_host | default(ansible_host) | default(inventory_hostname)) }}"
+  connection: local
+  become: no
+  when:
+    - ansible_connection is defined
+    - ansible_connection != "docker"
+    - bootstrap_wait_for_host | bool
+
+- name: test connection, otherwise register package manager
+  block:
+    - name: test connection (allowed to fail)
+      wait_for_connection:
+        timeout: "{{ bootstrap_timeout }}"
+      register: bootstrap_connect
+      changed_when: no
+
+  rescue:
+    - name: register package manager
+      include_tasks: register.yml
+
+    - name: install using registered package manager
+      include_tasks: install.yml
+
+- name: gather facts
+  setup:
+  become: no
+
+- name: install bootstrap packages
+  package:
+    name: "{{ bootstrap_packages }}"
+    state: present
+  register: packageresult
+  until: packageresult is succeeded
+
+- name: install software to support stable modules
+  package:
+    name: "{{ bootstrap_stable_packages }}"
+    state: present
+  when:
+    - bootstrap_stable_packages is defined
+  register: packagestableresult
+  until: packagestableresult is succeeded
+  notify:
+    - gather facts
+
+- name: install software to support preview modules
+  package:
+    name: "{{ bootstrap_preview_packages }}"
+    state: present
+  when:
+    - bootstrap_preview | bool
+    - bootstrap_preview_packages is defined
+  register: packagepreviewresult
+  until: packagepreviewresult is succeeded
+  notify:
+    - gather facts
+
+- name: flush handlers
+  meta: flush_handlers

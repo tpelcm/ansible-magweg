@@ -1,0 +1,6 @@
+---
+# defaults file for squid
+
+squid_port: 3128
+
+squid_cache_dir: ufs /var/spool/squid 100 16 256
