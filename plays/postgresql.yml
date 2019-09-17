@@ -2,7 +2,6 @@
 
 - name: postgresql.yml | All roles
   hosts: postgresql
-  # strategy: debug # does not work e.g. task.args will make ansible wait without end for something 
   sudo: True
 
   roles:
@@ -17,7 +16,7 @@
           listen_addresses = '{{ postgresql_listen_addresses }}'
       notify: postgresql_restart
       become: yes
-      when: ansible_os_family == 'Debian' and gi == false
+      when: ansible_os_family == 'Debian' and gi == "false"
 
     - name: CentOS PostgreSQL listen all
       lineinfile:
@@ -28,7 +27,7 @@
       with_items:
         - regexp: "listen_addresses"
           line: "listen_addresses = '{{ postgresql_listen_addresses }}'"    
-      when: ansible_os_family == 'RedHat' and gi == false
+      when: ansible_os_family == 'RedHat' and gi == "false"
 
     - name: GI PostgreSQL listen all
       lineinfile:
