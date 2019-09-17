@@ -24,9 +24,9 @@ c2_alias:
   roles:
     postgresql:
       logs: ["/var/log/postgresql/*.log"]
-      configs: 
-        - "/etc/postgresql/10/main/pg_hba.conf"
-        - "/etc/postgresql/10/main/postgresql.conf" 
+      configs: []
+#        - "/etc/postgresql/10/main/pg_hba.conf"
+#        - "/etc/postgresql/10/main/postgresql.conf" 
 #        - "{{ postgresql_config_path }}/pg_hba.conf"
 #        - "{{ postgresql_config_path }}/postgresql.conf" 
 # postgresql_config_path is not defined
