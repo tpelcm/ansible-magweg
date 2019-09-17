@@ -12,3 +12,4 @@
     opts: "{{ item['opts'] }}"
     state: "{{ item['state'] }}"
   with_items: '{{ nfs_mounts }}'
+  ignore_errors: True
