@@ -11,6 +11,7 @@
   command: update-ca-trust
   with_items: '{{ cadownload.results }}'
   when: 
+    - cadownload.results is defined
     - item.changed == True
     - common_corporate_ca_pem_urls is defined
  
