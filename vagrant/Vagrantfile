@@ -2,8 +2,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-#vagrant_box = 'generic/centos7'
-vagrant_box = 'generic/ubuntu1804'
+vagrant_box = 'generic/centos7'
+# vagrant_box = 'generic/ubuntu1804'
 
 shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
 shell_provision = 'sudo yum update -y && sudo yum -y install python' if vagrant_box == 'generic/centos7'
