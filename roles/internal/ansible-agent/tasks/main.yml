@@ -17,6 +17,17 @@
     dest: "{{ ansible_agent_pip_ca_trust_store }}/{{ ansible_agent_pip_ca_bundle_url | basename }}"
   when: ansible_agent_pip_ca_bundle_url is defined
 
-- name: Packages typically required by ansible 
+- name: Setup tools
   package:
     name: ['python2-pip','python-setuptools','openssl']
+    state: present
+
+- name: Python setuptools
+  pip:
+    name: setuptools
+    state: present
+
+- name: Python OpenSSL dependencies
+  pip:
+    name: pyOpenSSL
+    state: present

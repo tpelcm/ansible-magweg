@@ -1,21 +1,4 @@
 ---
-- name: Setup tools
-  apt:
-    name: python-setuptools
-    state: present
-  when: ansible_os_family == 'Debian'
-
-- name: Python setuptools
-  pip:
-    name: setuptools
-    state: present
-
-- name: Python OpenSSL dependencies
-  pip:
-    name: pyOpenSSL
-    state: present
-# TODO refactor to seperate role for use in common?
-
 - name: Generate private key
   openssl_privatekey:
     path: "{{ https_proxy_etc_ssl_private[ansible_os_family] }}https_proxy.pem"
