@@ -14,6 +14,7 @@ ansible_groups = {
   'postgresql:vars' => { 'hostvar' => 'abc' },
   'all:vars' => {
     'sudo_include_sudoersd' => 'yes', # vagrant
+    'gi' => false
   },
   'sonarqube' => ['sonarqube'],
   'sonarqube:vars' => {
