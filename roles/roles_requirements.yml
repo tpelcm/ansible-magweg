@@ -1,3 +1,5 @@
+- src: robertdebock.bootstrap
+
 - src: git+https://github.com/AutomationWithAnsible/ansible-apt
   version: "v0.4.1"
   name: ansible-apt
@@ -31,8 +33,6 @@
 
 - src: geerlingguy.apache
 
-- src: geerlingguy.pip
-
 - src: bas-ansible-roles-collection.postgresql9-client
 
 - src: marcelnijenhof.firewalld
@@ -42,3 +42,5 @@
 - src: geerlingguy.nfs
 
 - src: ajsalminen.hosts
+
+- src: robertdebock.squid

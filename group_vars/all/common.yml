@@ -1,5 +1,5 @@
 ---
-common_packages: ['nfs-common']
+common_packages: ['nfs-utils', 'nano']
 
 nfs_server: nfs
 nfs_mounts:
