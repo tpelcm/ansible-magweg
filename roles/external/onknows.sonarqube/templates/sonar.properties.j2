@@ -3,3 +3,9 @@ sonar.jdbc.password={{ sonar_database_password }}
 sonar.jdbc.url=jdbc:postgresql://{{ sonar_database_host }}:{{ sonar_database_port }}/{{ sonar_database_name }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
 sonar.web.context={{ sonar_web_context }}
 sonar.web.port={{ sonar_web_port }}
+{% if sonar_proxy is defined %}
+http.proxyHost={{ sonar_proxy['host'] }}
+http.proxyPort={{ sonar_proxy['port'] }}
+https.proxyHost={{ sonar_proxy['host'] }}
+https.proxyPort={{ sonar_proxy['port'] }}
+{% endif %}

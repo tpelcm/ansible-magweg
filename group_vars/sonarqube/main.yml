@@ -1,0 +1,35 @@
+---
+sonar_plugins:
+  build_breaker:
+    pattern: 'sonar-build-breaker-plugin-*.jar'
+    url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
+    checksum: "22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2"
+    # url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.1/sonar-build-breaker-plugin-2.1.jar"
+    # checksum: "0990cc954af0a660b41f00ece9238edeff8a503f48177dee1a4deeca3fb1a583"
+
+manala_motd_message:  "SonarQube {{ sonar_version }} Server"
+
+c2_alias:
+  roles:
+    sonarqube:
+      logs: ["{{ sonar_home }}/sonarqube/logs/*.log"]
+      configs: 
+        - "{{ sonar_home }}/sonarqube/conf/sonar.properties"
+        - "/etc/systemd/system/sonarqube.service" 
+
+https_proxy_roles:
+  sonarqube:
+    hostname: sonarqube.tech
+    proxy_port: 443
+    port: "{{ sonar_web_port }}"
+    context: "{{ sonar_web_context }}"
+
+sonar_java_bin: 
+  Debian: '{{ adoptopenjdk_java_home }}/bin/java'
+  RedHat: '{{ adoptopenjdk_java_home }}/bin/java'
+
+sonar_proxy:
+  host: '{{ proxy_host }}'
+  port: '{{ proxy_port }}'  
+
+apache_remove_default_vhost: true

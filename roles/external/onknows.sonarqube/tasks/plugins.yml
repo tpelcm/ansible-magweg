@@ -1,5 +1,12 @@
 ---
-- name: Community plugins
+- name: remove other version of plugins
+  remove_old_plugin_version:
+    plugin_dir: "{{sonar_home}}/{{ sonar_version_directory }}/extensions/plugins"
+    pattern: "{{ sonar_plugins[item]['pattern'] }}"
+    url: "{{ sonar_plugins[item]['url'] }}"
+  with_items: "{{ sonar_plugins }}"
+
+- name: community plugins
   get_url:
     url: "{{ sonar_plugins[item].url }}"
     checksum: "sha256:{{ sonar_plugins[item].checksum }}"
@@ -8,3 +15,5 @@
     owner: sonarqube
   notify: restart sonarqube   
   with_items: "{{ sonar_plugins }}"
+  when: sonar_plugins is defined
+
