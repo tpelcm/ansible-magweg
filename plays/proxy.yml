@@ -5,5 +5,7 @@
   sudo: True
 
   roles:
-    - { role: common,   tags: ["common"] }
-    - { role: nfs,      tags: ["nfs"] }
+    - { role: common,             tags: ["common"] }
+    - { role: nfs,                tags: ["nfs"] }
+    - { role: proxy,              tags: ["proxy"] }
+    - { role: robertdebock.squid, tags: ["proxy"] }

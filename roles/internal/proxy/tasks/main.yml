@@ -1,0 +1,5 @@
+---
+- name: allowed IPs
+  copy:
+    content: "{{ proxy_allowed_ips | join('\n') }}"
+    dest: "{{ proxy_allowd_ips_file }}"

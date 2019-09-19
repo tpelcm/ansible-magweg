@@ -4,3 +4,4 @@ common_packages: ['nfs-utils', 'nano']
 nfs_server: nfs
 nfs_mounts:
   - { path: /backup, src: '{{ nfs_server }}:/nfs/backup', opts: rw, fstype: nfs, state: mounted }
+  

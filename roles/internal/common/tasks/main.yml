@@ -13,3 +13,8 @@
     state: "{{ item['state'] }}"
   with_items: '{{ nfs_mounts }}'
   ignore_errors: True
+
+- name: etc environment
+  template:
+   src: etc_environment.j2
+   dest: /etc/environment

@@ -1,0 +1,3 @@
+---
+proxy_allowd_ips_file: /etc/squid-allowed-ips.txt
+proxy_allowed_ips: []

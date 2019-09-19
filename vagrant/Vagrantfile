@@ -24,6 +24,7 @@ ansible_groups = {
   'nfs:vars' => {
     'nfs_exports' => ["/nfs/backup *(rw,sync,no_root_squash)"]
   },
+  'proxy' => ['proxy'],
   'backup' => ['sonarqube']
 }
 ansible_host_vars = {
