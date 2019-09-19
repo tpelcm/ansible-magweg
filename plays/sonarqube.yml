@@ -2,6 +2,7 @@
 
 - name: sonarqube.yml | All roles
   hosts: sonarqube
+   #strategy: debug
   sudo: True
 
   roles:
@@ -9,5 +10,5 @@
     - { role: alphanodes.postgresql-client, tags: ["postgresql"], when: ansible_os_family == 'Debian' }    
     - { role: bas-ansible-roles-collection.postgresql9-client, tags: ["postgresql"], when: ansible_os_family == 'RedHat' }    
     - { role: java,                         tags: ["java"] }
-    - { role: onknows.sonarqube,            tags: ["sonarqube"] }
     - { role: https_proxy,                  tags: ["proxy"] }
+    - { role: onknows.sonarqube,            tags: ["sonarqube"] }
