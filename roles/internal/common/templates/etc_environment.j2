@@ -1,0 +1,8 @@
+{% if proxy_host is defined %}
+http_proxy="http://{{ proxy_host }}:{{ proxy_port }}/"
+https_proxy="http://{{ proxy_host }}:{{ proxy_port }}/"
+{% 	if proxy_no_proxy is defined %}
+no_proxy="{{ proxy_no_proxy }}"
+{% 	endif %}
+# ftp_proxy="http://<username>:<password>@<hostname>:<port>/"
+{% endif %}
