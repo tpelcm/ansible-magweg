@@ -1,0 +1,9 @@
+---
+lvm_vg_devices: ['/dev/sdb'] # ,'/dev/sdc'
+
+# hash_behaviour = merge in ansible.cfg 
+#lvm_roles:
+#  sonarqube:
+#    size: '10g'
+#  nfs:
+#    size: '20g'

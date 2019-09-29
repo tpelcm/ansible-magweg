@@ -1,0 +1,29 @@
+---
+- name: Logical volumes
+  lvol:
+    vg: "{{ lvm_vg }}"
+    lv: "{{ item }}"
+    size: "{{ lvm_roles[item]['size'] }}"
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Create ext4 filesystems
+  filesystem:
+    fstype: ext4
+    dev: "/dev/mapper/{{ lvm_vg }}-{{ item }}"
+    resizefs: yes
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Mount dirs
+  file:
+    path: "{{ lvm_roles[item]['path'] }}"
+    state: directory
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Mount 
+  mount:
+    path: "{{ lvm_roles[item]['path'] }}"
+    src: '/dev/mapper/{{ lvm_vg }}-{{ item }}'
+    fstype: ext4
+    #opts: ro,noauto
+    state: mounted
+  with_items: "{{ lvm_roles_node }}"

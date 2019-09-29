@@ -1,0 +1,31 @@
+---
+- name: Get disks
+  set_fact: lvm_devices_present="{{ hostvars[inventory_hostname]["ansible_devices"].keys()|list|
+                                  map('regex_replace', '(.*)', '/dev/\\1')|
+                                  list}}"
+
+- name: Get usable devices
+  set_fact: lvm_vg_devices_usable="{{ lvm_vg_devices | intersect(lvm_devices_present) }}"
+
+- set_fact:
+    ansible_role_names_cleaned: "{{ ansible_role_names|
+                 map('regex_replace', regex, replace)|
+                 list }}"
+  vars:
+    regex: '^(.*)\.(.*)$'
+    replace: '\2'
+
+- name: Get nodes lvm roles
+  set_fact: lvm_roles_node="{{ lvm_roles_supported | intersect(ansible_role_names_cleaned) }}"
+
+- include_tasks: "debug.yml"
+
+- name: Volume group
+  lvg:
+    vg: "{{ lvm_vg }}"
+    pvs: "{{ lvm_vg_devices_usable | join(',') }}"
+  when: "lvm_vg_devices_usable | count > 0"
+
+# Create volumes for roles
+- include_tasks: "volumes.yml"
+  when: "lvm_vg_devices_usable | count > 0"

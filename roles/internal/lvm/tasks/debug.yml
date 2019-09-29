@@ -1,0 +1,17 @@
+---
+- name: Debug LVM vars
+  debug:
+   var: item
+  with_items:
+    - 'lvm_devices_present: {{ lvm_devices_present }}'
+    - 'lvm_vg_devices: {{ lvm_vg_devices }}'
+    - 'lvm_vg_devices_usable: {{ lvm_vg_devices_usable }}'
+    - 'lvm_roles_supported: {{ lvm_roles_supported }}'
+    - 'lvm_roles_node: {{ lvm_roles_node }}'
+    - 'lvm_roles: {{ lvm_roles }}'    
+    - 'ansible_role_names: {{ ansible_role_names }}'
+    - 'ansible_role_names_cleaned: {{ ansible_role_names_cleaned }}'
+    - 'ansible_play_role_names: {{ ansible_play_role_names }}'
+    - 'ansible_play_name: {{ ansible_play_name }}'
+
+
