@@ -1,7 +1,7 @@
 ---
-c2_backup_roles: ['sonarqube']
+backup_roles: ['sonarqube']
 
-c2_backup_utility:
+backup_utility:
   ubuntu:
     v18:
       url: https://github.com/tpelcm/omnibus-backup/releases/download/v5.0.0.beta2-1-ubuntu1804/backup_5.0.0.beta.2-1_amd64.deb

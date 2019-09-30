@@ -1,4 +1,54 @@
 
-{% for item in c2_backup_roles %}
+preconfigure 'GenericBackup' do
+
+  split_into_chunks_of 1000000
+  compress_with Gzip
+  hname = `hostname`.strip.split('.').first 
+  logfile = "/backup/logs/#{hname}_#{self.trigger}.log"
+
+  before do
+    File.delete(logfile) if File.exists?(logfile)
+    `/etc/backup/scripts/hooks.sh #{self.trigger} before`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Fout in #{self.trigger}-before"
+    end
+  end
+
+  notify_by Mail do |mail|
+    mail.from    = "#{hname}@myserver.local"
+    mail.to = 'mail'
+    mail.address = 'mail.local'
+    mail.port    = '25'
+    mail.domain  = 'myserver.local'
+    mail.on_success = true
+    mail.on_warning = true
+    mail.on_failure = true
+  end
+
+
+  after do 
+    `/etc/backup/scripts/hooks.sh #{self.trigger} after`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Fout in #{self.trigger}-after"
+    end
+  end
+
+end
+
+tmp_path  "/backup/tmp/#{`hostname`.strip}"
+
+  after do 
+    `/etc/backup/scripts/hooks.sh #{self.trigger} after`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Fout in #{self.trigger}-after"
+    end
+  end
+
+end
+
+{% for item in backup_roles %}
 Role: {{ item }}
 {% endfor %}
