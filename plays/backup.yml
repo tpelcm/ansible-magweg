@@ -5,4 +5,4 @@
   sudo: True
 
   roles:
-    - { role: c2-backup, tags: ["backup"] }
+    - { role: backup, tags: ["backup"] }
