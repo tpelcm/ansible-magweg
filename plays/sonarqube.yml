@@ -12,3 +12,4 @@
     - { role: java,                         tags: ["java"] }
     - { role: https_proxy,                  tags: ["proxy"] }
     - { role: onknows.sonarqube,            tags: ["sonarqube"] }
+    - { role: backup,                       tags: ["backup"] }

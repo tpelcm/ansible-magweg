@@ -1,8 +1,0 @@
----
-
-- name: backup.yml | All roles
-  hosts: backup
-  sudo: True
-
-  roles:
-    - { role: backup, tags: ["backup"] }

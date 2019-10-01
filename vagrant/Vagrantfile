@@ -36,7 +36,7 @@ ansible_host_vars = {
 nodes = {}
 nodes['sonarqube'] = {
   'ip' => '1.1.1.4',
-  'plays' => %w(sonarqube backup)
+  'plays' => %w(sonarqube)
 }
 nodes['postgresql'] = {
   'ip' => '1.1.1.2',
