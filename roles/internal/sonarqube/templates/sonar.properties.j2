@@ -1,11 +1,11 @@
-sonar.jdbc.username={{ sonar_database_username }}
-sonar.jdbc.password={{ sonar_database_password }}
-sonar.jdbc.url=jdbc:postgresql://{{ sonar_database_host }}:{{ sonar_database_port }}/{{ sonar_database_name }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
-sonar.web.context={{ sonar_web_context }}
-sonar.web.port={{ sonar_web_port }}
-{% if sonar_proxy is defined %}
-http.proxyHost={{ sonar_proxy['host'] }}
-http.proxyPort={{ sonar_proxy['port'] }}
-https.proxyHost={{ sonar_proxy['host'] }}
-https.proxyPort={{ sonar_proxy['port'] }}
+sonar.jdbc.username={{ sonarqube_database_username }}
+sonar.jdbc.password={{ sonarqube_database_password }}
+sonar.jdbc.url=jdbc:postgresql://{{ sonarqube_database_host }}:{{ sonarqube_database_port }}/{{ sonarqube_database_name }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+sonar.web.context={{ sonarqube_web_context }}
+sonar.web.port={{ sonarqube_web_port }}
+{% if sonarqube_proxy is defined %}
+http.proxyHost={{ sonarqube_proxy['host'] }}
+http.proxyPort={{ sonarqube_proxy['port'] }}
+https.proxyHost={{ sonarqube_proxy['host'] }}
+https.proxyPort={{ sonarqube_proxy['port'] }}
 {% endif %}

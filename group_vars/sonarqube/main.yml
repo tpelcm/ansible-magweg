@@ -1,5 +1,5 @@
 ---
-sonar_plugins:
+sonarqube_plugins:
   build_breaker:
     pattern: 'sonar-build-breaker-plugin-*.jar'
     url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
@@ -7,28 +7,28 @@ sonar_plugins:
     # url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.1/sonar-build-breaker-plugin-2.1.jar"
     # checksum: "0990cc954af0a660b41f00ece9238edeff8a503f48177dee1a4deeca3fb1a583"
 
-manala_motd_message:  "SonarQube {{ sonar_version }} Server"
+manala_motd_message:  "SonarQube {{ sonarqube_version }} Server"
 
 c2_alias:
   roles:
     sonarqube:
-      logs: ["{{ sonar_home }}/sonarqube/logs/*.log"]
+      logs: ["{{ sonarqube_home }}/sonarqube/logs/*.log"]
       configs: 
-        - "{{ sonar_home }}/sonarqube/conf/sonar.properties"
+        - "{{ sonarqube_home }}/sonarqube/conf/sonar.properties"
         - "/etc/systemd/system/sonarqube.service" 
 
 https_proxy_roles:
   sonarqube:
     hostname: sonarqube.tech
     proxy_port: 443
-    port: "{{ sonar_web_port }}"
-    context: "{{ sonar_web_context }}"
+    port: "{{ sonarqube_web_port }}"
+    context: "{{ sonarqube_web_context }}"
 
-sonar_java_bin: 
+sonarqube_java_bin: 
   Debian: '{{ adoptopenjdk_java_home }}/bin/java'
   RedHat: '{{ adoptopenjdk_java_home }}/bin/java'
 
-sonar_proxy:
+sonarqube_proxy:
   host: '{{ proxy_host }}'
   port: '{{ proxy_port }}'  
 

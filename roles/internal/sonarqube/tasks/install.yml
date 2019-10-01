@@ -7,14 +7,14 @@
 
 - name: Create root directory
   file:
-    path: "{{ sonar_home }}"
+    path: "{{ sonarqube_home }}"
     state: directory
     group: sonarqube
     owner: sonarqube 
 
 - name: Create install folder
   file:
-    path: "{{sonar_home}}/{{ sonar_version_directory }}"
+    path: "{{sonarqube_home}}/{{ sonarqube_version_directory }}"
     state: directory
     group: sonarqube
     owner: sonarqube    
@@ -22,14 +22,14 @@
 
 - name: Check installed
   stat: 
-    path: "{{ sonar_home }}/{{ sonar_version_directory }}/conf"
+    path: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/conf"
   register: sonarqube_installed
 
 - name: Download
   get_url:
-    url: "{{ sonar_download_url }}"
-    dest: "/tmp/{{ sonar_version_directory }}.zip"
-    validate_certs: "{{ sonar_download_validate_certs }}"
+    url: "{{ sonarqube_download_url }}"
+    dest: "/tmp/{{ sonarqube_version_directory }}.zip"
+    validate_certs: "{{ sonarqube_download_validate_certs }}"
   notify: restart sonarqube
   when: sonarqube_installed.stat.exists == false
 
@@ -40,8 +40,8 @@
 
 - name: Unzip
   unarchive:
-    src: "/tmp/{{ sonar_version_directory }}.zip"
-    dest: "{{ sonar_home }}"
+    src: "/tmp/{{ sonarqube_version_directory }}.zip"
+    dest: "{{ sonarqube_home }}"
     copy: false
     group: sonarqube
     owner: sonarqube    
@@ -49,12 +49,12 @@
 
 - name: Create symbolic link install
   file:
-   src: "{{ sonar_home }}/{{ sonar_version_directory }}"
-   dest: "{{ sonar_home }}/sonarqube"
+   src: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}"
+   dest: "{{ sonarqube_home }}/sonarqube"
    state: link
 
 - name: Create symbolic link jar 
   file:
-   src: "{{ sonar_home }}/{{ sonar_version_directory }}/lib/sonar-application-{{ sonar_version }}.jar"
-   dest: "{{ sonar_home }}/{{ sonar_version_directory }}/lib/sonar-application.jar"
+   src: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/lib/sonar-application-{{ sonarqube_version }}.jar"
+   dest: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/lib/sonar-application.jar"
    state: link

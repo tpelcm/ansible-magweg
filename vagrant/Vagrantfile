@@ -19,7 +19,7 @@ ansible_groups = {
   },
   'sonarqube' => ['sonarqube'],
   'sonarqube:vars' => {
-    'sonar_database_host' => '1.1.1.2'
+    'sonarqube_database_host' => '1.1.1.2'
   },
   'nfs' => ['proxy'],
   'nfs:vars' => {

@@ -1,35 +1,35 @@
 ---
-sonar_home: /opt/sonarqube
-sonar_download_validate_certs: true
+sonarqube_home: /opt/sonarqube
+sonarqube_download_validate_certs: true
 
-sonar_version: 6.7
-sonar_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonar_version }}.zip"
-sonar_version_directory: "sonarqube-{{ sonar_version }}"
+sonarqube_version: 6.7
+sonarqube_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonarqube_version }}.zip"
+sonarqube_version_directory: "sonarqube-{{ sonarqube_version }}"
 
-sonar_java_bin: 
+sonarqube_java_bin: 
   Debian: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
   RedHat: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.el7_6.x86_64/jre/bin/java
   
-sonar_xms: 32m # 128m
-sonar_xmx: 32m # 2048m
+sonarqube_xms: 32m # 128m
+sonarqube_xmx: 32m # 2048m
 
-sonar_web_port: 9000
-sonar_web_context: '/sonarqube'
+sonarqube_web_port: 9000
+sonarqube_web_context: '/sonarqube'
 
-sonar_database_username: sonarqube
-sonar_database_password: supersecure
+sonarqube_database_username: sonarqube
+sonarqube_database_password: supersecure
 
-sonar_database_host: localhost
-sonar_database_port: "5432"
-sonar_database_name: sonarqube
+sonarqube_database_host: localhost
+sonarqube_database_port: "5432"
+sonarqube_database_name: sonarqube
 
-sonar_database_admin_username: ansible
-sonar_database_admin_password: supersecure
+sonarqube_database_admin_username: ansible
+sonarqube_database_admin_password: supersecure
 
-sonar_python_library: python-psycopg2
+sonarqube_python_library: python-psycopg2
 
-sonar_plugins: []
+sonarqube_plugins: []
 
-#sonar_proxy:
+#sonarqube_proxy:
 #  host: localhost
 #  port: 3128
