@@ -1,16 +1,32 @@
 ---
-backup_roles: ['sonarqube']
+backup_mount: '/backup'
+backup_logs: '/backup/logs'
+backup_tmp: '/backup/tmp'
+backup_split_into_chunks_of: 1000000
 
-backup_utility:
-  ubuntu:
-    v18:
-      url: https://github.com/tpelcm/omnibus-backup/releases/download/v5.0.0.beta2-1-ubuntu1804/backup_5.0.0.beta.2-1_amd64.deb
-      checksum: 2363ac2e8d5f38bafd2401d4fec84c9eef548f612f30a76cb82a2fe2d4dc0ec8
-  rhel:
-    v7:
-      url: https://github.com/tpelcm/omnibus-backup/releases/download/v5.0.0.beta2-1-el7/backup-5.0.0.beta.2-1.el7.x86_64.rpm
-      checksum: ce4170985fbce068a9b16d08e916ac570af0a82dcdb9c2286753f800bbb90d77
-  centos:
-    v7:
-      url: https://github.com/tpelcm/omnibus-backup/releases/download/v5.0.0.beta2-1-el7/backup-5.0.0.beta.2-1.el7.x86_64.rpm
-      checksum: ce4170985fbce068a9b16d08e916ac570af0a82dcdb9c2286753f800bbb90d77      
+backup_roles_supported: ['sonarqube']
+
+backup_roles:
+  sonarqube:
+    stop_start_service: sonarqube
+    # snapshot: true
+    # schedules: ['daily', 'weekly', 'monthly', 'manual']
+
+backup:
+  schedules_default: ['daily', 'weekly', 'monthly', 'manual']
+  schedules:
+    daily:
+    weekly:
+    monthly:
+    manual:
+
+backup_notify_mail:
+  enabled: false
+  from: 'backup@mydomain.com'
+  to: 'admin@mydomain.com'
+  address: 'mail.local'
+  port: 25
+  domain: 'mydomain.local'
+  on_success: true
+  on_warning: true
+  on_failure: true

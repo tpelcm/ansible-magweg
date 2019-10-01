@@ -25,3 +25,10 @@
   template:
     src: config.rb.j2
     dest: /etc/backup/config.rb
+
+- name: Backup scripts
+  template:
+   dest: /etc/backup/scripts/helpers.sh
+   src: helpers.sh.j2
+
+- include_tasks: "models.yml"
