@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - {role: facts,                   tags: facts }
   - {role: lvm,                     tags: lvm }
   - {role: ca,                      tags: ssl }
   - {role: ansible-agent,           tags: ansible }
