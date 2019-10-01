@@ -11,5 +11,5 @@
     - { role: bas-ansible-roles-collection.postgresql9-client, tags: ["postgresql"], when: ansible_os_family == 'RedHat' }    
     - { role: java,                         tags: ["java"] }
     - { role: https_proxy,                  tags: ["proxy"] }
-    - { role: onknows.sonarqube,            tags: ["sonarqube"] }
+    - { role: sonarqube,                    tags: ["sonarqube"] }
     - { role: backup,                       tags: ["backup"] }
