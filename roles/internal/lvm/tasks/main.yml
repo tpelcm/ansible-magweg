@@ -7,14 +7,6 @@
 - name: Get usable devices
   set_fact: lvm_vg_devices_usable="{{ lvm_vg_devices | intersect(lvm_devices_present) }}"
 
-- set_fact:
-    ansible_role_names_cleaned: "{{ ansible_role_names|
-                 map('regex_replace', regex, replace)|
-                 list }}"
-  vars:
-    regex: '^(.*)\.(.*)$'
-    replace: '\2'
-
 - name: Get nodes lvm roles
   set_fact: lvm_roles_node="{{ lvm_roles_supported | intersect(ansible_role_names_cleaned) }}"
 
