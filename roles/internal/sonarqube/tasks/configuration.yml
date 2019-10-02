@@ -2,7 +2,7 @@
 - name: Configure
   template:
     src: sonar.properties.j2
-    dest: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/conf/sonar.properties"
+    dest: "{{ sonarqube_home_version }}/conf/sonar.properties"
     mode: 0755
     backup: yes
   notify: restart sonarqube

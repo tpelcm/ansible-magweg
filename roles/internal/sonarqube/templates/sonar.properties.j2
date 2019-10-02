@@ -1,6 +1,6 @@
 sonar.jdbc.username={{ sonarqube_database_username }}
 sonar.jdbc.password={{ sonarqube_database_password }}
-sonar.jdbc.url=jdbc:postgresql://{{ sonarqube_database_host }}:{{ sonarqube_database_port }}/{{ sonarqube_database_name }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+sonar.jdbc.url=jdbc:postgresql://{{ sonarqube_database_host }}:{{ sonarqube_database_port }}/{{ sonarqube_database_name_version }}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
 sonar.web.context={{ sonarqube_web_context }}
 sonar.web.port={{ sonarqube_web_port }}
 {% if sonarqube_proxy is defined %}

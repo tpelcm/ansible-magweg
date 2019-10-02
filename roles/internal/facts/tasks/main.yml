@@ -1,8 +1,0 @@
----
-- set_fact:
-    ansible_role_names_cleaned: "{{ ansible_role_names|
-                 map('regex_replace', regex, replace)|
-                 list }}"
-  vars:
-    regex: '^(.*)\.(.*)$'
-    replace: '\2'

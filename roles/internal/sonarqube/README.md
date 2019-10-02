@@ -43,6 +43,11 @@ JDBC settings for a connection to a MySQL database. Defaults presume the databas
 
 ## Dependencies
 
+__lcm__ role sets facts to "version-enable" home directory and database e.g. 
+
+    sonarqube_home_version: /opt/sonarqube/sonarqube_6_7
+    sonarqube_database_name_version: sonarqube_6_7
+
 ## Example Playbook
 
     - hosts: all

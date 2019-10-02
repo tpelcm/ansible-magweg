@@ -1,0 +1,6 @@
+# {{ ansible_managed }} 
+{% for rl in backup_roles_node %}
+{%  for schdl in backup['schedules_default'] %}
+alias {{ backup_alias_prefix }}_{{ rl }}_{{ schdl }}="/opt/backup/bin/backup perform --trigger {{ rl }}_{{ schdl}} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null"
+{%   endfor %}
+{% endfor %}

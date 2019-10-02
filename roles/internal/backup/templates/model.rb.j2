@@ -1,0 +1,45 @@
+# encoding: utf-8
+##
+# Backup v5.x Configuration
+# {{ ansible_managed }}
+#
+# Documentation: http://backup.github.io/backup
+# Issue Tracker: https://github.com/backup/backup/issues
+##
+
+{% for schdl in backup['schedules_default'] %}
+
+GenericBackup.new(:{{ item }}_{{ schdl }}, '{{ item }} - {{ inventory_hostname }}') do
+    
+  split_into_chunks_of {{ backup_split_into_chunks_of }}
+  compress_with Gzip
+
+  # <%= render '_mount_test_before_hook.erb', :cookbook => 'ok-backup' %>
+
+{% if vars[item + '_database_host'] is defined %}
+  database PostgreSQL do |db|
+    db.name = '{{ vars[item + '_database_name_version'] }}'
+    db.username = '{{ vars[item + '_database_username'] }}'
+    db.password = '{{ vars[item + '_database_password'] }}'
+    db.host = '{{ vars[item + '_database_host'] }}'
+    db.port = '{{ vars[item + '_database_port'] }}'
+    db.additional_options = []
+  end
+{% endif %}
+
+{% if vars[item + '_home'] is defined %}
+  archive :home do |archive|
+    archive.root '{{ vars[item + '_home_version'] }}'
+    archive.add '.'
+  end
+{% endif %}
+
+  store_with Local do |local|
+    local.path = '{{ backup_mount }}/{{ inventory_hostname }}'
+    local.keep = {{ backup_roles[item]['keep'][schdl] }}
+  end
+
+  # TODO stop start the following service {{ backup_roles[item]['stop_start_service'] }}
+end
+
+{% endfor %}

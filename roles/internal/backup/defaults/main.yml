@@ -1,14 +1,16 @@
 ---
-backup_mount: '/backup'
-backup_logs: '/backup/logs'
-backup_tmp: '/backup/tmp'
+backup_mount: /backup
+backup_logs: /backup/logs
+backup_tmp: /backup/tmp
 backup_split_into_chunks_of: 1000000
+backup_alias_prefix: tpelcm
 
 backup_roles_supported: ['sonarqube']
 
 backup_roles:
   sonarqube:
     stop_start_service: sonarqube
+    keep: { daily: 3, weekly: 2, monthly: 1, manual: 1 }
     # snapshot: true
     # schedules: ['daily', 'weekly', 'monthly', 'manual']
 
@@ -22,11 +24,19 @@ backup:
 
 backup_notify_mail:
   enabled: false
-  from: 'backup@mydomain.com'
-  to: 'admin@mydomain.com'
-  address: 'mail.local'
+  from: backup@mydomain.com
+  to: admin@mydomain.com
+  address: mail.local
   port: 25
-  domain: 'mydomain.local'
+  domain: mydomain.local
+  on_success: true
+  on_warning: true
+  on_failure: true
+
+backup_notify_slack:
+  enabled: false 
+  webhook: https://hooks.slack.com/services/...
+  channel: infra
   on_success: true
   on_warning: true
   on_failure: true

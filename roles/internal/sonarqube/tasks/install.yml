@@ -14,7 +14,7 @@
 
 - name: Create install folder
   file:
-    path: "{{sonarqube_home}}/{{ sonarqube_version_directory }}"
+    path: "{{sonarqube_home_version }}"
     state: directory
     group: sonarqube
     owner: sonarqube    
@@ -22,13 +22,13 @@
 
 - name: Check installed
   stat: 
-    path: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/conf"
+    path: "{{ sonarqube_home_version }}/conf"
   register: sonarqube_installed
 
 - name: Download
   get_url:
     url: "{{ sonarqube_download_url }}"
-    dest: "/tmp/{{ sonarqube_version_directory }}.zip"
+    dest: "/tmp/{{ sonarqube_home_version|basename }}.zip"
     validate_certs: "{{ sonarqube_download_validate_certs }}"
   notify: restart sonarqube
   when: sonarqube_installed.stat.exists == false
@@ -40,7 +40,7 @@
 
 - name: Unzip
   unarchive:
-    src: "/tmp/{{ sonarqube_version_directory }}.zip"
+    src: "/tmp/{{ sonarqube_home_version|basename }}.zip"
     dest: "{{ sonarqube_home }}"
     copy: false
     group: sonarqube
@@ -49,12 +49,12 @@
 
 - name: Create symbolic link install
   file:
-   src: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}"
+   src: "{{ sonarqube_home_version }}"
    dest: "{{ sonarqube_home }}/sonarqube"
    state: link
 
 - name: Create symbolic link jar 
   file:
-   src: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/lib/sonar-application-{{ sonarqube_version }}.jar"
-   dest: "{{ sonarqube_home }}/{{ sonarqube_version_directory }}/lib/sonar-application.jar"
+   src: "{{ sonarqube_home_version }}/lib/sonar-application-{{ sonarqube_version }}.jar"
+   dest: "{{ sonarqube_home_version }}/lib/sonar-application.jar"
    state: link

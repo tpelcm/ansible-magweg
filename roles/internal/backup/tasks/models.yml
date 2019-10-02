@@ -1,7 +1,4 @@
 ---
-- name: Backup roles for node
-  set_fact: backup_roles_node="{{ backup_roles_supported | intersect(ansible_role_names_cleaned) }}"
-
 - name: Backup model rb 
   template:
     dest: '/etc/backup/models/{{ item }}.rb'

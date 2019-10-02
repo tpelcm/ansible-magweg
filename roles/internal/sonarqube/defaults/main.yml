@@ -4,7 +4,6 @@ sonarqube_download_validate_certs: true
 
 sonarqube_version: 6.7
 sonarqube_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonarqube_version }}.zip"
-sonarqube_version_directory: "sonarqube-{{ sonarqube_version }}"
 
 sonarqube_java_bin: 
   Debian: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
@@ -22,7 +21,6 @@ sonarqube_database_password: supersecure
 sonarqube_database_host: localhost
 sonarqube_database_port: "5432"
 sonarqube_database_name: sonarqube
-
 sonarqube_database_admin_username: ansible
 sonarqube_database_admin_password: supersecure
 
@@ -33,3 +31,7 @@ sonarqube_plugins: []
 #sonarqube_proxy:
 #  host: localhost
 #  port: 3128
+
+# Facts set by lcm role - only
+# sonarqube_database_name_version: sonarqube_6_7
+# sonarqube_home_version: /opt/sonarqube/sonarqube_6_7

@@ -1,3 +1,12 @@
+# encoding: utf-8
+
+##
+# Backup v5.x Configuration
+# {{ ansible_managed }}
+#
+# Documentation: http://backup.github.io/backup
+# Issue Tracker: https://github.com/backup/backup/issues
+##
 
 preconfigure 'GenericBackup' do
 
@@ -11,7 +20,7 @@ preconfigure 'GenericBackup' do
 
   before do
     File.delete(logfile) if File.exists?(logfile)
-    `/etc/backup/scripts/hooks.sh #{self.trigger} before`
+    `/etc/backup/scripts/hooks.sh #{self.trigger} before #{logfile}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-before"
@@ -33,21 +42,27 @@ preconfigure 'GenericBackup' do
     mail.on_warning = '{{ backup_notify_mail['on_warning'] }}'
     mail.on_failure = '{{ backup_notify_mail['on_failure'] }}'
   end
+{% endif %}
+{% if backup_notify_slack['enabled'] == true %}
+  notify_by Slack do |slack|
+    slack.webhook_url = '{{ backup_notify_slack['webhook'] }}'
+    slack.username = 'backup'
+    slack.channel = '{{ backup_notify_slack['channel'] }}'
+    slack.on_success = '{{ backup_notify_slack['on_success'] }}'
+    slack.on_warning = '{{ backup_notify_slack['on_warning'] }}'
+    slack.on_failure = '{{ backup_notify_slack['on_failure'] }}'
+    slack.message = lambda do |model, data|
+       "[{{ inventory_hostname }}] #{data[:status][:message]} #{model.label} (#{model.trigger})"
+    end    
+  end
 {% endif %}  
-
   after do 
-    `/etc/backup/scripts/hooks.sh #{self.trigger} after`
+    `/etc/backup/scripts/hooks.sh #{self.trigger} after #{logfile}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-after"
     end
   end
-
-  tmp_path  File.join('{{ backup_tmp }}', '{{ inventory_hostname }}')
 end
 
-{% for item in backup_roles %}
-# Role: {{ item }}
-{% endfor %}
-
-
+tmp_path  File.join('{{ backup_tmp }}', '{{ inventory_hostname }}')

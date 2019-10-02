@@ -1,7 +1,7 @@
 ---
 - name: remove other version of plugins
   remove_old_plugin_version:
-    plugin_dir: "{{sonarqube_home}}/{{ sonarqube_version_directory }}/extensions/plugins"
+    plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
     pattern: "{{ sonarqube_plugins[item]['pattern'] }}"
     url: "{{ sonarqube_plugins[item]['url'] }}"
   with_items: "{{ sonarqube_plugins }}"
@@ -10,7 +10,7 @@
   get_url:
     url: "{{ sonarqube_plugins[item].url }}"
     checksum: "sha256:{{ sonarqube_plugins[item].checksum }}"
-    dest: "{{sonarqube_home}}/{{ sonarqube_version_directory }}/extensions/plugins"
+    dest: "{{sonarqube_home_version }}/extensions/plugins"
     group: sonarqube
     owner: sonarqube
   notify: restart sonarqube   

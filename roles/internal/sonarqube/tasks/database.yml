@@ -22,7 +22,7 @@
 
 - name: SonarQube PostgreSQL database
   postgresql_db:
-    name: "{{ sonarqube_database_name }}"
+    name: "{{ sonarqube_database_name_version }}"
     lc_collate: 'en_US.UTF-8'
     lc_ctype: 'en_US.UTF-8'
     encoding: 'UTF-8'
