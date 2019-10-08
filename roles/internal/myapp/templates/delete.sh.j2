@@ -1,0 +1,3 @@
+# {{ ansible_managed }}
+echo "delete from myapp_table;" | psql -h {{ myapp_database_host }} -U {{ myapp_owner }} {{ myapp_database_name_version }}
+rm --force {{ myapp_home_version }}/data/*

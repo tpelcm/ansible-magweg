@@ -1,2 +1,2 @@
 ---
-lcm_roles: ['sonarqube']
+lcm_roles: ['sonarqube', 'myapp']

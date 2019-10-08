@@ -1,0 +1,7 @@
+---
+myapp_database_name: myapp2
+#backup_restore: 
+#  myapp:
+#    path_pattern: '*'
+#    # path_pattern: /backup/archives/someotherhost/myapp_*/*/*.tar')
+#    force: true

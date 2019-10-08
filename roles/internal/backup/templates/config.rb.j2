@@ -15,6 +15,7 @@ preconfigure 'GenericBackup' do
 
   FileUtils.mkdir_p('{{ backup_logs }}')
   FileUtils.mkdir_p('{{ backup_tmp }}')
+  FileUtils.mkdir_p('{{ backup_archives }}')
 
   logfile = File.join('{{ backup_logs }}',"{{ inventory_hostname }}_#{self.trigger}.log")
 

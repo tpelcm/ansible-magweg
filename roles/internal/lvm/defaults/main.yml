@@ -10,6 +10,7 @@ lvm_roles_supported:
   - nfs
   - postgresql
   - sonarqube
+  - myapp
 
 lvm_roles:
   nfs:
@@ -21,3 +22,6 @@ lvm_roles:
   sonarqube:
     size: '10g'
     path: '{{ sonar_home if sonar_home is defined else "/opt/sonarqube" }}'
+  myapp:
+    size: '1g' 
+    path: '{{ myapp_home if myapp_home is defined else "/opt/myapp" }}'

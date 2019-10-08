@@ -35,11 +35,9 @@ GenericBackup.new(:{{ item }}_{{ schdl }}, '{{ item }} - {{ inventory_hostname }
 {% endif %}
 
   store_with Local do |local|
-    local.path = '{{ backup_mount }}/{{ inventory_hostname }}'
+    local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
     local.keep = {{ backup_roles[item]['keep'][schdl] }}
   end
-
-  # TODO stop start the following service {{ backup_roles[item]['stop_start_service'] }}
 end
 
 {% endfor %}

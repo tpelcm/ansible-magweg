@@ -2,16 +2,20 @@
 backup_mount: /backup
 backup_logs: /backup/logs
 backup_tmp: /backup/tmp
+backup_archives: /backup/archives
 backup_split_into_chunks_of: 1000000
 backup_alias_prefix: tpelcm
 backup_cron_jobs: true
 
-backup_roles_supported: ['sonarqube']
+backup_roles_supported: ['sonarqube', 'myapp']
 
 backup_roles:
   sonarqube:
     stop_start_service: sonarqube
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+  myapp:
+    # stop_start_service: myapp
+    keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }
     # snapshot: true
     # schedules: ['daily', 'weekly', 'monthly', 'manual']
 
@@ -22,9 +26,7 @@ backup:
     weekly: 50 2 * * 6
     monthly: 50 2 1 * *
 
-## Crontab for backup_monthly managed by Chef. Changes will be overwritten.
-
-#50 2 1 * * root /etc/backup/scripts/backup_monthly.sh
+backup_restored: []
 
 backup_notify_mail:
   enabled: false
@@ -44,3 +46,11 @@ backup_notify_slack:
   on_success: true
   on_warning: true
   on_failure: true
+
+#backup_restore:
+#   sonarqube: 
+#     folder: 2019.10.03.05.21.29
+#     folder: '*'
+#     path: 
+#     force: true
+

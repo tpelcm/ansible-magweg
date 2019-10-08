@@ -54,3 +54,6 @@
    src: backup.sh.j2
   when: backup['schedules'][item] is defined
   with_items: "{{ backup['schedules_default'] }}" 
+
+- include_tasks: "restore.yml"
+  when: backup_restore is defined

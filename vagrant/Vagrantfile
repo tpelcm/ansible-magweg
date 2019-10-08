@@ -2,8 +2,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-vagrant_box = 'generic/centos7'
-# vagrant_box = 'c2/centos7' # for lvm role
+# vagrant_box = 'generic/centos7'
+ vagrant_box = 'c2/centos7' # for lvm role
 # vagrant_box = 'generic/ubuntu1804'
 
 shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
@@ -23,10 +23,11 @@ ansible_groups = {
   },
   'nfs' => ['proxy'],
   'nfs:vars' => {
-    'nfs_exports' => ["/nfs/backup *(rw,sync,no_root_squash)"]
+    'nfs_exports' => ['/nfs/backup *(rw,sync,no_root_squash)']
   },
   'proxy' => ['proxy'],
-  'backup' => ['sonarqube']
+  'backup' => ['sonarqube'],
+  'myapp_servers' => ['myapp', 'myapp2']
 }
 ansible_host_vars = {
   'postgresql' => { 'xyz' => 80 }
@@ -34,18 +35,11 @@ ansible_host_vars = {
 
 # Vagrant nodes
 nodes = {}
-nodes['sonarqube'] = {
-  'ip' => '1.1.1.4',
-  'plays' => %w(sonarqube)
-}
-nodes['postgresql'] = {
-  'ip' => '1.1.1.2',
-  'plays' => %w(postgresql)
-}
-nodes['proxy'] = {
-  'ip' => '1.1.1.3',
-  'plays' => %w(proxy)
-}
+nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube) }
+nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
+nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy) }
+nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
+nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
 Vagrant.configure(2) do |config|
   nodes.each do |n, a|

@@ -1,0 +1,107 @@
+---
+- name: Ensure PostgreSQL Python libraries are installed.
+  apt:
+    name: "{{ myapp_python_library }}"
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: SonarQube PostgreSQL user
+  postgresql_user:
+    name: "{{ myapp_database_username }}"
+    password: "{{ myapp_database_password }}"
+    db: "postgres"
+    login_host: "{{ myapp_database_host }}"
+    login_password: "{{ myapp_database_admin_password }}"
+    login_user: "{{ myapp_database_admin_username }}"
+    port: "{{ myapp_database_port }}"
+    state: "{{ item.state | default('present') }}"
+  no_log: false
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: SonarQube PostgreSQL database
+  postgresql_db:
+    name: "{{ myapp_database_name_version }}"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: 'template0'
+    login_host: "{{ myapp_database_host }}"
+    login_password: "{{ myapp_database_admin_password }}"
+    login_user: "{{ myapp_database_admin_username }}"
+    port: "{{ myapp_database_port }}"
+    owner: "{{ myapp_database_username }}"
+    state: "{{ item.state | default('present') }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Add linux user
+  user:
+    name: '{{ myapp_owner }}'
+    comment: MyApp
+    shell: /bin/bash
+
+- name: Create root directory
+  file:
+    path: "{{ myapp_home }}"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}' 
+
+- name: Create install folder
+  file:
+    path: "{{ myapp_home_version }}"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'    
+
+- name: Create symbolic link install
+  file:
+   src: "{{ myapp_home_version }}"
+   dest: "{{ myapp_home }}/{{ myapp_home|basename }}"
+   state: link
+
+- name: Install
+  copy:
+    content: "myapp={{ myapp_version }}"
+    dest: "{{ myapp_home_version }}/myapp.txt"
+
+- name: Create a data folder
+  file:
+    path: "{{ myapp_home_version }}/data"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'    
+
+- name: Table
+  postgresql_table:
+    db: "{{ myapp_database_name_version }}"
+    login_host: "{{ myapp_database_host }}"
+    login_password: "{{ myapp_database_admin_password }}"
+    login_user: "{{ myapp_database_admin_username }}"
+    owner: "{{ myapp_database_username }}"
+    name: myapp_table
+    columns:
+    - story text
+
+- name: App scripts
+  template:
+    dest: '/home/myapp/{{ item }}.sh'
+    src: '{{ item }}.sh.j2'
+    group: "myapp"
+    mode: "755"
+    owner: "myapp"
+  with_items: 
+    - insert
+    - select
+    - delete
+
+- name: Password file
+  copy:
+   content: "*:*:*:{{ myapp_database_username }}:{{ myapp_database_password }}"
+   dest: "/home/myapp/.pgpass"
+   group: "myapp"
+   owner: "myapp"
+   mode: "0600"
