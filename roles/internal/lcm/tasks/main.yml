@@ -21,3 +21,16 @@
     "{{ item }}_database_name_version": "{{ vars[item + '_database_name'] }}_{{ vars[item + '_version']|replace('.','_') }}"
   with_items: '{{ lcm_roles_node }}'
 
+- name: LCM info 
+  lcm_info:
+    role: '{{ item }}'
+    version: "{{ vars[item + '_version'] }}"
+    home: "{{ vars[item + '_home'] }}"
+    home_version: "{{ vars[item + '_home_version'] }}"
+    versions_sequence: "{{ vars[item + '_versions_sequence'] }}"
+  with_items: '{{ lcm_roles_node }}'
+
+- name: LCM info
+  debug:
+    var: "{{ item }}_lcm" 
+  with_items: '{{ lcm_roles_node }}'

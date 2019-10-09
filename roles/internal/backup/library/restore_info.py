@@ -10,7 +10,7 @@ def tar_sha256sum(tar):
     with open(tar,"rb") as f:
       for byte_block in iter(lambda: f.read(4096),b""):
           sha256_hash.update(byte_block)
-    open(tsf,'w').write(sha256_hash.hexdigest()) 
+    open(tsf,'w').write(sha256_hash.hexdigest())
   return open(tsf, 'r').read()
 
 def tar_sha256sum_file(tar):
@@ -36,6 +36,22 @@ def tar_extracted(tmp, tar):
   fldr = os.path.splitext(bn)[0]
   return os.path.join(os.path.sep,tmp,fldr) 
 
+def restored_file(data):
+  return os.path.join(os.path.sep,data['home'],'RESTORED')
+
+def not_restored(s256,data):
+  f = restored_file(data)
+  if os.path.isfile(f):
+    rstrd = open(f, 'r').read()
+    if s256 in rstrd:
+      return False
+    else:
+      return True
+  else:
+    if os.path.isdir(data['home']):
+      open(f,'w').write('Restored sha256sums: ') 
+    return True
+
 def get_restore_info(data):
   has_changed = False
   if '/' not in data['path_pattern']:
@@ -46,17 +62,20 @@ def get_restore_info(data):
   restore_info = []
   for tr in glob.glob(ptrn):
     trs.append(tr)
-  #raise ValueError('trs'+trs[0]+'sorted'+sorted_tars(trs)[0]) 
   for tr in sorted_tars(trs):
     s256 = tar_sha256sum(tr)
-    if s256 not in data['restored'] or data['force'] == True:
-      restore_info.append({"path":tr, "sha256sum": s256})
-      has_changed = True
+    restore_info.append({"path":tr, "sha256sum": s256, "restored": not not_restored(s256,data)})
+  if restore_info.count > 0 and ( restore_info[0]["restored"] == False or data['force'] == True):
+    has_changed = True
   if has_changed:
     fcts = restore_facts(data, restore_info, ptrn)
     tr = restore_info[0]['path']
   else:
-    fcts = {'backup_restore':{"path_pattern_expanded": ptrn}}
+    fcts = { 'backup_restore': 
+            {data['role']: {
+              "path_pattern_expanded": ptrn,              
+              "tars": restore_info
+            }}}
   return (has_changed, fcts, tr)
 
 def restore_facts(data, restore_info, ptrn):
@@ -70,9 +89,11 @@ def restore_facts(data, restore_info, ptrn):
             "path_pattern_expanded": ptrn,
             "tmp": data['tmp'],
             "home_extracted": hm_extracted,
-            "tars": restore_info
+            "tars": restore_info,
+            "restored-file": restored_file(data)
           }}}
   if data['home_version']:
+    fcts['backup_restore_home'] = True
     fcts['backup_restore'][data['role']]['rsync-target'] = data['home_version'] + '/'
     fcts['backup_restore'][data['role']]['rsync-src'] = hm_extracted + '/'
     if data['folder']:
@@ -82,6 +103,7 @@ def restore_facts(data, restore_info, ptrn):
     fcts['backup_restore'][data['role']]['home_tar'] = home_tar(data['tmp'], restore_info[0]['path'])
   if data['database']:
     fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], restore_info[0]['path'])
+    fcts['backup_restore_db'] = True
   return fcts
 
 def main():
@@ -90,19 +112,16 @@ def main():
     "backup_archives": {"required": True, "type": "str"},
     "role": {"required": True, "type": "str"},
     "path_pattern": {"required": True, "type": "str"},
-    "force": {"required": True, "type": "bool"},
-    "restored": { "required": True, "type": "list"},
+    "force": {"default": False, "type": "bool"},
     "folder": { "required": False, "type": "str"},
     "database": { "required": True, "type": "bool"},
     "home_version": { "required": True, "type": "str"},
+    "home": { "required": True, "type": "str"},
     "tmp": {"required": True, "type": "str"}}
 
   module = AnsibleModule(argument_spec=fields)
   has_changed, fcts, tr = get_restore_info(module.params)
-  if has_changed:
-    module.exit_json(changed=has_changed, ansible_facts=fcts, msg=tr)
-  else:
-    module.exit_json(changed=has_changed, ansible_facts=fcts)
+  module.exit_json(changed=has_changed, ansible_facts=fcts, msg=tr)
 
 if __name__ == '__main__':
     main()

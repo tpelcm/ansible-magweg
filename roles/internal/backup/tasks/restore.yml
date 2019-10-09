@@ -4,29 +4,19 @@
     backup_archives: '{{ backup_archives }}'
     role: '{{ item }}'
     path_pattern: '{{ backup_restore[item]["path_pattern"] }}'
-    force: '{{ backup_restore[item]["force"] if backup_restore[item]["force"] is defined }}'
-    restored: '{{ backup_restored }}'
-    database: "{{ vars[item+'_database_name'] is defined }}"  
+    force: '{{ backup_restore[item]["force"] }}'
+    database: "{{ vars[item+'_database_name'] is defined }}"
+    home: "{{ vars[item + '_home'] }}"    
     home_version: "{{ vars[item+'_home_version'] if vars[item+'_home_version'] is defined  }}"    
     tmp: "{{ backup_tmp }}/{{ inventory_hostname }}-{{ item }}"
     folder: '{{ backup_restore[item]["folder"] }}'   
   with_items: '{{ backup_restore }}'
+  # TODO conditional vars not supported 
+  # all if is defined, do not work
   
-- name: Restore info
+- name: backup_restore
   debug:
     var: backup_restore
-    #msg: "{{ item }}: {{ backup_restore[item]['tar'] }}"
-  #when: backup_restore[item]['tar'] is defined
-  #with_items: '{{ backup_restore }}'
-
-- name: Tmp restore folders
-  file:
-    path: "{{ backup_restore[item]['tmp'] }}"
-    state: directory
-    mode: 0700
-  when: backup_restore[item]['tar'] is defined
-  with_items: '{{ backup_restore }}'
-
 
 - name: Tmp restore folders
   file:
@@ -49,59 +39,28 @@
     src: "{{ backup_restore[item]['tar'] }}"
     remote_src: yes
     dest: "{{ backup_restore[item]['tmp'] }}"
+  when: backup_restore[item]['tar'] is defined    
   with_items: '{{ backup_restore }}'
 
-- name: Extract home tar
-  unarchive:
-    src: "{{ backup_restore[item]['home_tar'] }}"
-    remote_src: yes
-    dest: "{{ backup_restore[item]['tmp'] }}/home"
-  when: backup_restore[item]['home_tar'] is defined    
+- include_tasks: "restore_db.yml"
+  when: backup_restore_db == True
+
+- include_tasks: "restore_files.yml"
+  when: backup_restore_home == True
+
+- name: Mark restore performed
+  lineinfile:
+    dest: "{{ backup_restore[item]['restored-file'] }}"
+    line: "{{ backup_restore[item]['sha256sum'] }}"
+  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
-- name: Drop database
-  postgresql_db:
-    name: "{{ vars[item + '_database_name_version']  }}"
-    maintenance_db: postgres 
-    login_host: "{{ vars[item + '_database_host'] }}"
-    login_password: "{{ vars[item + '_database_admin_password'] }}"
-    login_user: "{{ vars[item + '_database_admin_username'] }}"
-    port:  "{{ vars[item + '_database_port'] }}"
+- name: Delete tmp restore folders
+  file:
+    path: "{{ backup_restore[item]['tmp'] }}"
     state: absent
+  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
-
-- name: Create database
-  postgresql_db:
-    name: "{{ vars[item + '_database_name_version']  }}"
-    lc_collate: 'en_US.UTF-8' # TODO - uit rol halen
-    lc_ctype: 'en_US.UTF-8'
-    encoding: 'UTF-8'
-    template: 'template0'
-    login_host: "{{ vars[item + '_database_host'] }}"
-    login_password: "{{ vars[item + '_database_admin_password'] }}"
-    login_user: "{{ vars[item + '_database_admin_username'] }}"
-    port:  "{{ vars[item + '_database_port'] }}"
-    owner: "{{ vars[item + '_database_username'] }}"
-    state: present
-  with_items: '{{ backup_restore }}'
-
-- name: Restore database
-  postgresql_db:
-    name: "{{ vars[item + '_database_name_version']  }}"
-    login_host: "{{ vars[item + '_database_host'] }}"
-    login_password: "{{ vars[item + '_database_admin_password'] }}"
-    login_user: "{{ vars[item + '_database_admin_username'] }}"
-    port: "{{ vars[item + '_database_port'] }}"
-    state: restore
-    target: "{{ backup_restore[item]['db_tar'] }}"
-  when: backup_restore[item]['db_tar'] is defined
-  with_items: '{{ backup_restore }}'
-  register: db_restore
-  failed_when: "'ERROR' in db_restore.stderr"  
-
-- name: db_restore
-  debug:
-    var: db_restore
 
 #- name: Restore files
  # synchronize:

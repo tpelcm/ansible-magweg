@@ -57,3 +57,8 @@
 
 - include_tasks: "restore.yml"
   when: backup_restore is defined
+
+- name: Rsync
+  package:
+    name: rsync
+    state: present

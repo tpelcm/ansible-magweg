@@ -27,9 +27,10 @@
 
 - name: Download
   get_url:
-    url: "{{ sonarqube_download_url }}"
+    url: "{{ sonarqube_versions[sonarqube_version]['url'] }}"
     dest: "/tmp/{{ sonarqube_home_version|basename }}.zip"
     validate_certs: "{{ sonarqube_download_validate_certs }}"
+    checksum: "{{ sonarqube_versions[sonarqube_version]['checksum'] }}"
   notify: restart sonarqube
   when: sonarqube_installed.stat.exists == false
 

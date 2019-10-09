@@ -18,3 +18,5 @@ myapp_python_library: python-psycopg2
 # Facts set by lcm role - only
 # myapp_database_name_version: myapp_6_7
 # myapp_home_version: /opt/myapp/myapp_6_7
+
+myapp_versions_sequence: ['0.1.0']

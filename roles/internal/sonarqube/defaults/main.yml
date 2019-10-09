@@ -3,7 +3,6 @@ sonarqube_home: /opt/sonarqube
 sonarqube_download_validate_certs: true
 
 sonarqube_version: 6.7
-sonarqube_download_url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonarqube_version }}.zip"
 
 sonarqube_java_bin: 
   Debian: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
@@ -35,3 +34,13 @@ sonarqube_plugins: []
 # Facts set by lcm role - only
 # sonarqube_database_name_version: sonarqube_6_7
 # sonarqube_home_version: /opt/sonarqube/sonarqube_6_7
+
+sonarqube_versions: 
+  6.7:
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.zip
+    checksum: sha256:426ef44431814609ea279c3afd889b4b93c1cc630be7666cad34f0bc70b5d3b0
+  7.9.1:
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.1.zip
+    checksum: sha256:67f3ccae79245397480b0947d7a0b5661dc650b87f368b39365044ebcc88ada0
+
+sonarqube_versions_sequence: ["6.7", "7.9.1"]

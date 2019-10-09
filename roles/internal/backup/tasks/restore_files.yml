@@ -1,0 +1,13 @@
+---
+- name: Extract home tar
+  unarchive:
+    src: "{{ backup_restore[item]['home_tar'] }}"
+    remote_src: yes
+    dest: "{{ backup_restore[item]['tmp'] }}/home"
+  when: backup_restore[item]['home_tar'] is defined
+  with_items: '{{ backup_restore }}'
+
+- name: Restore files
+  command: "rsync -az --delete --recursive {{ backup_restore[item]['rsync-src'] }} {{ backup_restore[item]['rsync-target'] }}"
+  when: backup_restore[item]['home_tar'] is defined
+  with_items: '{{ backup_restore }}'

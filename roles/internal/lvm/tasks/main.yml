@@ -10,7 +10,7 @@
 - name: Get nodes lvm roles
   set_fact: lvm_roles_node="{{ lvm_roles_supported | intersect(ansible_role_names_cleaned) }}"
 
-- include_tasks: "debug.yml"
+# - include_tasks: "debug.yml"
 
 - name: Volume group
   lvg:

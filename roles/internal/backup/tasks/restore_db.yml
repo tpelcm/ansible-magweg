@@ -1,0 +1,46 @@
+---
+- name: Drop database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    maintenance_db: postgres 
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port:  "{{ vars[item + '_database_port'] }}"
+    state: absent
+  when: backup_restore[item]['db_tar'] is defined    
+  with_items: '{{ backup_restore }}'
+
+- name: Create database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    lc_collate: 'en_US.UTF-8' # TODO - uit rol halen
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: 'template0'
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port:  "{{ vars[item + '_database_port'] }}"
+    owner: "{{ vars[item + '_database_username'] }}"
+    state: present
+  when: backup_restore[item]['db_tar'] is defined    
+  with_items: '{{ backup_restore }}'
+
+- name: Restore database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port: "{{ vars[item + '_database_port'] }}"
+    state: restore
+    target: "{{ backup_restore[item]['db_tar'] }}"
+  when: backup_restore[item]['db_tar'] is defined    
+  with_items: '{{ backup_restore }}'
+  register: db_restore
+  failed_when: "'ERROR' in db_restore.stderr"  
+
+- name: db_restore
+  debug:
+    var: db_restore
