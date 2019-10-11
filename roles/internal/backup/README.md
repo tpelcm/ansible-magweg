@@ -10,11 +10,11 @@ Installs the backup utility and configures backup models for supported roles (`b
 
 Database and file system are archived together in a file for example similar to 
 
-    /backup/archives/sonarqube/sonarqube_daily/2019.10.03.05.21.29/sonarqube_daily.tar`. 
+    /backup/archives/sonarqube/sonarqube_daily/2019.10.03.05.21.29/sonarqube_daily.tar
 
 The path is created as follows 
 
-    {{ backup_archives }}/{{ inventory_hostname }}/{{ role }}_{{ schedule }}/{{ date-time }}/{{ role }}_{{ schedule }}.tar`. 
+    {{ backup_archives }}/{{ inventory_hostname }}/{{ role }}_{{ schedule }}/{{ date-time }}/{{ role }}_{{ schedule }}.tar
 
 ## Restore
 
