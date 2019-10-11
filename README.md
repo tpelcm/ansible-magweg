@@ -3,7 +3,7 @@
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible. 
 
 Currently one product is automated:
-- [SonarQube](../roles/internal/sonarqube)
+- [SonarQube](roles/internal/sonarqube)
 
 This repository is created and maintained as a monolithic repository. External roles from Galaxy and GitHub are copied into this repository. Aside from that it tries to follow [Ansible Best Practices](ANSIBLEBESTPRACTICES.md) as much as possible.
 
