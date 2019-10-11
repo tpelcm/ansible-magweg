@@ -1,8 +1,8 @@
+# myapp Ansible role
 
 Purpose of this role that it to develop, demonstrate and test  internal roles such as [lcm](../lcm/), [lvm](../lvm/) and [backup](../backup/) that are created to support LCM procedures.
 <!-- MarkdownTOC -->
 
-- myapp Ansible role
 - Vagrant up VMs
 - MyApp2 VM
     - MyApp2 logical volume
@@ -12,11 +12,10 @@ Purpose of this role that it to develop, demonstrate and test  internal roles su
     - Create MyApp data
     - Restore MyApp
     - Upgrade MyApp
-        - Create 0.1.1 database using 0.1.0 as a template
-        - Migrate / upgrade file system
+        - Database upgrade
+        - File system upgrade
 
 <!-- /MarkdownTOC -->
-## myapp Ansible role
 
 The role __myapp__ creates a simple app with a home directory and database. The app consists of three scripts that can be run as user __myapp__ to add, view and delete "data". 
 
@@ -32,7 +31,7 @@ This role is supported by internal roles:
 
 Use `vagrant up` and `provision` to create the three VMs. 
 
-    vagrant up postgresql myapp myapp2
+    vagrant up proxy postgresql myapp myapp2
 
 ## MyApp2 VM
 
@@ -50,7 +49,7 @@ If there is a free disk `/dev/sdb` the __lvm__ role will create `/opt/myapp` as 
 
 ### Create MyApp2 data
 
-Ssh into the machine and create some "data".
+Ssh into the machine.
 
     vagrant ssh myapp2
     sudo su - myapp
@@ -117,7 +116,7 @@ As root run the backup manually using alias `tpelcm_myapp_daily`. This creates a
 
 ## MyApp VM
 
-The __MyApp__ VM is identical to __MyApp2__. The only difference is that it uses a different database schema.  
+The __MyApp__ VM is identical to __MyApp2__. The only difference is that it uses a different database.  
 
 ### Create MyApp data
 
@@ -157,7 +156,7 @@ The reason for this is that the backup is configured as follows in [host_vars/my
         folder: data
         force: false
 
-The `path_pattern` fact will be expanded by the __backup__ role to `/backup/archives/*/myapp_*/*/*.tar`. So this selects *the most recent backup* of the __myapp__ role, created on *any host*. The backup will be restored once untill a more recent backup becomes available. Attribute `force: true` can be used to run the restore each time.
+The `path_pattern` fact will be expanded by the __backup__ role to `/backup/archives/*/myapp_*/*/*.tar`. So this selects *the most recent backup* of the __myapp__ role, created on *any host*. The backup will be restored one time. If a new backup is created, the restore will run again. Attribute `force: true` can be used to run the restore each time.
 
 It could also be configured as `2019.10.10.09.10.40` to select a specific backup file. Then it will be expanded to `/backup/archives/*/myapp_*/2019.10.10.09.10.40/*.tar`. 
 
@@ -165,7 +164,7 @@ Or it can be configured as an expanded path directly for example `/backup/archiv
 
 After provision / restore of __myapp__ we see the database and the data directory of __myapp2__. The home of __myapp__ however still has the same files for example `OWFlYmFkMjE2YjcwYzkwZjczZmQ5M2Yw`. This is because only the __data__ directory was configured to be restored using the `folder` attribute. 
 
-Note the file `RESTORED` file. This file contains sha256 checksums of restored backup files. So if you delete this file, __myapp__ will be restored again. If you configure `force: true` this file is ignored. 
+Note the file `RESTORED` file. This file contains sha256 checksums of restored backup files. So if you delete this file, __myapp__ will be restored again. If you configure `force: true` this file is ignored - restore will be performed on each Ansible run.
 
     [myapp@myapp ~]$ ./select.sh 
                                          story                                      
@@ -224,7 +223,11 @@ To upgrade we configure `myapp_version: 0.1.1` in [host_vars/myapp.yml](../../..
     .
     5 directories, 13 files
 
-Note that the `0.1.1` version has the "data": the three records and the contents of the data directory. On the __postgresql__ VM we can list the databases as shown below.   
+Note that the `0.1.1` version has the "data": the three records and the contents of the data directory. 
+
+#### Database upgrade 
+
+On the __postgresql__ VM we can list the databases as shown below.   
 
     postgres=# \l
                                         List of databases
@@ -234,9 +237,8 @@ Note that the `0.1.1` version has the "data": the three records and the contents
      myapp_0_1_0   | myapp     | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
      myapp_0_1_1   | myapp     | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
 
-#### Create 0.1.1 database using 0.1.0 as a template
 
-A new database `myapp_0_1_1` was created as part of the upgrade to `0.1.1`. It was created as by using `myapp_0_1_0` as a template. The custom module [roles/internal/lcm/library/lcm_info.py](../..internal/lcm/library/lcm_info.py ) in the [lcm](../lcm/) role sets creates the facts `myapp_database_template` equal to `myapp_0_1_0`. This fact is used during in the task that creates the database [roles/internal/myapp/tasks/main.yml](../../../roles/internal/myapp/tasks/main.yml).
+A new database `myapp_0_1_1` was created as part of the upgrade to `0.1.1`. It was created by using `myapp_0_1_0` as a template. The custom module [roles/internal/lcm/library/lcm_info.py](../..internal/lcm/library/lcm_info.py ) in the [lcm](../lcm/) role sets creates the fact `myapp_database_template` equal to `myapp_0_1_0`. This fact is used during in the task that creates the database [roles/internal/myapp/tasks/main.yml](../../../roles/internal/myapp/tasks/main.yml).
 
     + name: LCM info 
       lcm_info:
@@ -253,9 +255,9 @@ A new database `myapp_0_1_1` was created as part of the upgrade to `0.1.1`. It w
         fcts[role + '_home_version_current'] = home_version(data,cv)    
 [roles/internal/lcm/library/lcm_info.py](../..internal/lcm/library/lcm_info.py )
 
-#### Migrate / upgrade file system 
+#### File system upgrade 
 
-The [lcm](../lcm/) role also sets identifies the current LCM operation using the custom module [roles/internal/lcm/library/lcm_info.py](../..internal/lcm/library/lcm_info.py )as an __upgrade__ `my_applcm['operation']: upgrade`. 
+The [lcm](../lcm/) role also sets identifies the current LCM operation using the custom module [roles/internal/lcm/library/lcm_info.py](../..internal/lcm/library/lcm_info.py ) as an __upgrade__ `myapp_lcm['operation']: upgrade`. 
 
 This fact can be used to perform tasks that are specific to a certain LCM operation for example copy data.
 
