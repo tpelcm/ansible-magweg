@@ -2,6 +2,9 @@
 backup_restore: 
   myapp:
     path_pattern: '*'
-    # path_pattern: /backup/archives/myapp2/myapp_*/*/*.tar')
+    # path_pattern: /backup/archives/*/myapp_*/*/*.tar')
     folder: data
-    force: false 
+    force: false
+
+myapp_version: 0.1.0
+

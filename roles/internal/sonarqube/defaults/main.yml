@@ -22,6 +22,7 @@ sonarqube_database_port: "5432"
 sonarqube_database_name: sonarqube
 sonarqube_database_admin_username: ansible
 sonarqube_database_admin_password: supersecure
+sonarqube_database_template: template0
 
 sonarqube_python_library: python-psycopg2
 

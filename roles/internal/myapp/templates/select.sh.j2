@@ -2,5 +2,3 @@
 echo 'select * from myapp_table;' | psql -h {{ myapp_database_host }} -U {{ myapp_owner }} {{ myapp_database_name_version }}
 
 tree {{ myapp_home }} 
-
-tree {{ backup_mount }} 
