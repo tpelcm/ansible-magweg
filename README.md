@@ -15,5 +15,12 @@ With the first machine running create two links for __group_vars__ and __host_va
 
 Vagrant uses a dynamic inventory file and Ansible searches the location of this file for the __group_vars__ and __host_vars__.
 
+After creating the links you can setup SonarQube
+
+    vagrant up proxy postgresql sonarqube
+    vagrant provision proxy postgresql sonarqube
+
+For the purpose of demonstrating, testing and developing how this repository automates LCM produres a demo application [myapp](roles/internal/myapp) was created.
+
 ## License
 MIT License.
