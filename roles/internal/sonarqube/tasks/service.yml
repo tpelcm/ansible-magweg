@@ -8,6 +8,7 @@
     mode: 0755
   notify: restart sonarqube  
   when: "ansible_service_mgr == 'systemd'" 
+  notify: systemctl-daemon-reload
 
 - name: Ensure Sonar is running and set to start on boot.
   service: name=sonarqube state=started enabled=yes

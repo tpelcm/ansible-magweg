@@ -1,4 +1,8 @@
 ---
+- name: Stop SonarQube for LCM
+  service: name=sonarqube state=stopped
+  when: sonarqube_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+
 - include: database.yml
 - include: install.yml
 - include: configuration.yml

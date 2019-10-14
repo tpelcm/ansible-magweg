@@ -59,3 +59,13 @@
    src: "{{ sonarqube_home_version }}/lib/sonar-application-{{ sonarqube_version }}.jar"
    dest: "{{ sonarqube_home_version }}/lib/sonar-application.jar"
    state: link
+
+- name: Copy data dir ( part of upgrade )
+  command: "rsync -az --delete --recursive {{ sonarqube_home_version_current }}/extensions/plugins/ {{ sonarqube_home_version }}/extensions/plugins/"
+  when: sonarqube_lcm['operation'] == 'upgrade' 
+
+- name: Raise mmap counts limit
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^vm.max_map_count='
+    line: 'vm.max_map_count = {{ sonarqube_max_map_count }}'

@@ -5,3 +5,6 @@
 
 - name: wait for sonarqube
   wait_for: port=9000 delay=3 timeout=300
+
+- name: systemctl-daemon-reload
+  command: systemctl daemon-reload

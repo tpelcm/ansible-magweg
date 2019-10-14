@@ -8,8 +8,8 @@ sonarqube_java_bin:
   Debian: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
   RedHat: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.el7_6.x86_64/jre/bin/java
   
-sonarqube_xms: 32m # 128m
-sonarqube_xmx: 32m # 2048m
+sonarqube_xms: 32m
+sonarqube_xmx: 32m
 
 sonarqube_web_port: 9000
 sonarqube_web_context: '/sonarqube'
@@ -25,6 +25,9 @@ sonarqube_database_admin_password: supersecure
 sonarqube_database_template: template0
 
 sonarqube_python_library: python-psycopg2
+
+sonarqube_max_map_count: 262144
+
 
 sonarqube_plugins: []
 
