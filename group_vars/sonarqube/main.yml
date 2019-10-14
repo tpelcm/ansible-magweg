@@ -1,11 +1,20 @@
 ---
+sonarqube_version: 6.7
+# sonarqube_version: 7.9.1
+
 sonarqube_plugins:
   build_breaker:
     pattern: 'sonar-build-breaker-plugin-*.jar'
     url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
     checksum: "22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2"
-    # url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.1/sonar-build-breaker-plugin-2.1.jar"
-    # checksum: "0990cc954af0a660b41f00ece9238edeff8a503f48177dee1a4deeca3fb1a583"
+  json:
+    pattern: 'sonar-json-plugin-*.jar'
+    url: "https://github.com/racodond/sonar-json-plugin/releases/download/2.1/sonar-json-plugin-2.1.jar"
+    checksum: "07fce6ffc032c9740900822af81bf7a8d9d38de1f0a3cb10e53e3b2a20126979"
+  widgetlab:
+    pattern: 'sonar-widget-lab-plugin-*.jar'
+    url: "https://github.com/SonarQubeCommunity/sonar-widget-lab/releases/download/1.8.1/sonar-widget-lab-plugin-1.8.1.jar"
+    checksum: "2efb300427a0c5439d91234ce831137b28819da2007354482613cd391b979ff9"
 
 manala_motd_message:  "SonarQube {{ sonarqube_version }} Server"
 
@@ -23,6 +32,9 @@ https_proxy_roles:
     proxy_port: 443
     port: "{{ sonarqube_web_port }}"
     context: "{{ sonarqube_web_context }}"
+
+adoptopenjdk:
+  version: "jdk11_0411_oj9"
 
 sonarqube_java_bin: 
   Debian: '{{ adoptopenjdk_java_home }}/bin/java'
