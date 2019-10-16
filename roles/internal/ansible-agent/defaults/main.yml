@@ -1,2 +1,6 @@
 ---
 ansible_agent_pip_ca_trust_store: /usr/share/pki/ca-trust-store-ansible-agent
+
+ansible_agent_setup_tools_packages:
+  RedHat: ['python2-pip','python-setuptools','openssl']
+  Debian: ['python-pip','python-setuptools','openssl']

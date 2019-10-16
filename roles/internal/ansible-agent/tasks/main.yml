@@ -1,3 +1,8 @@
+---
+- name: Common packages
+  package:
+    name: '{{ common_packages[ansible_os_family] }}'
+    state: present
 
 - name: Configure pip repo
   template: 
@@ -19,7 +24,7 @@
 
 - name: Setup tools
   package:
-    name: ['python2-pip','python-setuptools','openssl']
+    name: '{{ ansible_agent_setup_tools_packages[ansible_os_family] }}'
     state: present
 
 - name: Python setuptools

@@ -1,12 +1,17 @@
 ---
-- name: remove other version of plugins
+- name: sonarqube_versions
+  debug:
+   var: sonarqube_versions
+
+- name: Remove other version of plugins
   remove_old_plugin_version:
     plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
     pattern: "{{ sonarqube_plugins[item]['pattern'] }}"
     url: "{{ sonarqube_plugins[item]['url'] }}"
   with_items: "{{ sonarqube_plugins }}"
+  notify: restart sonarqube
 
-- name: community plugins
+- name: Community plugins
   get_url:
     url: "{{ sonarqube_plugins[item].url }}"
     checksum: "sha256:{{ sonarqube_plugins[item].checksum }}"
@@ -16,4 +21,25 @@
   notify: restart sonarqube   
   with_items: "{{ sonarqube_plugins }}"
   when: sonarqube_plugins is defined
+  notify: restart sonarqube
 
+- name: Remove other version of plugins for version
+  remove_old_plugin_version:
+    plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
+    pattern: "{{ sonarqube_versions[sonarqube_version]['plugins'][item]['pattern'] }}"
+    url: "{{ sonarqube_versions[sonarqube_version]['plugins'][item]['url'] }}"
+  with_items: "{{ sonarqube_versions[sonarqube_version]['plugins'] }}"
+  when: sonarqube_versions[sonarqube_version]['plugins'] is defined  
+  notify: restart sonarqube
+
+- name: Version community plugins
+  get_url:
+    url: "{{ sonarqube_versions[sonarqube_version]['plugins'][item].url }}"
+    checksum: "sha256:{{ sonarqube_versions[sonarqube_version]['plugins'][item].checksum }}"
+    dest: "{{sonarqube_home_version }}/extensions/plugins"
+    group: sonarqube
+    owner: sonarqube
+  notify: restart sonarqube   
+  with_items: "{{ sonarqube_versions[sonarqube_version]['plugins'] }}"
+  when: sonarqube_versions[sonarqube_version]['plugins'] is defined
+  notify: restart sonarqube

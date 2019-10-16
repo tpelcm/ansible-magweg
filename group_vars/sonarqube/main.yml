@@ -1,12 +1,22 @@
 ---
 sonarqube_version: 6.7
-# sonarqube_version: 7.9.1
+#sonarqube_version: 7.9.1
+
+sonarqube_versions:
+  6.7:
+    plugins:
+      build_breaker:
+        pattern: 'sonar-build-breaker-plugin-*.jar'
+        url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
+        checksum: "22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2"
+  7.9.1:
+    plugins:
+      build_breaker:
+        pattern: 'sonar-build-breaker-plugin-*.jar'
+        url: "https://github.com/adnovum/sonar-build-breaker/releases/download/v2.3/sonar-build-breaker-plugin-2.3.jar"
+        checksum: "fa7a922e3693813ca12c09b283da02fa57cfe963ab7f0e1e266ab4ddc6ba0307"
 
 sonarqube_plugins:
-  build_breaker:
-    pattern: 'sonar-build-breaker-plugin-*.jar'
-    url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
-    checksum: "22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2"
   json:
     pattern: 'sonar-json-plugin-*.jar'
     url: "https://github.com/racodond/sonar-json-plugin/releases/download/2.1/sonar-json-plugin-2.1.jar"

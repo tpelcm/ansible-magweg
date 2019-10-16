@@ -1,5 +1,8 @@
 ---
-common_packages: ['nfs-utils', 'nano']
+common_packages: ['nfs-common', 'nano']
+common_packages: 
+  Debian: ['nfs-common', 'nano', 'libffi-dev'] 
+  RedHat: ['nfs-utils', 'nano', 'libffi-devel']
 
 nfs_server: nfs
 nfs_mounts:

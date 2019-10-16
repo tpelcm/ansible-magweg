@@ -64,8 +64,8 @@
   command: "rsync -az --delete --recursive {{ sonarqube_home_version_current }}/extensions/plugins/ {{ sonarqube_home_version }}/extensions/plugins/"
   when: sonarqube_lcm['operation'] == 'upgrade' 
 
-- name: Raise mmap counts limit
-  lineinfile:
-    path: /etc/sysctl.conf
-    regexp: '^vm.max_map_count='
-    line: 'vm.max_map_count = {{ sonarqube_max_map_count }}'
+# Kernel parameters set at boot!
+- name: Raise mmap counts limit 
+  copy:
+    dest: /usr/lib/sysctl.d/100-sonarqube.conf
+    content: 'vm.max_map_count = {{ sonarqube_max_map_count }}'
