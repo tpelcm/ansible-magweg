@@ -33,6 +33,7 @@
   template:
    dest: '/etc/backup/scripts/{{ item }}.sh'
    src: '{{ item }}.sh.j2'
+   mode: 0755   
   with_items: 
     - helpers
     - hooks 
