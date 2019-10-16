@@ -71,5 +71,6 @@
   register: vm_max_map_count
 
 - name: Raise mmap counts limit
-  command: 'sysctl -w vm.max_map_count={{ sonarqube_max_map_count }}'
+  command: '/sbin/sysctl -w vm.max_map_count={{ sonarqube_max_map_count }}'
   when: vm_max_map_count|changed 
+  notify: restart sonarqube
