@@ -4,6 +4,9 @@ common_packages:
   Debian: ['nfs-common', 'nano', 'libffi-dev'] 
   RedHat: ['nfs-utils', 'nano', 'libffi-devel']
 
+common_etc_environment: >
+  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin 
+
 nfs_server: nfs
 nfs_mounts:
   - { path: /backup, src: '{{ nfs_server }}:/nfs/backup', opts: rw, fstype: nfs, state: mounted }

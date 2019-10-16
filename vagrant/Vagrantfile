@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
 
     bx = a['box'] || vagrant_box
     shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
-    shell_provision = 'sudo yum update -y && sudo yum -y install python' if bx.include? 'centos'
+    shell_provision = 'sudo yum update -y && sudo yum -y install python && echo PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin | sudo tee /etc/environment > /dev/null' if bx.include? 'centos'
 
     config.vm.define n do |cfg|
       cfg.vm.hostname = n # .e.g. sonarqube

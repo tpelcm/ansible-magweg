@@ -1,3 +1,6 @@
+{% if common_etc_environment is defined %}
+{{ common_etc_environment }}
+{% endif % }
 {% if proxy_host is defined %}
 http_proxy="http://{{ proxy_host }}:{{ proxy_port }}/"
 https_proxy="http://{{ proxy_host }}:{{ proxy_port }}/"
