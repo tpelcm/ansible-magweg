@@ -6,9 +6,6 @@
  vagrant_box = 'c2/centos7' # for lvm role
 # vagrant_box = 'generic/ubuntu1804'
 
-shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
-shell_provision = 'sudo yum update -y && sudo yum -y install python' if vagrant_box.include? 'centos'
-
 # Ansible inventory
 ansible_groups = {
   'postgresql' => ['postgresql'],
@@ -36,7 +33,7 @@ ansible_host_vars = {
 # Vagrant nodes
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024*4 }
-nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
+nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql), 'box' => 'generic/ubuntu1804' }
 nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024*4 }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
@@ -44,9 +41,14 @@ nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024*4 
 
 Vagrant.configure(2) do |config|
   nodes.each do |n, a|
+
+    bx = a['box'] || vagrant_box
+    shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
+    shell_provision = 'sudo yum update -y && sudo yum -y install python' if bx.include? 'centos'
+
     config.vm.define n do |cfg|
       cfg.vm.hostname = n # .e.g. sonarqube
-      cfg.vm.box = a['box'] || vagrant_box
+      cfg.vm.box = bx
       cfg.vm.network 'private_network', ip: a['ip']
       cfg.vm.provider 'virtualbox' do |vb|
         vb.gui = false
