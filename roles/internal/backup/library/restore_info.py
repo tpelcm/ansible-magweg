@@ -53,6 +53,7 @@ def not_restored(s256,data):
     return True
 
 def get_restore_info(data):
+  tr = None
   has_changed = False
   if '/' not in data['path_pattern']:
     ptrn = os.path.join(os.path.sep,data['backup_archives'],'*/' + data['role'] + '_*/' + data['path_pattern'] + '/*.tar') 
@@ -65,7 +66,7 @@ def get_restore_info(data):
   for tr in sorted_tars(trs):
     s256 = tar_sha256sum(tr)
     restore_info.append({"path":tr, "sha256sum": s256, "restored": not not_restored(s256,data)})
-  if restore_info.count > 0 and ( restore_info[0]["restored"] == False or data['force'] == True):
+  if len(restore_info) > 0 and (restore_info[0]["restored"] == False or data['force'] == True):
     has_changed = True
   if has_changed:
     fcts = restore_facts(data, restore_info, ptrn)
