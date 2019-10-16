@@ -33,7 +33,7 @@ ansible_host_vars = {
 # Vagrant nodes
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024*4 }
-nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql), 'box' => 'generic/ubuntu1804' }
+nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
 nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024*4 }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
