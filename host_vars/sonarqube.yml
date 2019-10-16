@@ -1,9 +1,7 @@
 ---
-backup_restore: 
-  sonarqube:
-    # path_pattern: '2019.10.11.15.42.08'
-    path_pattern: '2019.10.14.10.13.18'
-    # path_pattern: /backup/archives/*/myapp_*/*/*.tar')
-    folder: extensions/plugins
-    force: false
-    stop_start_service: sonarqube
+#backup_restore: 
+#  sonarqube:
+#    path_pattern: '2019.10.14.10.13.18'
+#    folder: extensions/plugins
+#    force: false
+#    stop_start_service: sonarqube
