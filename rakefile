@@ -1,0 +1,35 @@
+
+require 'pathname'
+
+namespace :vagrant do
+  desc 'Link groups_vars and host_vars dir in Vagrant inventory folder'
+  task :group_host_vars do
+    wdir = File.join(Rake.original_dir)
+    Dir.chdir(wdir) do
+      git_root = `git rev-parse --show-toplevel`.delete("\n")
+      group_vars = File.expand_path(Dir.glob("#{git_root}/**/group_vars").first)
+      host_vars = File.expand_path(Dir.glob("#{git_root}/**/host_vars").first)
+      inventory = File.expand_path(Dir.glob('./**/.vagrant/**/inventory').first)
+      groups_vars_link = File.join(inventory, 'group_vars')
+      host_vars_link = File.join(inventory, 'host_vars')
+      [[groups_vars_link, group_vars], [host_vars_link, host_vars]].each do |itm|
+        if File.exist? itm.first
+          puts "Link exists #{itm.first} already"
+        else
+          if File.exist? inventory
+            Dir.chdir(inventory) do
+              pn_vars = Pathname.new(itm.last)
+              pn_inventory = Pathname.new(inventory)
+              rel_path = pn_vars.relative_path_from(pn_inventory)
+              cmd = "ln -sf #{rel_path} #{File.basename(pn_vars)}"
+              puts cmd
+              puts `#{cmd}`
+            end
+          else
+            puts "No 'inventory' folder found in #{wdir}"
+          end
+        end
+      end
+    end
+  end
+end
