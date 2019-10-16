@@ -19,7 +19,7 @@
   version: "v1.0.3"
   name: knopki.locale
 
-- src: geerlingguy.postgresql
+- src: galaxyproject.postgresql
 
 - src: geerlingguy.java
 
@@ -36,8 +36,6 @@
 - src: bas-ansible-roles-collection.postgresql9-client
 
 - src: marcelnijenhof.firewalld
-
-- src: onknows.sonarqube
 
 - src: geerlingguy.nfs
 
