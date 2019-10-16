@@ -2,8 +2,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# vagrant_box = 'generic/centos7'
- vagrant_box = 'c2/centos7' # for lvm role
+vagrant_box = 'generic/centos7'
+# vagrant_box = 'c2/centos7' # for lvm role
 # vagrant_box = 'generic/ubuntu1804'
 
 # Ansible inventory
