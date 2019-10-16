@@ -2,7 +2,7 @@
 {% for rl in backup_roles_node %}
 {%  for schdl in backup['schedules_default'] %}
 {%    if backup_roles[rl]['keep'][schdl] > 0 %}
-alias {{ backup_alias_prefix }}_{{ rl }}_{{ schdl }}="/opt/backup/bin/backup perform --trigger {{ rl }}_{{ schdl}}_{{ vars[rl + '_version'] | replace('.','_') }} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null"
+alias {{ backup_alias_prefix }}-{{ rl }}-{{ schdl }}="/opt/backup/bin/backup perform --trigger {{ rl }}_{{ schdl}}_{{ vars[rl + '_version'] | replace('.','_') }} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null"
 {%    endif %}
 {%   endfor %}
 {% endfor %}
