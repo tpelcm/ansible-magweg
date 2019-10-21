@@ -4,5 +4,5 @@ backup_restore:
     path_pattern: '*'
     folder: extensions/plugins
     remove_folder: data/es*
-    force: true
+    force: false
     stop_start_service: sonarqube
