@@ -6,10 +6,11 @@
     path_pattern: '{{ backup_restore[item]["path_pattern"] }}'
     force: '{{ backup_restore[item]["force"] }}'
     database: "{{ vars[item+'_database_name'] is defined }}"
-    home: "{{ vars[item + '_home'] }}"    
-    home_version: "{{ vars[item+'_home_version'] if vars[item+'_home_version'] is defined  }}"    
+    home: "{{ vars[item + '_home'] }}"
+    home_version: "{{ vars[item+'_home_version'] if vars[item+'_home_version'] is defined  }}"
     tmp: "{{ backup_tmp }}/{{ inventory_hostname }}-{{ item }}"
     folder: '{{ backup_restore[item]["folder"] }}'   
+    remove_folder: '{{ backup_restore[item]["remove_folder"] | default(omit, true) }}'   
   with_items: '{{ backup_restore }}'
   # TODO conditional vars not supported 
   # all if is defined, do not work

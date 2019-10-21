@@ -52,11 +52,14 @@ def not_restored(s256,data):
       open(f,'w').write('Restored sha256sums: ') 
     return True
 
+def get_remove_folder(data):
+  return os.path.join(os.path.sep,data['home_version'],data['remove_folder'])
+
 def get_restore_info(data):
   tr = None
   has_changed = False
   if '/' not in data['path_pattern']:
-    ptrn = os.path.join(os.path.sep,data['backup_archives'],'*/' + data['role'] + '_*/' + data['path_pattern'] + '/*.tar') 
+    ptrn = os.path.join(os.path.sep,data['backup_archives'],'*/' + data['role'] + '_*/' + data['path_pattern'] + '/*.tar')
   else:
     ptrn = data['backup_archives']
   trs = []
@@ -105,6 +108,8 @@ def restore_facts(data, restore_info, ptrn):
   if data['database']:
     fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], restore_info[0]['path'])
     fcts['backup_restore_db'] = True
+  if data['remove_folder']:
+    fcts['backup_restore'][data['role']]['remove_folder_expanded'] = get_remove_folder(data)
   return fcts
 
 def main():
@@ -115,6 +120,7 @@ def main():
     "path_pattern": {"required": True, "type": "str"},
     "force": {"default": False, "type": "bool"},
     "folder": { "required": False, "type": "str"},
+    "remove_folder": { "required": False, "type": "str"},
     "database": { "required": True, "type": "bool"},
     "home_version": { "required": True, "type": "str"},
     "home": { "required": True, "type": "str"},

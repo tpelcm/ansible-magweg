@@ -41,6 +41,6 @@
   register: db_restore
   failed_when: "'ERROR' in db_restore.stderr"  
 
-- name: db_restore
-  debug:
-    var: db_restore
+#- name: db_restore
+#  debug:
+#    var: db_restore
