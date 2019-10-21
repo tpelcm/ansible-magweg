@@ -29,10 +29,5 @@
 
 - name: Python setuptools
   pip:
-    name: setuptools
-    state: present
-
-- name: Python OpenSSL dependencies
-  pip:
-    name: pyOpenSSL
+    name: '{{ ansible_agent_setup_tools_pip_packages }}'
     state: present

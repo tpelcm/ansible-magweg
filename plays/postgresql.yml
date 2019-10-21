@@ -5,43 +5,6 @@
   sudo: True
 
   roles:
-    - { role: common,                   tags: ["common"] }
-    - { role: geerlingguy.postgresql,   tags: ["postgresql"] }
-
-  tasks:
-    - name: Debian PostgreSQL listen all 
-      copy:
-        dest: "/etc/postgresql/10/main/conf.d/listen.conf"
-        content: |
-          listen_addresses = '{{ postgresql_listen_addresses }}'
-      notify: postgresql_restart
-      become: yes
-      when: ansible_os_family == 'Debian' and gi == "false"
-
-    - name: CentOS PostgreSQL listen all
-      lineinfile:
-        dest: /var/lib/pgsql/data/postgresql.conf
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      notify: postgresql_restart
-      with_items:
-        - regexp: "listen_addresses"
-          line: "listen_addresses = '{{ postgresql_listen_addresses }}'"    
-      when: ansible_os_family == 'RedHat' and gi == "false"
-
-    - name: GI PostgreSQL listen all
-      lineinfile:
-        dest: /var/lib/pgsql/9.6/data/postgresql.conf
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      notify: postgresql_restart
-      with_items:
-        - regexp: "listen_addresses"
-          line: "listen_addresses = '{{ postgresql_listen_addresses }}'"    
-      when: gi == "true" 
- 
-  handlers:
-    - name: postgresql_restart
-      service:
-        name: '{{ postgresql_daemon }}'
-        state: restarted
+    - { role: common,                     tags: ["common"] }
+    - { role: galaxyproject.postgresql,   tags: ["postgresql"] }
+    - { role: postgresql,                 tags: ["postgresql"] }

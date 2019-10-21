@@ -1,0 +1,10 @@
+---
+postgresql_client_version: 9.6
+
+postgresql_client_repos:
+  RedHat:
+    '7':
+      url: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+postgresql_client_versions: 
+  9.6: ['postgresql96']
