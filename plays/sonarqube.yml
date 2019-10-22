@@ -1,5 +1,4 @@
 ---
-
 - name: sonarqube.yml | All roles
   hosts: sonarqube
   sudo: True

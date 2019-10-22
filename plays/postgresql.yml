@@ -1,5 +1,4 @@
 ---
-
 - name: postgresql.yml | All roles
   hosts: postgresql
   sudo: True

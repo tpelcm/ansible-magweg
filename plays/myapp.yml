@@ -1,5 +1,4 @@
 ---
-
 - name: myapp.yml
   hosts: myapp_servers
   any_errors_fatal: true  
