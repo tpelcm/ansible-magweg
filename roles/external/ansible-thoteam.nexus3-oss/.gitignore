@@ -1,0 +1,10 @@
+.idea/
+*.iml
+.venv
+molecule/**/.molecule/
+molecule/**/__pycache__/
+molecule/**/.cache
+molecule/**/.pytest_cache
+README.md.orig.*
+README.md.toc.*
+*.pyc
