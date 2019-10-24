@@ -9,6 +9,16 @@ squid_acls:
     classifier: src
     value: "\"{{ proxy_allowd_ips_file }}\""
 
+reverse_proxy_vhosts:
+  sh:
+    server_name: sh.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      sq:
+        proxy_pass: /sonarqube https://1.1.1.4/sonarqube
+        #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
+
 #squid_cache_rules:
 #  - acl: localnet
 #    decision: deny

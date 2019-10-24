@@ -8,5 +8,4 @@
     - { role: nfs,                tags: ["nfs"] }
     - { role: proxy,              tags: ["proxy"] }
     - { role: robertdebock.squid, tags: ["proxy"] }
-    - { role: geerlingguy.apache, tags: ["reverse-proxy"] }
     - { role: reverse-proxy,      tags: ["reverse-proxy"] }

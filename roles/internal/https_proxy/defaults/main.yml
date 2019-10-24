@@ -10,3 +10,5 @@ https_proxy_etc_ssl_certs:
 https_log_dir:
   Debian: /var/log/apache2/
   RedHat: /var/log/httpd/
+
+apache_remove_default_vhost: true

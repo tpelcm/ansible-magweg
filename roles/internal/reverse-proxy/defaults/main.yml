@@ -1,0 +1,27 @@
+---
+reverse_proxy_server_admin: admin@tpelcm.tech
+reverse_proxy_log_level: warn # debug, info, notice, warn, error, crit,
+
+reverse_proxy_vhosts: []
+#reverse_proxy_vhosts:
+#  sh:
+#    server_name: sonarqube.tech 
+#    port: 8443
+#    proxy_passes:
+#      sq:
+#        proxy_pass: /sonarqube https://1.1.1.4/sonarqube/
+#        #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
+
+apache_remove_default_vhost: true
+
+reverse_proxy_etc_ssl_private:
+  Debian: /etc/ssl/private/
+  RedHat: /etc/ssl/
+
+reverse_proxy_etc_ssl_certs:
+  Debian: /etc/ssl/certs/
+  RedHat: /etc/ssl/
+
+https_log_dir:
+  Debian: /var/log/apache2/
+  RedHat: /var/log/httpd/
