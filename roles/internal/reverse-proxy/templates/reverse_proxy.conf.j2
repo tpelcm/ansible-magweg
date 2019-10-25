@@ -28,6 +28,7 @@ SSLCryptoDevice builtin
     SSLCertificateFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}.pem
     SSLCertificateKeyFile {{ reverse_proxy_etc_ssl_private[ansible_os_family] }}reverse_proxy.pem
     RequestHeader set X-Forwarded-Proto "https"
+    AllowEncodedSlashes NoDecode
 
     DocumentRoot /var/www/html
 
