@@ -1,0 +1,82 @@
+---
+nexus_version: 3.7.1-02
+nexus_public_hostname: sh.1.1.1.3.nip.io
+nexus_public_scheme: https
+vault_nexus_admin_password: supersecret
+
+nexus_default_context_path: /nexus
+
+nexus_api_hostname: sh.1.1.1.3.nip.io
+nexus_api_scheme: https
+nexus_api_validate_certs: false
+nexus_api_context_path: /nexus/
+nexus_api_port: 443
+
+#nexus_privileges:
+#  - name: all-repos-read
+#    description: 'Read & Browse access to all repos'
+#    repository: '*'
+#    actions:
+#      - read
+#      - browse
+#  - name: company-project-deploy
+#    description: 'Deployments to company-project'
+#    repository: company-project
+#    actions:
+#      - add
+#      - edit
+#nexus_roles:
+#  - id: Developpers # maps to the LDAP group
+#    name: developers
+#    description: All developers
+#    privileges:
+#      - nx-search-read
+#      - all-repos-read
+#      - company-project-deploy
+#    roles: []
+#nexus_local_users:
+#  - username: jenkins # used as key to update
+#    first_name: Jenkins
+#    last_name: CI
+#    email: support@company.com
+#    password: "s3cr3t"
+#    roles:
+#      - Developpers # role ID here
+#nexus_blobstores:
+#  - name: company-artifacts
+#    path: /var/nexus/blobs/company-artifacts
+#nexus_scheduled_tasks:
+#  - name: compact-blobstore
+#    cron: '0 0 22 * * ?'
+#    typeId: blobstore.compact
+#    taskProperties:
+#      blobstoreName: 'company-artifacts'
+#nexus_repos_maven_proxy:
+#  - name: central
+#    remote_url: 'https://repo1.maven.org/maven2/'
+#    layout_policy: permissive
+#  - name: alfresco
+#    remote_url: 'https://artifacts.alfresco.com/nexus/content/groups/private/'
+#    remote_username: 'secret-username'
+#    remote_password: "{{ vault_alfresco_private_password }}"
+#  - name: jboss
+#    remote_url: 'https://repository.jboss.org/nexus/content/groups/public-jboss/'
+#  - name: vaadin-addons
+#    remote_url: 'https://maven.vaadin.com/vaadin-addons/'
+#  - name: jaspersoft
+#    remote_url: 'https://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/'
+#    version_policy: mixed
+#nexus_repos_maven_hosted:
+#  - name: company-project
+#    version_policy: mixed
+#    write_policy: allow
+#    blob_store: company-artifacts
+#nexus_repos_maven_group:
+#  - name: public
+#    member_repos:
+#      - central
+#      - jboss
+#      - vaadin-addons
+#      - jaspersoft
+
+

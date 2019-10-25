@@ -1,0 +1,44 @@
+---
+- name: Nexus
+  hosts: nexus
+  become: yes
+
+  vars:
+    nexus_timezone: 'Europa/Amsterdam'
+    nexus_admin_password: "{{ vault_nexus_admin_password }}"
+    httpd_setup_enable: false
+    adoptopenjdk:
+      version: jdk8_222b10_oj9
+    adoptopenjdk_java_home_etc_environment: true
+    nexus_installation_dir: '/opt/nexus'
+    nexus_data_dir: '/opt/nexus/nexus-{{ nexus_version }}/data'
+    c2_alias:
+      roles:
+        nexus:
+          logs: ["{{ nexus_data_dir }}/log/*.log"]
+          configs: 
+            - "/etc/systemd/system/nexus.service"       
+#    httpd_ssl_certificate_file: "{{ vault_httpd_ssl_certificate_file }}"
+#    httpd_ssl_certificate_key_file: "{{ vault_httpd_ssl_certificate_key_file }}"
+#    ldap_connections:
+#      - ldap_name: 'Company LDAP'
+#        ldap_protocol: 'ldaps'
+#        ldap_hostname: 'ldap.company.com'
+#        ldap_port: 636
+#        ldap_search_base: 'dc=company,dc=net'
+#        ldap_user_base_dn: 'ou=users'
+#        ldap_user_object_class: 'inetOrgPerson'
+#        ldap_user_id_attribute: 'uid'
+##        ldap_user_real_name_attribute: 'cn'
+#        ldap_user_email_attribute: 'mail'
+#        ldap_group_base_dn: 'ou=groups'
+#        ldap_group_object_class: 'posixGroup'
+#        ldap_group_id_attribute: 'cn'
+#        ldap_group_member_attribute: 'memberUid'
+#        ldap_group_member_format: '${username}'
+  roles:
+    - { role: common,                       tags: ["common"] }
+    - { role: java,                         tags: ["java"] }
+    - { role: ansible-thoteam.nexus3-oss,   tags: ['nexus'] }
+    - { role: nexus,                        tags: ['nexus'] }
+    - { role: backup,                       tags: ["backup"] }

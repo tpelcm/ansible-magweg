@@ -1,0 +1,6 @@
+---
+- name: Nexus JAVA_HOME
+  copy:
+    content: "INSTALL4J_JAVA_HOME_OVERRIDE={{ adoptopenjdk_java_home }}"
+    dest: /etc/profile.d/nexus-jdk.sh
+    mode: 0644
