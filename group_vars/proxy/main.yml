@@ -19,7 +19,9 @@ reverse_proxy_vhosts:
       sq:
         proxy_pass: /sonarqube https://1.1.1.4/sonarqube
         #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
-
+      nexus:
+        proxy_pass: /nexus http://1.1.1.7:8081/nexus nocanon
+        proxy_pass_reverse: /nexus http://1.1.1.7:8081/nexus
 #squid_cache_rules:
 #  - acl: localnet
 #    decision: deny
