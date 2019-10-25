@@ -31,3 +31,10 @@
   pip:
     name: '{{ ansible_agent_setup_tools_pip_packages }}'
     state: present
+
+- name: Python role packages
+  pip:
+    name: '{{ ansible_agent_role_packages[item] }}'
+    state: present
+  when: ansible_agent_role_packages[item] is defined
+  with_items: '{{ ansible_role_names }}'
