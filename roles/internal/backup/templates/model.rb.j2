@@ -9,7 +9,7 @@
 
 {% for schdl in backup['schedules_default'] %}
 
-GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('.','_') }}, '{{ item }} - {{ inventory_hostname }}') do
+GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('.','_') | replace('-','_') }}, '{{ item }} - {{ inventory_hostname }}') do
     
   split_into_chunks_of {{ backup_split_into_chunks_of }}
   compress_with Gzip
