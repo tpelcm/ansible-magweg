@@ -26,7 +26,7 @@
     role: '{{ item }}'
     version: "{{ vars[item + '_version'] }}"
     home: "{{ vars[item + '_home'] }}"
-    database: "{{ vars[item + '_database_name'] }}"
+    database: "{{ vars[item + '_database_name'] | default(omit) }}"
     versions_sequence: "{{ vars[item + '_versions_sequence'] }}"
   with_items: '{{ lcm_roles_node }}'
 

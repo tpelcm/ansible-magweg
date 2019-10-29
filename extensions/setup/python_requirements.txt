@@ -3,8 +3,12 @@ PyYAML
 Jinja2
 httplib2
 
+# On control host
+jmespath
+
 # Ansible
 ansible
 
 #Other packages
 boto
+

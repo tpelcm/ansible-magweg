@@ -1,2 +1,5 @@
 ---
 common_packages: []
+
+common_role_packages:
+  nexus: ['rsync']

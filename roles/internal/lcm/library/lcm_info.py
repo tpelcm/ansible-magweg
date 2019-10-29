@@ -65,9 +65,11 @@ def lcm_info(data):
   "version-file": vsn_file},
   role + '_home_link': home_link(data)}
   fcts[role + '_home_version'] = home_version(data,data['version'])
-  fcts[role + '_database_name_version'] = database_version(data,data['version'])
+  if data['database'] is not None:
+    fcts[role + '_database_name_version'] = database_version(data,data['version'])
   if op == 'upgrade':
-    fcts[role + '_database_template'] = database_version(data,cv)
+    if data['database'] is not None:
+      fcts[role + '_database_template'] = database_version(data,cv)
     fcts[role + '_home_version_current'] = home_version(data,cv)    
   return (has_changed, fcts)
 
@@ -77,7 +79,7 @@ def main():
     "home": {"required": True, "type": "str"},
     "version": {"required": True, "type": "str"},
     "versions_sequence": {"required": True, "type": "list"},
-    "database": {"required": True, "type": "str"}}
+    "database": {"required": False, "type": "str"}}
 
   module = AnsibleModule(argument_spec=fields)
   has_changed, fcts = lcm_info(module.params)
