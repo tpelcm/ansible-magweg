@@ -11,7 +11,7 @@
       version: jdk8_222b10_oj9
     adoptopenjdk_java_home_etc_environment: true
     nexus_installation_dir: '/opt/nexus'
-    nexus_data_dir: '/opt/nexus/nexus-{{ nexus_version }}/data'
+    nexus_data_dir: '/opt/nexus/sonatype-work/nexus3'
     c2_alias:
       roles:
         nexus:
