@@ -31,6 +31,7 @@ nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
 Vagrant.configure(2) do |config|
+  config.vm.synced_folder '.', '/vagrant'
   nodes.each do |n, a|
     bx = a['box'] || vagrant_box
     shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
