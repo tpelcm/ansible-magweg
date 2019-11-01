@@ -1,0 +1,78 @@
+---
+nexus_config_gitlfs: true
+
+nexus_blobstores:
+  - name: pet
+    path: pet
+
+nexus_repos_gitlfs_hosted:
+  - name: pet-gitlfs
+    blob_store: pet
+
+nexus_roles:
+  - id: pet-members # maps to the LDAP group
+    name: pet-members
+    description: All members Petclinic project
+    privileges:
+      - nx-search-read
+      - all-repos-read
+      - pet-members-add-edit
+    roles: []
+
+nexus_privileges:
+  - name: all-repos-read
+    description: 'Read & Browse access to all repos'
+    repository: '*'
+    actions:
+      - read
+      - browse
+  - name: pet-members-add-edit
+    description: 'Git LFS artifacts'
+    repository: pet-gitlfs
+    format: gitlfs
+    actions:
+      - add
+      - edit
+
+nexus_scheduled_tasks:
+  - name: pet-compact-blobstore
+    cron: '0 0 22 * * ?'
+    typeId: blobstore.compact
+    taskProperties:
+      blobstoreName: 'pet'
+
+#nexus_local_users:
+#  - username: jenkins # used as key to update
+#    first_name: Jenkins
+#    last_name: CI
+#    email: support@company.com
+#    password: "s3cr3t"
+#    roles:
+#      - Developpers # role ID here
+#nexus_repos_maven_proxy:
+#  - name: central
+#    remote_url: 'https://repo1.maven.org/maven2/'
+#    layout_policy: permissive
+#  - name: alfresco
+#    remote_url: 'https://artifacts.alfresco.com/nexus/content/groups/private/'
+#    remote_username: 'secret-username'
+#    remote_password: "{{ vault_alfresco_private_password }}"
+#  - name: jboss
+#    remote_url: 'https://repository.jboss.org/nexus/content/groups/public-jboss/'
+#  - name: vaadin-addons
+#    remote_url: 'https://maven.vaadin.com/vaadin-addons/'
+#  - name: jaspersoft
+#    remote_url: 'https://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo/'
+#    version_policy: mixed
+#nexus_repos_maven_hosted:
+#  - name: company-project
+#    version_policy: mixed
+#    write_policy: allow
+#    blob_store: company-artifacts
+#nexus_repos_maven_group:
+#  - name: public
+#    member_repos:
+#      - central
+#      - jboss
+#      - vaadin-addons
+#      - jaspersoft    
