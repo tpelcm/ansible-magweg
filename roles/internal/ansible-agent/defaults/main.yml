@@ -6,3 +6,6 @@ ansible_agent_setup_tools_packages:
   Debian: ['python-pip','python-setuptools','openssl']
 
 ansible_agent_setup_tools_pip_packages: ['setuptools', 'pyOpenSSL', 'psycopg2-binary']
+
+ansible_agent_role_packages: []
+#  nexus: ['pip-package']

@@ -1,0 +1,4 @@
+---
+nexus_version: '3.7.1-02'
+nexus_versions_sequence: ['3.7.1-02','3.19.1-01']
+nexus_home: /opt/nexus
