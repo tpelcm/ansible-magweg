@@ -40,14 +40,14 @@
     src: "{{ backup_restore[item]['tar'] }}"
     remote_src: yes
     dest: "{{ backup_restore[item]['tmp'] }}"
-  when: backup_restore[item]['tar'] is defined    
+  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
 - name: Stop service
   service:
     name: "{{ backup_restore[item]['stop_start_service'] }}"
     state: stopped
-  when: backup_restore[item]['stop_start_service'] is defined
+  when: backup_restore[item]['tar'] is defined and backup_restore[item]['stop_start_service'] is defined
   with_items: '{{ backup_restore }}'
 
 - include_tasks: "restore_db.yml"
@@ -74,5 +74,5 @@
   service:
     name: "{{ backup_restore[item]['stop_start_service'] }}"
     state: started
-  when: backup_restore[item]['stop_start_service'] is defined
+  when: backup_restore[item]['tar'] is defined and backup_restore[item]['stop_start_service'] is defined
   with_items: '{{ backup_restore }}'
