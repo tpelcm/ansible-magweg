@@ -19,7 +19,6 @@
   notify: restart apache
   with_items:
      - 000-default.conf
-     - vhosts.conf
  
 - name: Enable mods
   command: "a2enmod {{ item }}"

@@ -21,5 +21,4 @@
      - autoindex.conf
      - ssl.conf
      - userdir.conf
-     - vhosts.conf
      - welcome.conf

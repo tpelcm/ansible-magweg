@@ -12,6 +12,7 @@ reverse_proxy_vhosts: []
 #        proxy_pass: /sonarqube https://1.1.1.4/sonarqube/
 #        #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
 
+apache_create_vhosts: no
 apache_remove_default_vhost: true
 
 reverse_proxy_etc_ssl_private:

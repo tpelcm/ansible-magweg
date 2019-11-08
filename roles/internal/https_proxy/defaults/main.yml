@@ -11,4 +11,5 @@ https_log_dir:
   Debian: /var/log/apache2/
   RedHat: /var/log/httpd/
 
+apache_create_vhosts: false
 apache_remove_default_vhost: true
