@@ -44,3 +44,6 @@
 - src: robertdebock.squid
 
 - src: ansible-thoteam.nexus3-oss
+
+- src: git+https://github.com/wstrange/ans-opendj.git
+  name: opendj
