@@ -12,11 +12,15 @@ jenkins_url: "https://builds.forgerock.org/view/OpenDJ/job/OpenDJ%20-%20trunk%20
 opendj_major: "OpenDJ-2.7.0"
 opendj_zip: "{{opendj_major}}-{{ansible_date_time.year}}{{ansible_date_time.month}}{{ansible_date_time.day}}.zip"
 opendj_url: "{{jenkins_url}}/{{opendj_zip}}"
+opendj_java_home: "{{ adoptopenjdk_java_home | default(omit) }}"
 
-# Directory Manager password
-opendj_password: password
+# Directory Manager
+opendj_root_user_dn: cn=admin
+opendj_password: supersecure
+opendj_ldif_file: /tmp/cicd.ldif
+
 # BaseDN
-opendj_basedn: "dc=example,dc=com"
+opendj_basedn: "dc=cicd,dc=tech"
 
 opendj_ldap_port: 389
 opendj_ldaps_port: 636
@@ -25,3 +29,4 @@ opendj_jmx_port: 1689
 
 # Name given to the init.d service file. 
 opendj_service_name: opendj
+

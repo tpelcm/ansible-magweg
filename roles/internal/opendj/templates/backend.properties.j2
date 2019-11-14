@@ -1,0 +1,5 @@
+create-backend        --backend-name newBackend --type pdb --set base-dn:"{{ opendj_basedn }}" --set db-cache-percent:20 --set enabled:true
+create-backend-index  --backend-name newBackend --type generic --set index-type:equality --set index-type:substring --index-name cn
+create-backend-index  --backend-name newBackend --type generic --set index-type:equality --set index-type:substring --index-name sn
+create-backend-index  --backend-name newBackend --type generic --set index-type:equality --index-name uid
+create-backend-index  --backend-name newBackend --type generic --set index-type:equality --set index-type:substring --index-name mail

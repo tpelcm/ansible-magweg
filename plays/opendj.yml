@@ -1,0 +1,12 @@
+---
+- name: opendj.yml
+  hosts: opendj
+  sudo: True
+
+  roles:
+    - { role: common,                     tags: ["common"] }
+    - { role: java,                         tags: ["java"] }
+    - { role: opendj,                     tags: ["system"] }
+
+  vars:
+    opendj_url: https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/4.4.3/opendj-4.4.3.zip

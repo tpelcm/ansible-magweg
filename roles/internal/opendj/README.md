@@ -44,6 +44,15 @@ Configure two instances of OpenDJ on the same server (different ports)
           - { role: opendj, install_root: "/opt/b", opendj_admin_port: 1444, opendj_ldap_port: 2389,
               opendj_ldaps_port: 2636 , opendj_jmx_port: 2689, opendj_service_name: "opendj2" }
 
+Remove
+-------
+
+To completely remove OpenDJ
+
+    systemctl stop opendj
+    rm -rf /opt/opendj/
+    rm /etc/init.d/opendj
+
 Dependencies
 ------------
 
