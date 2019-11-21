@@ -12,6 +12,7 @@ ansible_groups = {
   'sonarqube' => ['sonarqube'],
   'nexus' => ['nexus'],
   'opendj' => ['proxy'],
+  'env' => ['env'],  
   'myapp_servers' => %w(myapp myapp2),
   'nfs' => ['proxy'],
   # 'backup' => %w(sonarqube nexus), # TODO
@@ -28,6 +29,7 @@ nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
 nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy opendj) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
+nodes['env'] = {  'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
