@@ -25,6 +25,11 @@ sonarqube_plugins:
     pattern: 'sonar-widget-lab-plugin-*.jar'
     url: "https://github.com/SonarQubeCommunity/sonar-widget-lab/releases/download/1.8.1/sonar-widget-lab-plugin-1.8.1.jar"
     checksum: "2efb300427a0c5439d91234ce831137b28819da2007354482613cd391b979ff9"
+  ldap:
+    pattern: sonar-ldap-plugin-*.jar
+    url: https://binaries.sonarsource.com/Distribution/sonar-ldap-plugin/sonar-ldap-plugin-2.2.0.608.jar
+    checksum: 21ca64e27fc17fdc961983a20a9381b043ad84acfbf77ca58158841de5fef9c5
+
 
 manala_motd_message:  "SonarQube {{ sonarqube_version }} Server"
 
@@ -54,4 +59,21 @@ sonarqube_proxy:
   host: '{{ proxy_host }}'
   port: '{{ proxy_port }}'  
 
+sonarqube_ldap:
+  url: ldap://1.1.1.3:389
+  bindDn: cn=admin
+  bindPassword: supersecure
+  authentication: simple
+  #authentication: DIGEST-MD5
+  user: 
+    baseDn: ou=people,dc=cicd,dc=tech
+    request: uid={login}
+    realNameAttribute: cn
+    emailAttribute: mail
+  group: 
+    baseDn: ou=groups,dc=cicd,dc=tech
+    request: (&(objectClass=groupOfNames)(member={dn}))
+    idAttribute: cn
+
 apache_remove_default_vhost: true
+
