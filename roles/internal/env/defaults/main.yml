@@ -1,0 +1,19 @@
+---
+env_ldap_basedn: dc=example,dc=com
+env_ldap_auth:
+  server_uri: ldap://localhost/
+  bind_dn: cn=admin,dc=example,dc=com
+  bind_pw: password
+
+env_ldap_people_base_dn: "ou=people,{{ env_ldap_basedn }}"
+env_ldap_group_base_dn: "ou=groups,{{ env_ldap_basedn }}"
+
+env_ldap_person_class:
+  - inetorgperson
+  - organizationalperson
+  - person
+  - top
+
+env_ldap_group_class:
+  - groupOfNames
+  - top
