@@ -14,7 +14,7 @@
       description: "{{ item['description'] }}"
     params: "{{ env_ldap_auth }}"
   with_items: "{{ env_users }}"
-  no_log: true
+  # no_log: true
 
 - name: Gather project facts
   project:

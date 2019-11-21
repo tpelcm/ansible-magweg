@@ -3,7 +3,7 @@ postgresql_user: postgres
 
 postgresql_users:
   - name: ansible
-    password: supersecure
+    password: "{{ postgresql_user_ansible_password }}"
     role_attr_flags: CREATEDB,CREATEROLE,SUPERUSER
 
 postgresql_unix_socket_directories:
