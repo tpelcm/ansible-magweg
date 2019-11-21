@@ -59,12 +59,9 @@ sonarqube_proxy:
   host: '{{ proxy_host }}'
   port: '{{ proxy_port }}'  
 
-sonarqube_ldap_bindpassword: supersecure
-
 sonarqube_ldap:
   url: ldap://1.1.1.3:389
   bindDn: cn=admin
-  bindPassword: "{{ sonarqube_ldap_bindpassword }}"
   authentication: simple
   #authentication: DIGEST-MD5
   user: 

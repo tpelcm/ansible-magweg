@@ -22,7 +22,7 @@ sonar.security.realm=LDAP
 
 ldap.url={{ sonarqube_ldap['url'] }}
 ldap.bindDn={{ sonarqube_ldap['bindDn'] }}
-ldap.bindPassword={{ sonarqube_ldap['bindPassword'] }}
+ldap.bindPassword={{ sonarqube_ldap_bindpassword }}
 
 # simple (default) | CRAM-MD5 | DIGEST-MD5 | GSSAPI	 
 ldap.authentication={{ sonarqube_ldap['authentication'] }}
