@@ -32,14 +32,26 @@
   args:
     creates: "{{install_root}}/opendj/config"
 
-- name: Create rc script
-  command: "{{install_root}}/opendj/bin/create-rc-script -f /etc/init.d/{{opendj_service_name}} -u root"
-  environment:
-    OPENDJ_JAVA_HOME: "{{ opendj_java_home }}"
-  notify: systemctl-daemon-reload    
-  
-- name: Change the ownership on the files so the fr user can execute ldap commands
-  file: path={{install_root}}/opendj state=directory owner={{fr_user}} recurse=yes
+#- name: Change the ownership on the files so the fr user can execute ldap commands
+#  file: path={{install_root}}/opendj state=directory owner={{fr_user}} recurse=yes
+#
+#- name: Create rc script
+#  command: "{{install_root}}/opendj/bin/create-rc-script -f /etc/init.d/{{opendj_service_name}} -u root"
+#  environment:
+#    OPENDJ_JAVA_HOME: "{{ opendj_java_home }}"
+#  notify: systemctl-daemon-reload    
+#
+#- name: Start opendj
+#  sysvinit: name={{opendj_service_name}} state=started enabled=yes
 
-- name: Start opendj
-  sysvinit: name={{opendj_service_name}} state=started enabled=yes
+- name: Systemd service
+  template:
+    src: opendj.service.j2
+    dest: /etc/systemd/system/opendj.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: systemctl-daemon-reload
+
+- name: Start OpenDJ service
+  systemd: state=started name=opendj daemon_reload=yes

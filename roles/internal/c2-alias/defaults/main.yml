@@ -15,7 +15,7 @@ c2_alias:
         - /opt/opendj/logs/errors
         - /opt/opendj/logs/access
       configs: 
-        - /etc/rc.d/init.d/opendj
+        - /etc/systemd/system/opendj.service
 
 
 
