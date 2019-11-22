@@ -1,6 +1,8 @@
 ---
 postgresql_user: postgres
 
+postgresql_user_ansible_password: supersecure
+
 postgresql_users:
   - name: ansible
     password: "{{ postgresql_user_ansible_password }}"

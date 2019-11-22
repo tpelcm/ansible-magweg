@@ -51,7 +51,7 @@ To completely remove OpenDJ
 
     systemctl stop opendj
     rm -rf /opt/opendj/
-    rm /etc/init.d/opendj
+    rm /etc/systemd/system/opendj.service
 
 Dependencies
 ------------

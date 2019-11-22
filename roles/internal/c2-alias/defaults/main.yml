@@ -16,6 +16,10 @@ c2_alias:
         - /opt/opendj/logs/access
       configs: 
         - /etc/systemd/system/opendj.service
-
-
-
+    nexus:
+      logs: ["{{ nexus_data_dir | default(omit) }}/log/*.log"]
+      configs: 
+        - /etc/systemd/system/nexus.service
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/jetty/jetty-https.xml"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus-default.properties"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus.properties"

@@ -54,4 +54,4 @@
   notify: systemctl-daemon-reload
 
 - name: Start OpenDJ service
-  systemd: state=started name=opendj daemon_reload=yes
+  systemd: state=started name=opendj daemon_reload=yes enabled=yes
