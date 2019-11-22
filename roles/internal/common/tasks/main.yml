@@ -1,4 +1,13 @@
 ---
+# SELinux permissive mode, logging actions that would be blocked
+# e.g. required on proxy to allow http connection to nexus
+# this could also be done with command below on proxy 
+# /usr/sbin/setsebool -P httpd_can_network_connect 1
+- name: Put SELinux in permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+
 - name: NFS mounts
   mount:
     path: "{{ item['path'] }}"
