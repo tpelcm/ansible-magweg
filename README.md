@@ -60,5 +60,7 @@ https://sh.1.1.1.3.nip.io/sonarqube/ and https://sh.1.1.1.3.nip.io/nexus/
 
 You should be able to logon to SonarQube using for example account `akaufman` with password `supersecure`. Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
 
+If you want to connect to the LDAP directory using a tool like [Apache Directory Studio](https://directory.apache.org/studio/) use for example ldap://1.1.1.3:389 and `cn=admin` with password `secret`.
+
 ## License
 MIT License.
