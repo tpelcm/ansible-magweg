@@ -1,0 +1,21 @@
+[Unit]
+SourcePath=/opt/opendj/bin
+Description=OpenDJ Server
+Before=runlevel5.target shutdown.target
+After=
+Conflicts=shutdown.target
+
+[Service]
+Type=forking
+Restart=always
+TimeoutSec=5min
+IgnoreSIGPIPE=no
+KillMode=process
+GuessMainPID=no
+RemainAfterExit=yes
+Environment=OPENDJ_JAVA_HOME={{ opendj_java_home }}
+ExecStart=/opt/opendj/bin/start-ds
+ExecStop=/opt/opendj/bin/stop-ds
+
+[Install]
+WantedBy=multi-user.target

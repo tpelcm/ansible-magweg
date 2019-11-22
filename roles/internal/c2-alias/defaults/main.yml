@@ -1,5 +1,25 @@
 ---
-c2_alias:
-  roles: []
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
+
+c2_alias:
+  roles:
+    proxy:
+      logs: ["/var/log/squid/*.log","/var/log/squid/squid.out"]
+      configs: 
+        - "{{ squid_config_directory | default(omit) }}/{{ squid_config_file | default(omit) }}"
+        - "{{ proxy_allowd_ips_file | default(omit) }}"
+    opendj:
+      logs: 
+        - /opt/opendj/logs/server.out
+        - /opt/opendj/logs/errors
+        - /opt/opendj/logs/access
+      configs: 
+        - /etc/systemd/system/opendj.service
+    nexus:
+      logs: ["{{ nexus_data_dir | default(omit) }}/log/*.log"]
+      configs: 
+        - /etc/systemd/system/nexus.service
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/jetty/jetty-https.xml"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus-default.properties"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus.properties"

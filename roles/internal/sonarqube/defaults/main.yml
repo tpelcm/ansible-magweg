@@ -48,3 +48,18 @@ sonarqube_versions:
     checksum: sha256:67f3ccae79245397480b0947d7a0b5661dc650b87f368b39365044ebcc88ada0
 
 sonarqube_versions_sequence: ["6.7", "7.9.1"]
+
+#sonarqube_ldap_bindpassword
+#sonarqube_ldap:
+#  url: ldap://localhost:389/
+#  bindDn: cn=admin
+#  # authentication: 
+#  user: 
+#    baseDn: ou=people,dc=cicd,dc=tech
+#    request: uid={login}
+#    realNameAttribute: cn
+#    emailAttribute: mail
+#  group: 
+#    baseDn: ou=groups,dc=cicd,dc=tech
+#    request: (&(objectClass=groupOfNames)(member={dn}))
+#    idAttribute: cn

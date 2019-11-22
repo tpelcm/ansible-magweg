@@ -25,12 +25,3 @@ reverse_proxy_vhosts:
 #squid_cache_rules:
 #  - acl: localnet
 #    decision: deny
-
-# move to alias
-c2_alias:
-  roles:
-    proxy:
-      logs: ["/var/log/squid/*.log","/var/log/squid/squid.out"]
-      configs: 
-        - "{{ squid_config_directory }}/{{ squid_config_file }}"
-        - "{{ proxy_allowd_ips_file }}"

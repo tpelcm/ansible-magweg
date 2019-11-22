@@ -9,3 +9,37 @@ http.proxyPort={{ sonarqube_proxy['port'] }}
 https.proxyHost={{ sonarqube_proxy['host'] }}
 https.proxyPort={{ sonarqube_proxy['port'] }}
 {% endif %}
+
+{% if sonarqube_ldap is defined %}
+# LDAP Configuration, see http://docs.sonarqube.org/display/PLUG/LDAP+Plugin
+# SonarQube first will try ldap and then internal directory
+sonar.security.realm=LDAP
+
+# sonar.security.savePassword=true # default false
+# sonar.authenticator.createUsers=false # default true
+# sonar.security.updateUserAttributes = false # default true
+# sonar.authenticator.downcase=true	# default false Set to true when connecting to a LDAP server using a case-insensitive setup.	false	No	 
+
+ldap.url={{ sonarqube_ldap['url'] }}
+ldap.bindDn={{ sonarqube_ldap['bindDn'] }}
+ldap.bindPassword={{ sonarqube_ldap_bindpassword }}
+
+# simple (default) | CRAM-MD5 | DIGEST-MD5 | GSSAPI	 
+ldap.authentication={{ sonarqube_ldap['authentication'] }}
+
+#ldap.realm=
+#ldap.contextFactoryClass=
+#ldap.windows.auth
+#ldap.windows.group.downcase
+#ldap.windows.sso.protocols
+#ldap.windows.compatibilityMode
+#ldap.windows.user.realNameAttribute=
+
+ldap.user.baseDn={{ sonarqube_ldap['user']['baseDn'] }}
+ldap.user.request={{ sonarqube_ldap['user']['request'] }}
+ldap.user.realNameAttribute={{ sonarqube_ldap['user']['realNameAttribute'] }}
+ldap.user.emailAttribute={{ sonarqube_ldap['user']['emailAttribute'] }}
+ldap.group.baseDn={{ sonarqube_ldap['group']['baseDn'] }}
+ldap.group.request={{ sonarqube_ldap['group']['request'] }}
+ldap.group.idAttribute={{ sonarqube_ldap['group']['idAttribute'] }}
+{% endif %}

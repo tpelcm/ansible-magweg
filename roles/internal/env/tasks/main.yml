@@ -1,0 +1,50 @@
+---
+- name: Create LDAP accounts
+  ldap_entry:
+    dn: "uid={{ item['uid'] }},{{ env_ldap_people_base_dn }}"
+    objectClass: "{{ env_ldap_person_class }}"
+    attributes:
+      cn: "{{ item['cn'] }}"
+      givenName: "{{ item['givenName'] }}"
+      sn: "{{ item['sn'] }}"
+      mail: "{{ item['mail'] }}"
+      uid: "{{ item['uid'] }}"
+      employeeNumber: "{{ item['employeeNumber'] }}"
+      userPassword: "{{ item['userPassword'] }}"
+      description: "{{ item['description'] }}"
+    params: "{{ env_ldap_auth }}"
+  with_items: "{{ env_users }}"
+  # no_log: true
+
+- name: Gather project facts
+  project:
+    key: "{{ item }}"
+    name: "{{ env_projects[item]['name'] }}"
+    admins: "{{ env_projects[item]['admins'] }}"
+    members: "{{ env_projects[item]['members'] }}"
+    users: "{{ env_projects[item]['users'] }}"
+    people_base_dn: "{{ env_ldap_people_base_dn }}"
+  with_items: "{{ env_projects }}"
+
+#- debug:
+#    var: env_project_groups
+
+- name: Create LDAP project groups
+  ldap_entry:
+    dn: "cn={{ env_project_groups[item]['cn'] }},{{ env_ldap_group_base_dn }}"
+    objectClass: "{{ env_ldap_group_class }}"
+    attributes:
+      cn: "{{ env_project_groups[item]['cn'] }}"
+      member: "{{ env_project_groups[item]['member'] }}"
+    params: "{{ env_ldap_auth }}"
+  with_items: "{{ env_project_groups }}"
+
+- name: Create LDAP groups
+  ldap_entry:
+    dn: "cn={{ item['cn'] }},{{ env_ldap_group_base_dn }}"
+    objectClass: "{{ env_ldap_group_class }}"
+    attributes:
+      cn: "{{ item['cn'] }}"
+      member: "{{ item['member'] }}"
+    params: "{{ env_ldap_auth }}"
+  with_items: "{{ env_groups }}"
