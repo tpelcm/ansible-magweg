@@ -1,0 +1,3 @@
+---
+# sonarqube_database_url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=1.1.1.111)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=sonarqube.localdomain)))
+# sonarqube_database_url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.0.2.2)(PORT=1523))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=sonarqube.localdomain)))
