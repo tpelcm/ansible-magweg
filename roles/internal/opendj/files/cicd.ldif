@@ -1,0 +1,47 @@
+# https://github.com/ghchinoy/forgerock-docker/blob/master/ldifs/Example.ldif
+dn: dc=tech
+objectClass: domain
+objectClass: top
+dc: tech
+
+dn: dc=cicd,dc=tech
+objectClass: domain
+objectClass: top
+dc: cicd
+
+dn: ou=groups,dc=cicd,dc=tech
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+# Create ACI on people container that lets users in admins group administer objects under people
+dn: ou=people,dc=cicd,dc=tech
+objectClass: organizationalunit
+objectClass: top
+ou: people
+aci: (targetattr="*")(version 3.0; acl "give admins full rights"; allow(all)
+  groupdn =  "ldap:///cn=admins,ou=groups,dc=cicd,dc=tech";)
+
+# Create Admin user. Give them privs to reset passwords
+# dn: uid=admin,ou=people,dc=cicd,dc=tech
+# objectClass: inetorgperson
+# objectClass: organizationalperson
+# objectClass: person
+# objectClass: top
+# cn: admin
+# sn: admin
+# description: Admin User
+# employeeNumber: 0
+# givenName: admin
+# mail: admin@cicd.tech
+# uid: admin
+# userPassword: supersecure
+# ds-privilege-name: config-read
+# ds-privilege-name: password-reset
+
+# Create admins group - put admin user in that group
+dn: cn=admins,ou=groups,dc=cicd,dc=tech
+objectClass: groupOfNames
+objectClass: top
+cn: admins
+# member: uid=admin,ou=people,dc=cicd,dc=tech

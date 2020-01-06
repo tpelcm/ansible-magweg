@@ -1,0 +1,57 @@
+---
+- name: OpenDJ JDK
+  copy:
+    content: "OPENDJ_JAVA_HOME={{ opendj_java_home }}"
+    dest: /etc/profile.d/opendj-jdk.sh
+    mode: 0644
+
+- name: Download opendj
+  get_url: url={{opendj_url}} dest={{download_dir}}/{{opendj_zip}}
+  
+- name: Create install root
+  file: path={{install_root}} state=directory
+ 
+- name: Unpack opendj
+  command: chdir={{install_root}} creates={{install_root}}/opendj unzip {{ download_dir }}/{{ opendj_zip }}
+
+- name: Copy opendj props file
+  template: src=opendj.properties.j2 dest=/tmp/opendj.properties 
+
+#- name: copy backend props file
+#  template: src=backend.properties.j2 dest=/tmp/backend.properties
+
+- name: Copy cicd ldif
+  copy:
+   dest: "{{ opendj_ldif_file }}"
+   src: cicd.ldif
+  
+- name: Setup
+  command: "{{install_root}}/opendj/setup --cli --propertiesFilePath /tmp/opendj.properties --acceptLicense --no-prompt --doNotStart"
+  environment:
+    OPENDJ_JAVA_HOME: "{{ opendj_java_home }}"
+  args:
+    creates: "{{install_root}}/opendj/config"
+
+#- name: Change the ownership on the files so the fr user can execute ldap commands
+#  file: path={{install_root}}/opendj state=directory owner={{fr_user}} recurse=yes
+#
+#- name: Create rc script
+#  command: "{{install_root}}/opendj/bin/create-rc-script -f /etc/init.d/{{opendj_service_name}} -u root"
+#  environment:
+#    OPENDJ_JAVA_HOME: "{{ opendj_java_home }}"
+#  notify: systemctl-daemon-reload    
+#
+#- name: Start opendj
+#  sysvinit: name={{opendj_service_name}} state=started enabled=yes
+
+- name: Systemd service
+  template:
+    src: opendj.service.j2
+    dest: /etc/systemd/system/opendj.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: systemctl-daemon-reload
+
+- name: Start OpenDJ service
+  systemd: state=started name=opendj daemon_reload=yes enabled=yes
