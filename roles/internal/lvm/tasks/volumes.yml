@@ -6,9 +6,9 @@
     size: "{{ lvm_roles[item]['size'] }}"
   with_items: "{{ lvm_roles_node }}"
 
-- name: Create ext4 filesystems
+- name: Create filesystem
   filesystem:
-    fstype: ext4
+    fstype: "{{ lvm_fstype }}"
     dev: "/dev/mapper/{{ lvm_vg }}-{{ item }}"
     resizefs: yes
   with_items: "{{ lvm_roles_node }}"
@@ -23,7 +23,7 @@
   mount:
     path: "{{ lvm_roles[item]['path'] }}"
     src: '/dev/mapper/{{ lvm_vg }}-{{ item }}'
-    fstype: ext4
+    fstype: "{{ lvm_fstype }}"
     #opts: ro,noauto
     state: mounted
   with_items: "{{ lvm_roles_node }}"

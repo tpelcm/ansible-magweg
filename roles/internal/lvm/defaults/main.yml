@@ -5,6 +5,8 @@ lvm_vg: 'data'
 # List of devices to use for volume group
 lvm_vg_devices: ['/dev/sdx']
 
+lvm_fstype: 'ext4'
+
 # Roles ( external / internal) supported by this lvm role
 lvm_roles_supported:
   - nfs
