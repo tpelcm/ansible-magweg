@@ -14,3 +14,13 @@ common_etc_environment: >
 nfs_server: nfs
 nfs_mounts:
   - { path: /backup, src: '{{ nfs_server }}:/nfs/backup', opts: rw, fstype: nfs, state: mounted }
+
+common_ansible_user_create: true
+
+sudo_enabled: yes
+sudo_users: [tpetools]
+# sudo_groups: [admin, sudo]
+# sudo_passwordless: [admin, sudo]
+
+# common_ansible_authorized_keys: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+common_ansible_user_password: whuq0hKZYtmE2

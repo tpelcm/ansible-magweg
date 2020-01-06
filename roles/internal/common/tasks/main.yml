@@ -29,3 +29,20 @@
     state: present
   when: common_role_packages[item] is defined
   with_items: '{{ common_role_packages }}'
+
+- name: Add Ansible user
+  user:
+    name: '{{ common_ansible_user }}'
+    comment: Ansible 
+    shell: /bin/bash
+    password: '{{ common_ansible_user_password }}'
+  when: common_ansible_user_create == true
+
+- name: Set authorized keys taken from url
+  authorized_key:
+    user: '{{ common_ansible_user }}'
+    state: present
+    key: '{{ common_ansible_authorized_keys }}'
+  when: common_ansible_authorized_keys is defined    
+
+
