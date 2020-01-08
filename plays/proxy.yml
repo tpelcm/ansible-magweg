@@ -7,5 +7,5 @@
     - { role: common,             tags: ["common"] }
     - { role: nfs,                tags: ["nfs"] }
     - { role: proxy,              tags: ["proxy"] }
-    - { role: robertdebock.squid, tags: ["proxy"] }
+    - { role: tpelcm.squid,       tags: ["proxy"] }
     - { role: reverse-proxy,      tags: ["reverse-proxy"] }
