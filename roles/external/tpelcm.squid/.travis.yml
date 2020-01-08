@@ -1,0 +1,50 @@
+---
+#
+# Ansible managed
+#
+language: python
+
+python:
+  - "3.7"
+
+services:
+  - docker
+
+env:
+  global:
+    namespace="robertdebock"
+  matrix:
+    - image="amazonlinux" tag="1"
+    - image="amazonlinux"
+    - image="alpine"
+    - image="alpine" tag="edge"
+    - image="debian" tag="unstable"
+    - image="debian"
+    - image="centos" tag="7"
+    - image="centos"
+    - image="fedora"
+    - image="fedora" tag="rawhide"
+    - image="opensuse"
+    - image="ubuntu"
+
+matrix:
+  allow_failures:
+    - env: image="alpine" tag="edge"
+    - env: image="debian" tag="unstable"
+    - env: image="fedora" tag="rawhide"
+
+cache:
+  - pip
+
+install:
+  - pip install --upgrade pip
+  - pip install tox
+
+script:
+  - tox --parallel all
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    secure: "NRCGHbOikQuHD1Ex1v0y/NtBWUetAbiY1VmENH6qJWJ1aJhoYbme+Y/SJ1MAiD8JL2xqDY13ZCYYKODJd4YLayv4qK9asAWzhDowt9u2x7Bovl1dlfZf6mZuZsNvwnTfjm3IfiowJK9X9oKLF2grt9fXFeNgImS2XpFJ5AfMr9dJUDhz8Fxmj0Wgsi6vdTnodjmOsL4bBq4GRlzGkwATzWcAOpyUPohhShy14yFRWTgVbLS15iwk9L9OSb7rIGcEB1+t//jPD5PDWdVhW+wKO3YtBndfUfK7zcxTgHWvCUV+MMHm5xVp581hbh9B1xt4rewRG56qPoCuf2F7eIOVdOqZWo/UwlXKUQ/mVzaJDkUaaMR/6yNI6e1uaUSkXXe632i2gl/eDhBu16YPYJPqS3Rz6ThuMIQwAB0pau0caIEn5OoSHTvTGac3Mvq89MMwxzC5nLAwUrr5joEswyB6sLzN9qtgLRGO5Fus6U4E5xBpoLOLLsHVTR4Rzv7ni+p5GtN+Rs7WEHd9d6+C3XJy2sC/ZQfl7cT3fRqs94xGiLzjoO8AxRpFLTecfQMOHPYj+B1ja/sYDU2v2duX4nTZrNEPkshI8NwEtwzZg7mkayiuzB4nnQ4H6GMYa1lFspimdINR6OFgfmqHGz4ORWLf5OohmxtDih5pTa8S89Vx8ps="
+  email: false
