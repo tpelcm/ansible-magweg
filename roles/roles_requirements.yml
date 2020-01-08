@@ -41,7 +41,9 @@
 
 - src: ajsalminen.hosts
 
-- src: robertdebock.squid
+- src: git+https://github.com/tpelcm/ansible-role-squid.git
+  version: "2.2.1"
+  name: tpelcm.squid
 
 - src: ansible-thoteam.nexus3-oss
 
