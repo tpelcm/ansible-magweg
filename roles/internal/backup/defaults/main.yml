@@ -43,6 +43,7 @@ backup_notify_mail:
   on_success: true
   on_warning: true
   on_failure: true
+  #encryption: ':none'
 
 backup_notify_slack:
   enabled: false 

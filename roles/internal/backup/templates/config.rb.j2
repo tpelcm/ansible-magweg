@@ -42,6 +42,9 @@ preconfigure 'GenericBackup' do
     mail.on_success = '{{ backup_notify_mail['on_success'] }}'
     mail.on_warning = '{{ backup_notify_mail['on_warning'] }}'
     mail.on_failure = '{{ backup_notify_mail['on_failure'] }}'
+{%   if backup_notify_mail['encryption'] is defined %}
+    mail.encryption = {{ backup_notify_mail['encryption'] }}
+{%   endif %}
   end
 {% endif %}
 {% if backup_notify_slack['enabled'] == true %}
