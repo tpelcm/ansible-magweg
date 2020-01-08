@@ -1,3 +1,7 @@
 ---
 proxy_allowd_ips_file: /etc/squid-allowed-ips.txt
 proxy_allowed_ips: []
+
+# Configure upstream proxy server
+# proxy_upstream_server: 
+# proxy_upstream_port: 

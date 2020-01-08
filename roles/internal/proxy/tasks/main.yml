@@ -3,3 +3,17 @@
   copy:
     content: "{{ proxy_allowed_ips | join('\n') }}"
     dest: "{{ proxy_allowd_ips_file }}"
+
+- name: upstream proxy server
+  template:
+    dest: "{{ squid_conf_include_dir }}/upstream_proxy.conf"
+    owner: "{{ squid_user }}"
+    group: "{{ squid_group }}"
+    src: upstream.conf.j2
+  when: proxy_upstream_server is defined
+
+- name: disable upstream proxy server
+  file:
+    path: "{{ squid_conf_include_dir }}/upstream_proxy.conf"
+    state: absent
+  when: proxy_upstream_server is not defined
