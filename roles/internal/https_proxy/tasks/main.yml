@@ -16,6 +16,7 @@
     privatekey_path: "{{ https_proxy_etc_ssl_private[ansible_os_family] }}https_proxy.pem"
     csr_path: "{{ https_proxy_etc_ssl_private[ansible_os_family] }}{{ https_proxy_roles[item].hostname }}.csr"
     provider: selfsigned
+    subject_alt_name: "{{ https_proxy_roles[item].hostname }}"
   with_items: "{{ https_proxy_roles }}"
 
 - include: "{{ ansible_os_family }}.yml"
