@@ -39,9 +39,9 @@ preconfigure 'GenericBackup' do
     mail.address = '{{ backup_notify_mail['address'] }}'
     mail.port    = '{{ backup_notify_mail['port'] }}'
     mail.domain  = '{{ backup_notify_mail['domain'] }}'
-    mail.on_success = '{{ backup_notify_mail['on_success'] }}'
-    mail.on_warning = '{{ backup_notify_mail['on_warning'] }}'
-    mail.on_failure = '{{ backup_notify_mail['on_failure'] }}'
+    mail.on_success = {{ backup_notify_mail['on_success'] }}
+    mail.on_warning = {{ backup_notify_mail['on_warning'] }}
+    mail.on_failure = {{ backup_notify_mail['on_failure'] }}
 {%   if backup_notify_mail['encryption'] is defined %}
     mail.encryption = {{ backup_notify_mail['encryption'] }}
 {%   endif %}
@@ -52,9 +52,9 @@ preconfigure 'GenericBackup' do
     slack.webhook_url = '{{ backup_notify_slack['webhook'] }}'
     slack.username = 'backup'
     slack.channel = '{{ backup_notify_slack['channel'] }}'
-    slack.on_success = '{{ backup_notify_slack['on_success'] }}'
-    slack.on_warning = '{{ backup_notify_slack['on_warning'] }}'
-    slack.on_failure = '{{ backup_notify_slack['on_failure'] }}'
+    slack.on_success = {{ backup_notify_slack['on_success'] }}
+    slack.on_warning = {{ backup_notify_slack['on_warning'] }}
+    slack.on_failure = {{ backup_notify_slack['on_failure'] }}
     slack.message = lambda do |model, data|
        "[{{ inventory_hostname }}] #{data[:status][:message]} #{model.label} (#{model.trigger})"
     end    

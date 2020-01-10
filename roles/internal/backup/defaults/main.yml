@@ -40,18 +40,18 @@ backup_notify_mail:
   address: mail.local
   port: 25
   domain: mydomain.local
-  on_success: true
-  on_warning: true
-  on_failure: true
+  on_success: 'true'
+  on_warning: 'true'
+  on_failure: 'true'
   #encryption: ':none'
 
 backup_notify_slack:
   enabled: false 
   webhook: https://hooks.slack.com/services/...
   channel: infra
-  on_success: true
-  on_warning: true
-  on_failure: true
+  on_success: 'true'
+  on_warning: 'true'
+  on_failure: 'true'
 
 backup_utility:
   ubuntu:
