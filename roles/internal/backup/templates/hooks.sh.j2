@@ -14,17 +14,17 @@ fi
 {% for rl in backup_roles_node %}
 if [[ $1 == {{ rl }}* ]] && [ "$2" == "before" ]
 then
-	echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
-	{% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
-	try systemctl stop {{ vars['backup_roles'][rl]['stop_start_service'] }}
-	{% endif %}
+  echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
+  {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
+  try systemctl stop {{ vars['backup_roles'][rl]['stop_start_service'] }}
+  {% endif %}
 fi
 
 if [[ $1 == {{ rl }}* ]] && [ "$2" == "after" ]
 then
-	echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
-	{% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
-	try systemctl start {{ vars['backup_roles'][rl]['stop_start_service'] }}
-	{% endif %}
+  echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
+  {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
+  try systemctl start {{ vars['backup_roles'][rl]['stop_start_service'] }}
+  {% endif %}
 fi
 {% endfor %}

@@ -44,7 +44,7 @@
 
 - name: Cron
   template:
-   dest: '/etc/cron.d/backup-{{ item }}.sh'
+   dest: '/etc/cron.d/backup-{{ item }}'
    src: cron.j2
   when: backup['schedules'][item] is defined
   with_items: "{{ backup['schedules_default'] }}" 
