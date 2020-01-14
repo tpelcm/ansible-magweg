@@ -53,6 +53,7 @@
   template:
    dest: '/etc/backup/scripts/backup_{{ item }}.sh'
    src: backup.sh.j2
+   mode: 0755
   when: backup['schedules'][item] is defined
   with_items: "{{ backup['schedules_default'] }}" 
 
