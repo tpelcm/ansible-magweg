@@ -40,6 +40,13 @@ ldap_connections:
 
 apache_remove_default_vhost: true
 
+nexus_config_gitlfs: true
+
+nexus_content_selectors:
+- name: all-gitlfs
+  description: Selector for Git LFS repositories
+  search_expression: format=="gitlfs"
+
 #backup_restore: 
 #  nexus:
 #    path_pattern: '*'

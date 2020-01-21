@@ -1,6 +1,4 @@
 ---
-nexus_config_gitlfs: true
-
 nexus_blobstores:
   - name: pet
     path: pet
@@ -16,7 +14,7 @@ nexus_roles:
     privileges:
       - nx-search-read
       - all-repos-read
-      - pet-members-add-edit
+      - pet-members-gitlfs
     roles: []
 
 nexus_privileges:
@@ -26,13 +24,18 @@ nexus_privileges:
     actions:
       - read
       - browse
-  - name: pet-members-add-edit
-    description: 'Git LFS artifacts'
+  - name: pet-members-gitlfs
+    type: repository-content-selector
+    contentSelector: all-gitlfs
+    description: Add, edit delete and read access to pet-gitlfs repository
     repository: pet-gitlfs
     format: gitlfs
     actions:
       - add
       - edit
+      - delete
+      - read
+      - browse
 
 nexus_scheduled_tasks:
   - name: pet-compact-blobstore
