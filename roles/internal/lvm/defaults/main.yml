@@ -21,7 +21,7 @@ lvm_roles:
     path: '/nfs'
   postgresql:
     size: '10g'
-    path: '/var/lib/postgresql'
+    path: '/var/lib/pgsql'
   sonarqube:
     size: '10g'
     path: '{{ sonar_home if sonar_home is defined else "/opt/sonarqube" }}'
