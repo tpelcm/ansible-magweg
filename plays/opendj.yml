@@ -1,7 +1,7 @@
 ---
 - name: opendj.yml
   hosts: opendj
-  sudo: True
+  become: True
 
   roles:
     - { role: common,                     tags: ["common"] }

@@ -2,7 +2,7 @@
 - name: myapp.yml
   hosts: myapp_servers
   any_errors_fatal: true  
-  sudo: True
+  become: True
 
   roles:
     - { role: common,                       tags: ["common"] }
