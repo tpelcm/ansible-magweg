@@ -1,4 +1,8 @@
 ---
+proxy_port: 0
+proxy_host: ''
+#proxy_no_proxy: 'nip.io' # comma separated list
+
 proxy_allowed_ips: 
   - 1.1.1.2
   - 1.1.1.3

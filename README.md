@@ -1,8 +1,9 @@
 # TPELCM Ansible Repository
 
-This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible. 
+This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
 Currently the following products are supported:
+
 - [SonarQube](roles/internal/sonarqube)
 - [Nexus](roles/internal/nexus)
 
@@ -15,10 +16,11 @@ This repository is created and maintained as a monolithic repository. External r
 ## Getting Started
 
 Install Ansible, Vagrant, VirtualBox on Ubuntu 18.04 machine.
+[nip.io](https://nip.io) is used to DNS entries to IP addresses in the development environment.
 
 ### Ansible
 
-Add the Ansible repository and install Ansible.
+Add the Ansible repository and install [Ansible](https://ansible.com).
 
     sudo add-apt-repository ppa:ansible/ansible
     sudo apt-get install ansible
@@ -56,7 +58,7 @@ After creating the links you can setup SonarQube and Nexus
     vagrant up proxy postgresql sonarqube nexus env
     vagrant provision proxy postgresql sonarqube nexus env
 
-If provision is succesful you can access SonarQube and Nexus using 
+If provision is successful you can access SonarQube and Nexus using 
 https://sh.1.1.1.3.nip.io/sonarqube/ and https://sh.1.1.1.3.nip.io/nexus/
 
 You should be able to logon to SonarQube using for example account `akaufman` with password `supersecure`. Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
@@ -64,4 +66,5 @@ You should be able to logon to SonarQube using for example account `akaufman` wi
 If you want to connect to the LDAP directory using a tool like [Apache Directory Studio](https://directory.apache.org/studio/) use for example ldap://1.1.1.3:389 and `cn=admin` with password `secret`.
 
 ## License
+
 MIT License.

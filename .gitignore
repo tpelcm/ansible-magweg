@@ -4,3 +4,4 @@ vpass
 .galaxy_install_info
 .vscode
 .idea
+*.deb
