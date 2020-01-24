@@ -47,5 +47,7 @@
 
 - src: ansible-thoteam.nexus3-oss
 
+- src: geerlingguy.jenkins
+
 #- src: git+https://github.com/wstrange/ans-opendj.git
 #  name: opendj
