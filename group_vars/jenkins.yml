@@ -1,0 +1,137 @@
+---
+jenkins_version: "2.217"
+
+jenkins_proxy_host: "1.1.1.3"
+jenkins_proxy_port: "3128"
+jenkins_proxy_noproxy:
+  - "127.0.0.1"
+  - "localhost"
+  - "nip.io"
+
+git_install_from_source: true
+git_install_path: "/usr"
+git_version: "2.25.0"
+git_install_from_source_force_update: true
+
+jenkins_plugins_disabled: 
+  - pipeline-model-api
+  - git-server
+  - lockable-resources
+  - bouncycastle-api
+  - jdk-tool
+  - workflow-aggregator
+  - script-security
+  - job-dsl
+  - command-launcher
+  - groovy
+  - display-url-api
+  - mailer
+  - javadoc
+  - active-directory
+  - matrix-auth
+  - structs
+  - maven-plugin
+  - workflow-step-api
+  - h2-api
+  - workflow-scm-step
+  - credentials
+  - cloudbees-folder
+  - apache-httpcomponents-client-4-api
+  - pipeline-maven
+  - ssh-credentials
+  - jsch
+  - git-client
+  - scm-api
+  - workflow-api
+  - junit
+  - dependency-track
+  - matrix-project
+  - git
+  - locale
+  - analysis-core
+  - plain-credentials
+  - credentials-binding
+  - token-macro
+  - config-file-provider
+  - nodejs
+  - mapdb-api
+  - subversion
+  - branch-api
+  - pipeline-milestone-step
+  - jquery-detached
+  - jackson2-api
+  - ace-editor
+  - workflow-support
+  - workflow-cps
+  - pipeline-input-step
+  - pipeline-stage-step
+  - workflow-job
+  - workflow-cps-global-lib
+  - pipeline-graph-analysis
+  - pipeline-rest-api
+  - handlebars
+  - momentjs
+  - pipeline-stage-view
+  - pipeline-build-step
+  - docker-workflow
+  - pipeline-model-extensions
+  - workflow-multibranch
+  - pipeline-stage-tags-metadata
+  - authentication-tokens
+  - docker-commons
+  - durable-task
+  - pipeline-model-declarative-agent
+  - workflow-durable-task-step
+  - workflow-basic-steps
+  - pipeline-model-definition
+  - antisamy-markup-formatter
+  - dependency-check-jenkins-plugin
+  - ssh-slaves
+  - blueocean-commons
+  - blueocean-jwt
+  - deployit-plugin
+  - blueocean-rest
+  - pubsub-light
+  - blueocean-pipeline-scm-api
+  - github-api
+  - github
+  - github-branch-source
+  - htmlpublisher
+  - jenkins-design-language
+  - blueocean-core-js
+  - variant
+  - blueocean-web
+  - sonar
+  - favorite
+  - blueocean-rest-impl
+  - blueocean-pipeline-api-impl
+  - blueocean-github-pipeline
+  - blueocean-git-pipeline
+  - blueocean-config
+  - windows-slaves
+  - mercurial
+  - ant
+  - handy-uri-templates-2-api
+  - cloudbees-bitbucket-branch-source
+  - blueocean-bitbucket-pipeline
+  - blueocean-dashboard
+  - blueocean-personalization
+  - jira
+  - blueocean-jira
+  - blueocean-display-url
+  - sse-gateway
+  - blueocean-events
+  - blueocean-pipeline-editor
+  - blueocean-i18n
+  - blueocean-autofavorite
+  - blueocean
+  - nexus-artifact-uploader
+  - pipeline-utility-steps
+  - JDK_Parameter_Plugin
+  - jobConfigHistory
+  - jenkinslint
+  - monitoring
+  - msbuild
+  - jquery
+  - custom-tools-plugin
+  - extended-choice-parameter

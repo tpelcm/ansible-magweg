@@ -1,0 +1,13 @@
+---
+- name: jenkins.yml
+  hosts: jenkins
+  become: True
+
+  roles:
+    - { role: common,                       tags: ["common"] }
+    - { role: postgresql-client,            tags: ["postgresql"] }    
+    - { role: java,                         tags: ["java"] }
+    - { role: geerlingguy.git,              tags: ["jenkins"] }
+    - { role: geerlingguy.jenkins,          tags: ["jenkins"] }
+    - { role: jenkins,                      tags: ["jenkins"] }    
+    - { role: backup,                       tags: ["backup"] }

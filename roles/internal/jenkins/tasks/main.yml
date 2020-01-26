@@ -1,0 +1,12 @@
+---
+- name: Add system message
+  jenkins_script:
+    url: "{{ jenkins_url }}"
+    validate_certs: no
+    user: "{{ jenkins_admin_username }}"
+    password: "{{ jenkins_admin_password }}"
+    script:  "{{ lookup('file', 'scripts/set_system_message.groovy') }}"
+    args:
+      system_message: "Hello from Ansible"
+  register: script_result
+  changed_when: "'changed' in script_result.output"

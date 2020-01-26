@@ -1,0 +1,4 @@
+---
+jenkins_url_prefix: /jenkins
+jenkins_hostname: sh.1.1.1.9.nip.io
+jenkins_url: https://sh.1.1.1.3.nip.io/jenkins
