@@ -1,7 +1,7 @@
 ---
 - name: sonarqube.yml | All roles
   hosts: sonarqube
-  become: True
+  become: yes
 
   roles:
     - { role: common,                       tags: ["common"] }

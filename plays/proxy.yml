@@ -1,7 +1,7 @@
 ---
 - name: proxy.yml | All roles
   hosts: proxy
-  become: True
+  become: yes
 
   roles:
     - { role: common,             tags: ["common"] }
