@@ -38,7 +38,7 @@ This repository has been used with Python 2.7.15 and Ansible 2.8.3.
 
 ### Setup project directory
 
-Git clone this repository for example to `~/ansible`. Create a file `~/ansible/vpass` met content `secret` in de root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
+Git clone this repository for example to `~/ansible`. Create a file `~/ansible/vpass` with content `secret` in root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
 
 Cd into the __vagrant__ directory and provision the proxy node
 
@@ -52,17 +52,38 @@ Create two links for __group_vars__ and __host_vars__ directory in the directory
 
 ### Provision
 
-After creating the links you can setup SonarQube and Nexus
+After creating the links you can start provisioning one ore more services:
 
-    vagrant up proxy postgresql sonarqube nexus env
-    vagrant provision proxy postgresql sonarqube nexus env
+| Service   | Link      |
+|----------|-------------|
+| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)|
+| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   |
+| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)|
 
-If provision is successful you can access SonarQube and Nexus using 
-https://sh.1.1.1.3.nip.io/sonarqube/ and https://sh.1.1.1.3.nip.io/nexus/
+You should be able to logon using for example account `akaufman` with password `supersecure`. Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
 
-You should be able to logon to SonarQube using for example account `akaufman` with password `supersecure`. Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
+#### Proxy & Env
 
-If you want to connect to the LDAP directory using a tool like [Apache Directory Studio](https://directory.apache.org/studio/) use for example ldap://1.1.1.3:389 and `cn=admin` with password `secret`.
+The __env__ node is currently only used to create LDAP groups, accounts on the __proxy__. After __env__ provision it can be destroyed.
+
+    vagrant up proxy env
+    vagrant destroy env
+
+#### SonarQube ( optional )
+
+    vagrant provision postgresql sonarqube
+
+#### Nexus ( optional )
+
+    vagrant provision nexus
+
+#### Jenkins ( optional )
+
+    vagrant provision jenkins
+
+### LDAP
+
+The __proxy__ node includes a simple LDAP server based on OpenDJ. If you want to connect to the LDAP directory using a tool like [Apache Directory Studio](https://directory.apache.org/studio/) use for example ldap://1.1.1.3:389 and `cn=admin` with password `secret`.
 
 ## License
 

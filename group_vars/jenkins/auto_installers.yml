@@ -1,0 +1,19 @@
+---
+jenkins_auto_installers:
+  jdk-tool:
+    NPLCM-jdk8u242-b08:
+      - url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u242b08.tar.gz
+        label: linux
+        subdirectory: jdk8u242-b08
+      - url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x86-32_windows_hotspot_8u242b08.zip
+        label: windows
+        subdirectory: jdk8u242-b08
+    NPLCM-jdk-11.0.6+10:
+      - url: https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10_openj9-0.18.1/OpenJDK11U-jdk_x64_linux_openj9_11.0.6_10_openj9-0.18.1.tar.gz
+        label: linux
+        subdirectory: jdk-11.0.6+10
+  groovy:
+    NPLCM-groovy-2.5.5:
+      - url: https://d29vzk4ow07wi7.cloudfront.net/49fb14b98f9fed1744781e4383cf8bff76440032f58eb5fabdc9e67a5daa8742?response-content-disposition=attachment%3Bfilename%3D%22apache-groovy-binary-2.5.8.zip%22&Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHAqOi8vZDI5dnprNG93MDd3aTcuY2xvdWRmcm9udC5uZXQvNDlmYjE0Yjk4ZjlmZWQxNzQ0NzgxZTQzODNjZjhiZmY3NjQ0MDAzMmY1OGViNWZhYmRjOWU2N2E1ZGFhODc0Mj9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWF0dGFjaG1lbnQlM0JmaWxlbmFtZSUzRCUyMmFwYWNoZS1ncm9vdnktYmluYXJ5LTIuNS44LnppcCUyMiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3OTg4MDcxM30sIklwQWRkcmVzcyI6eyJBV1M6U291cmNlSXAiOiIwLjAuMC4wLzAifX19XX0_&Signature=ZQ0A5MkxMd94pLvDV7HSai6ZRfmupLfYKptPwgqlDR8Bx18doICBNoe6FFsrcTBjNj2mtqii1vVAeAH-W9gdpXYS8GW6x9KNqpj0THWatZlUbkHj7Zcrzpor3sy~aGZFaEn2rKoo8BVWszlLTCvDQUzn7819OSnaqTEASzx7jVplh9gQyctVis-psdTMyfa3kbLWh6Y0NDBXDpxteoIOkPMmS1ePZxBbWK7VyIXGGbDl36TkRvH3enkAE8kEYLUrkqw7yGSDi4kI8PEmrOrMdec-fYdO4pP90GlKieTFZ0z90jFvy9oNXpuQ92Y1TCErM0HuKUHalUcaw4SrULDIKg__&Key-Pair-Id=APKAIFKFWOMXM2UMTSFA
+        label: 
+        subdirectory: groovy-2.5.8

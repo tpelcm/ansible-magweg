@@ -5,6 +5,7 @@ proxy_allowed_ips:
   - 1.1.1.4
   - 1.1.1.7
   - 1.1.1.8
+  - 1.1.1.9
 
 squid_acls:
   - name: localnet
@@ -33,6 +34,9 @@ reverse_proxy_vhosts:
       nexus:
         proxy_pass: /nexus http://1.1.1.7:8081/nexus nocanon
         proxy_pass_reverse: /nexus http://1.1.1.7:8081/nexus
+      jenkins:
+        proxy_pass: /jenkins http://1.1.1.9:8080/jenkins nocanon
+        proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
 #squid_cache_rules:
 #  - acl: localnet
 #    decision: deny

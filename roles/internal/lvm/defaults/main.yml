@@ -12,6 +12,7 @@ lvm_roles_supported:
   - nfs
   - postgresql
   - sonarqube
+  - jenkins
   - nexus
   - myapp
 
@@ -28,6 +29,10 @@ lvm_roles:
   nexus:
     size: '10g' 
     path: '{{ nexus_home if nexus_home is defined else "/opt/nexus" }}'
+lvm_roles:
+  nfs:
+    size: '10g' 
+    path: '/var/lib/jekins'
   myapp:
     size: '1g' 
     path: '{{ myapp_home if myapp_home is defined else "/opt/myapp" }}'

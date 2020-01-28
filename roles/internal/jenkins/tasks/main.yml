@@ -1,0 +1,30 @@
+---
+- name: Add system message
+  jenkins_script:
+    url: "{{ jenkins_url }}"
+    validate_certs: no
+    user: "{{ jenkins_admin_username }}"
+    password: "{{ jenkins_admin_password }}"
+    script:  "{{ lookup('file', 'scripts/set_system_message.groovy') }}"
+    args:
+      system_message: "{{ jenkins_system_message }}"
+  register: script_result
+  changed_when: "'changed' in script_result.output"
+
+- name: Local JDKs script
+  template:
+    dest: /tmp/auto_installer_jdk.groovy
+    src: auto_installer_jdk.groovy.j2
+  when: jenkins_auto_installers['jdk-tool'] is defined
+  delegate_to: localhost
+
+- name: Add JDKs
+  jenkins_script:
+    url: "{{ jenkins_url }}"
+    validate_certs: no
+    user: "{{ jenkins_admin_username }}"
+    password: "{{ jenkins_admin_password }}"
+    script:  "{{ lookup('file', '/tmp/auto_installer_jdk.groovy') }}"
+  when: jenkins_auto_installers['jdk-tool'] is defined
+  #register: jdk_result  
+  #changed_when: "'changed' in jdk_result.output"  
