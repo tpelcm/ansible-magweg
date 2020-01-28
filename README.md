@@ -38,7 +38,7 @@ This repository has been used with Python 2.7.15 and Ansible 2.8.3.
 
 ### Setup project directory
 
-Git clone this repository for example to `~/ansible`. Create a file `~/ansible/vpass` met content `secret` in de root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
+Git clone this repository for example to `~/ansible`. Create a file `~/ansible/vpass` with content `secret` in root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
 
 Cd into the __vagrant__ directory and provision the proxy node
 
