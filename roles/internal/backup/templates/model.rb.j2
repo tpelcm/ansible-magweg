@@ -31,6 +31,9 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
   archive :home do |archive|
     archive.root '{{ vars[item + '_home_version'] }}'
     archive.add '.'
+{%   if backup_roles[item]['tar_options'] is defined %}
+    archive.tar_options '{{ backup_roles[item]['tar_options'] }}'
+{%   endif %}
   end
 {% endif %}
 

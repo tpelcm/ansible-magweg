@@ -18,6 +18,7 @@ backup_roles:
   nexus:
     stop_start_service: nexus
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }
+    tar_options: -h
   myapp:
     # stop_start_service: myapp
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }

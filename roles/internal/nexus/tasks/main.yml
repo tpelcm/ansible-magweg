@@ -4,3 +4,9 @@
     content: "INSTALL4J_JAVA_HOME_OVERRIDE={{ adoptopenjdk_java_home }}"
     dest: /etc/profile.d/nexus-jdk.sh
     mode: 0644
+
+- name: Create data link for backup / restore
+  file:
+    src: "{{ nexus_data_dir }}"
+    dest: /opt/nexus/nexus-latest/data
+    state: link
