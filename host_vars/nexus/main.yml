@@ -1,9 +1,10 @@
 ---
 # nexus_version: 3.7.1-02
 nexus_version: 3.19.1-01
+# nexus_version: 3.20.1-01
 nexus_public_hostname: sh.1.1.1.3.nip.io
 nexus_public_scheme: https
-nexus_upgrade: false
+nexus_upgrade: true
 
 nexus_default_context_path: /nexus
 
