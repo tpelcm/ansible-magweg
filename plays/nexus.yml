@@ -12,24 +12,7 @@
     adoptopenjdk_java_home_etc_environment: true
     nexus_installation_dir: /opt/nexus
     nexus_data_dir: /opt/nexus/data
-#    httpd_ssl_certificate_file: "{{ vault_httpd_ssl_certificate_file }}"
-#    httpd_ssl_certificate_key_file: "{{ vault_httpd_ssl_certificate_key_file }}"
-#    ldap_connections:
-#      - ldap_name: 'Company LDAP'
-#        ldap_protocol: 'ldaps'
-#        ldap_hostname: 'ldap.company.com'
-#        ldap_port: 636
-#        ldap_search_base: 'dc=company,dc=net'
-#        ldap_user_base_dn: 'ou=users'
-#        ldap_user_object_class: 'inetOrgPerson'
-#        ldap_user_id_attribute: 'uid'
-##        ldap_user_real_name_attribute: 'cn'
-#        ldap_user_email_attribute: 'mail'
-#        ldap_group_base_dn: 'ou=groups'
-#        ldap_group_object_class: 'posixGroup'
-#        ldap_group_id_attribute: 'cn'
-#        ldap_group_member_attribute: 'memberUid'
-#        ldap_group_member_format: '${username}'
+
   roles:
     - { role: common,                       tags: ["common"] }
     - { role: java,                         tags: ["java"] }
