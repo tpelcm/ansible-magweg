@@ -29,8 +29,7 @@ lvm_roles:
   nexus:
     size: '10g' 
     path: '{{ nexus_home if nexus_home is defined else "/opt/nexus" }}'
-lvm_roles:
-  nfs:
+  jenkins:
     size: '10g' 
     path: '/var/lib/jekins'
   myapp:
