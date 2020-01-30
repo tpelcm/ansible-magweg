@@ -54,13 +54,18 @@ Create two links for __group_vars__ and __host_vars__ directory in the directory
 
 After creating the links you can start provisioning one ore more services:
 
-| Service   | Link      |
-|----------|-------------|
-| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)|
-| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   |
-| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)|
+| Service   | Link      | Accounts|
+|----------|-------------|-------------|
+| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
+| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
+| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
 
-You should be able to logon using for example account `akaufman` with password `supersecure`. Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
+LDAP accounts
+| Account   | Password | Role |
+|----------|-------------|-------------|
+| `akaufman`   | `secrets` | admin |
+
+Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
 
 #### Proxy & Env
 
