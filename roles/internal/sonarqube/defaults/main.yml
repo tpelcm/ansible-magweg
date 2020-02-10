@@ -50,9 +50,7 @@ sonarqube_versions:
     url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.1.0.31237.zip
     checksum: sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
-
-
-sonarqube_versions_sequence: ["6.7", "7.9.1"]
+sonarqube_versions_sequence: ["6.7", "7.9.2", "8.1.0"]
 
 #sonarqube_ldap_bindpassword
 #sonarqube_ldap:

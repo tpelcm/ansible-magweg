@@ -1,6 +1,6 @@
 ---
-sonarqube_version: 6.7
-#sonarqube_version: 7.9.2
+#sonarqube_version: 6.7
+sonarqube_version: 7.9.2
 
 sonarqube_versions:
   6.7:
@@ -9,7 +9,7 @@ sonarqube_versions:
         pattern: 'sonar-build-breaker-plugin-*.jar'
         url: "https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar"
         checksum: "22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2"
-  7.9.1:
+  7.9.2:
     plugins:
       build_breaker:
         pattern: 'sonar-build-breaker-plugin-*.jar'
@@ -49,7 +49,7 @@ https_proxy_roles:
     context: "{{ sonarqube_web_context }}"
 
 adoptopenjdk:
-  # version: "jdk11_0411_oj9" # for SonarQube 7.9.1
+  # version: "jdk11_0411_oj9" # for SonarQube 7.9.2
   version: "jdk8_222b10_oj9" # for Oracle 12.2
 
 sonarqube_java_bin: 
