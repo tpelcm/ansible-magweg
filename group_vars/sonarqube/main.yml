@@ -13,8 +13,8 @@ sonarqube_versions:
     plugins:
       build_breaker:
         pattern: 'sonar-build-breaker-plugin-*.jar'
-        url: "https://github.com/adnovum/sonar-build-breaker/releases/download/v2.3/sonar-build-breaker-plugin-2.3.jar"
-        checksum: "fa7a922e3693813ca12c09b283da02fa57cfe963ab7f0e1e266ab4ddc6ba0307"
+        url: "https://github.com/adnovum/sonar-build-breaker/releases/download/2.3.0/sonar-build-breaker-plugin-2.3.0.299.jar"
+        checksum: "1af93c5739a1dce4b22b0d13b6aeb0be46470cfa20606031a64f2c491710e0c9"
 
 sonarqube_plugins:
   json:
