@@ -1,6 +1,6 @@
 ---
 sonarqube_version: 6.7
-#sonarqube_version: 7.9.1
+#sonarqube_version: 7.9.2
 
 sonarqube_versions:
   6.7:

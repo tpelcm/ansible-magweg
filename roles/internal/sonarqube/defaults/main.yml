@@ -43,9 +43,14 @@ sonarqube_versions:
   6.7:
     url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.zip
     checksum: sha256:426ef44431814609ea279c3afd889b4b93c1cc630be7666cad34f0bc70b5d3b0
-  7.9.1:
-    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.1.zip
-    checksum: sha256:67f3ccae79245397480b0947d7a0b5661dc650b87f368b39365044ebcc88ada0
+  7.9.2:
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.2.zip
+    checksum: sha256:e4111983996ffee407288cf1ee16703c940ce9ba92728dad0c09c6b5a22b6148
+  8.1.0:
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.1.0.31237.zip
+    checksum: sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+
 
 sonarqube_versions_sequence: ["6.7", "7.9.1"]
 
