@@ -1,0 +1,129 @@
+---
+# https://binaries.sonarsource.com/Distribution/
+sonarqube_plugins:
+  json:
+    pattern: sonar-json-plugin-*.jar
+    url: https://github.com/racodond/sonar-json-plugin/releases/download/2.1/sonar-json-plugin-2.1.jar
+    checksum: 07fce6ffc032c9740900822af81bf7a8d9d38de1f0a3cb10e53e3b2a20126979
+  widgetlab:
+    pattern: sonar-widget-lab-plugin-*.jar
+    url: https://github.com/SonarQubeCommunity/sonar-widget-lab/releases/download/1.8.1/sonar-widget-lab-plugin-1.8.1.jar
+    checksum: 2efb300427a0c5439d91234ce831137b28819da2007354482613cd391b979ff9
+  ldap:
+    pattern: sonar-ldap-plugin-*.jar
+    url: https://binaries.sonarsource.com/Distribution/sonar-ldap-plugin/sonar-ldap-plugin-2.2.0.608.jar
+    checksum: 21ca64e27fc17fdc961983a20a9381b043ad84acfbf77ca58158841de5fef9c5
+
+sonarqube_versions:
+  6.7:
+    plugins:
+      build_breaker:
+        pattern: sonar-build-breaker-plugin-*.jar
+        url: https://github.com/jbocc/sonar-build-breaker/releases/download/2.2/sonar-build-breaker-plugin-2.2.jar
+        checksum: 22f51c0f02d6d5ff6d7bc9c91150e9576bee72067de1d903270e4eb96f4f6fc2
+      csharp_plugin:
+        pattern: sonar-csharp-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-csharp-plugin/sonar-csharp-plugin-5.4.0.464.jar
+        checksum: c9e2ab9ceefd0ed1fefa0cb560ca44c5f52c39000fe39bc5d4feeb78b97cb655
+      css_plugin:
+        pattern: sonar-css-plugin-*.jar
+        url: https://repo1.maven.org/maven2/org/codehaus/sonar-plugins/css/sonar-css-plugin/3.1/sonar-css-plugin-3.1.jar
+        checksum: a378941cf714ac8d0474b1a8b037a8315c2faa8dee1a2153ddb79ca68c8e2bac
+      html_plugin:
+        pattern: sonar-html-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-html-plugin/sonar-html-plugin-3.0.1.1444.jar
+        checksum: 23be3703e7b258b26d63359e3d576da2410c63721857916837f12e99da932bad
+      java_plugin:
+        pattern: sonar-java-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-java-plugin/sonar-java-plugin-4.15.0.12310.jar
+        checksum: 037422cec3c97961c5bf167eb98e137c234ad572b53fe15aa2e10ea60b68d7f9
+      javascript_plugin:
+        pattern: sonar-javascript-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-javascript-plugin/sonar-javascript-plugin-2.17.0.3154.jar
+        checksum: 9923a3acad9a2a807d53c6518644bc93ad26d6b064fcc165ad6906e903c6c737
+      php_plugin:
+        pattern: sonar-php-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-php-plugin/sonar-php-plugin-2.12.0.2871.jar
+        checksum: 30d7f22b35aa917e56ef015d51a05244664b588c3d1fd787aa4c2285ab92819b
+      python_plugin:
+        pattern: sonar-python-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-python-plugin/sonar-python-plugin-1.6.jar
+        checksum: a14d0ac16484c2e55f05217007657c474840d735ec717a1f740d5b543db9d00b
+      git_plugin:
+        pattern: sonar-scm-git-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-scm-git-plugin/sonar-scm-git-plugin-1.2.jar
+        checksum: c3ffae97a038f84905967a4221766dd7d8e3c66cd68bd62f5dd9f7108169e6bf
+      svn_plugin:
+        pattern: sonar-scm-svn-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-scm-svn-plugin/sonar-scm-svn-plugin-1.3.jar
+        checksum: aa1abf17f26d273caf8c86d53b9c8d9b040a168b79f7807cddbb9e88b05baa4a
+      typescript_plugin:
+        pattern: sonar-typescript-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-typescript-plugin/sonar-typescript-plugin-1.0.0.340.jar
+        checksum: b034ea85668b94bba603dc45d23fc271dc47ca578fd7325f96eb00c91a7446b7
+      xml_plugin:
+        pattern: sonar-xml-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-xml-plugin/sonar-xml-plugin-1.4.3.1027.jar
+        checksum: 1d95a68c65f3fd3a4d2a2767b68e1c8b236af6eb176e757b36a473f859bfdbe4
+      kotlin_plugin:
+        pattern: sonar-kotlin-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-kotlin-plugin/sonar-kotlin-plugin-1.5.0.315.jar
+        checksum: 1fbb2a4c994082f31f97ca01030624d7d62893970a72d08f463dba8f5e29aea4
+  7.9.1:
+    plugins:
+      build_breaker:
+        pattern: sonar-build-breaker-plugin-*.jar
+        url: https://github.com/adnovum/sonar-build-breaker/releases/download/2.3.0/sonar-build-breaker-plugin-2.3.0.299.jar
+        checksum: 1af93c5739a1dce4b22b0d13b6aeb0be46470cfa20606031a64f2c491710e0c9
+      csharp_plugin:
+        pattern: sonar-csharp-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-csharp-plugin/sonar-csharp-plugin-8.3.0.14607.jar
+        checksum: 9450800165b15055554378bebf904f05ba4bc17afe645283c98b647a061416ee
+      css_plugin:
+        pattern: sonar-css-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-css-plugin/sonar-css-plugin-1.2.0.1325.jar
+        checksum: 25a397fa4f0ec52821d1fceca3cb0d4562142d315f10a6dda5a5592a695da568
+      html_plugin:
+        pattern: sonar-html-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-html-plugin/sonar-html-plugin-3.2.0.2082.jar
+        checksum: bf504ebd0062a56e6da5545187e302b34717ae3e6ec5fc71b781b73bd35261b7
+      java_plugin: # was web plugin
+        pattern: sonar-java-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-java-plugin/sonar-java-plugin-6.0.2.20657.jar
+        checksum: e162d66f8768bb86ac0af90e29adf0659a8ba3547edf112d807de2148ee5a0eb
+      javascript_plugin:
+        pattern: sonar-javascript-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-javascript-plugin/sonar-javascript-plugin-6.2.0.12043.jar
+        checksum: 59e0b9610f6693f62cf530f68503326efeff52e344b372d7de2760d60c637199
+      php_plugin:
+        pattern: sonar-php-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-php-plugin/sonar-php-plugin-3.3.0.5166.jar
+        checksum: f3abaf8b351d8e5c2aa8f98df7d1ef0e1ce42144624ec314624d8a6ba78af7a0
+      python_plugin:
+        pattern: sonar-python-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-python-plugin/sonar-python-plugin-2.4.0.5513.jar
+        checksum: af2c7e2b72ff993135b1f3f7846dc57c5d7397ac1fc5fd1cc329794c54d0fece
+      git_plugin:
+        pattern: sonar-scm-git-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-scm-git-plugin/sonar-scm-git-plugin-1.9.1.1834.jar
+        checksum: 3e6864766fe73cd270b4495a1eb21c2964e816c4cbbed988817bea64aa5638e9
+      svn_plugin:
+        pattern: sonar-scm-svn-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-scm-svn-plugin/sonar-scm-svn-plugin-1.9.0.1295.jar
+        checksum: 3ca796e02664dd59eb020432de6d6af57dfd53ba950c01dd1fa388e52d3c5e6b
+      typescript_plugin:
+        pattern: sonar-typescript-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-typescript-plugin/sonar-typescript-plugin-2.1.0.4359.jar
+        checksum: 67bc88dd83d9ee3af09180ab84f032cd4bc25b3e144d8414dc72d0fbf1e80ea4
+      xml_plugin:
+        pattern: sonar-xml-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-xml-plugin/sonar-xml-plugin-2.0.1.2020.jar
+        checksum: fb4220a0bb5b5a50c9057431cbb7c3e419721115f2322da7622f0e7dd81c8f80
+      kotlin_plugin:
+        pattern: sonar-kotlin-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-kotlin-plugin/sonar-kotlin-plugin-1.5.0.315.jar
+        checksum: 1fbb2a4c994082f31f97ca01030624d7d62893970a72d08f463dba8f5e29aea4        
+      jacoco_plugin:
+        pattern: sonar-jacoco-plugin-*.jar
+        url: https://binaries.sonarsource.com/Distribution/sonar-jacoco-plugin/sonar-jacoco-plugin-1.0.2.475.jar
+        checksum: d85d71d8b916472b3abc0bbd6a637c2f3c7846d4fd46a6497f1e39c7f0edb714        
