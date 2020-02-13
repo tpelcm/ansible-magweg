@@ -1,8 +1,4 @@
 ---
-- name: sonarqube_versions
-  debug:
-   var: sonarqube_versions
-
 - name: Remove other version of plugins
   remove_old_plugin_version:
     plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
