@@ -28,7 +28,7 @@ SSLCryptoDevice builtin
     SSLCertificateKeyFile {{ reverse_proxy_etc_ssl_private[ansible_os_family] }}reverse_proxy.pem
     SSLCertificateFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}.pem
 {% if reverse_proxy_certs_bundle_url is defined %}
-    SSLCertificateChainFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}-bundle.pem
+    SSLCertificateChainFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}-bundle.pem
 {% endif %}
     RequestHeader set X-Forwarded-Proto "https"
     AllowEncodedSlashes NoDecode

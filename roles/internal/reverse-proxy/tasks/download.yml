@@ -8,9 +8,12 @@
   get_url:
     url: '{{ reverse_proxy_certs_file_url }}'
     dest: "{{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}.pem"
+  with_items: "{{ reverse_proxy_vhosts }}"
+
 
 - name: Download bundle
   get_url:
     url: '{{ reverse_proxy_certs_bundle_url }}'
     dest: "{{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}-bundle.pem"
   when: reverse_proxy_certs_bundle_url is defined
+  with_items: "{{ reverse_proxy_vhosts }}"
