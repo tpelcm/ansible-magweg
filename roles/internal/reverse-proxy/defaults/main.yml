@@ -1,6 +1,11 @@
 ---
 reverse_proxy_server_admin: admin@tpelcm.tech
 reverse_proxy_log_level: warn # debug, info, notice, warn, error, crit,
+reverse_proxy_certs: generate # or download
+
+# reverse_proxy_certs_key_url:
+# reverse_proxy_certs_file_url:
+# reverse_proxy_certs_bundle_url: # optional
 
 reverse_proxy_vhosts: []
 #reverse_proxy_vhosts:
