@@ -61,7 +61,7 @@ def get_restore_info(data):
   if '/' not in data['path_pattern']:
     ptrn = os.path.join(os.path.sep,data['backup_archives'],'*/' + data['role'] + '_*/' + data['path_pattern'] + '/*.tar')
   else:
-    ptrn = data['backup_archives']
+    ptrn = data['path_pattern']
   trs = []
   restore_info = []
   for tr in glob.glob(ptrn):
