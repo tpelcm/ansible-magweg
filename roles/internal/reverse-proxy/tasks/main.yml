@@ -1,3 +1,12 @@
 ---
 - include: "{{ reverse_proxy_certs }}.yml"
 - include: "{{ ansible_os_family }}.yml"
+
+- debug:
+    var: apache_vhosts
+
+- name: Copy favicon
+  copy:
+    dest: "{{ apache_vhosts[0].documentroot }}/favicon.ico"
+    src: "{{ reverse_proxy_global_favicon }}"
+  when: reverse_proxy_global_favicon is defined 

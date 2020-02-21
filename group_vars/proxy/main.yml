@@ -41,4 +41,4 @@ reverse_proxy_vhosts:
 #  - acl: localnet
 #    decision: deny
 
-
+reverse_proxy_global_favicon: favicon-blue.ico

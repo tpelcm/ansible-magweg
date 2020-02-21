@@ -33,6 +33,15 @@ SSLCryptoDevice builtin
     RequestHeader set X-Forwarded-Proto "https"
     AllowEncodedSlashes NoDecode
 
+{% if reverse_proxy_global_favicon is defined %}
+    RewriteEngine on
+    RewriteRule favicon.ico$ /favicon.ico [NC]
+    ProxyPass /favicon.ico !
+{% endif %}
+
+{% for m in reverse_proxy_redirect_matches %}
+    RedirectMatch {{ m }}
+{% endfor %}
     DocumentRoot /var/www/html
 
     <Directory />
