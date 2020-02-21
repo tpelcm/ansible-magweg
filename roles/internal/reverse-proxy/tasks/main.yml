@@ -10,3 +10,9 @@
     dest: "{{ apache_vhosts[0].documentroot }}/favicon.ico"
     src: "{{ reverse_proxy_global_favicon }}"
   when: reverse_proxy_global_favicon is defined 
+
+- name: Environment file
+  template:
+    src: environment.j2
+    dest: "{{ apache_vhosts[0].documentroot }}/environment"
+  when: reverse_proxy_environment is defined 

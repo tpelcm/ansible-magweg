@@ -36,3 +36,5 @@ https_log_dir:
 reverse_proxy_redirect_matches: []
 #reverse_proxy_redirect_matches: 
 #  - ^/$ http://www.google.com
+
+# reverse_proxy_environment: staging
