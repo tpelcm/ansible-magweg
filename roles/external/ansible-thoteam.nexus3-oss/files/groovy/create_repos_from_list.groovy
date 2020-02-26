@@ -10,6 +10,30 @@ scriptResults.put('action_details', actionDetails)
 
 repositoryManager = repository.repositoryManager
 
+private Configuration newConfiguration(Map map) {
+    Configuration config
+    try {
+        config = repositoryManager.newConfiguration()
+    } catch (MissingMethodException) {
+        // Compatibility with nexus versions older than 3.21
+        config = Configuration.newInstance()
+    }
+    config.with {
+        repositoryName = map.repositoryName
+        recipeName = map.recipeName
+        online = map.online
+        attributes = map.attributes as Map
+    }
+    return config
+}
+
+private boolean configurationChanged(Configuration oldConfig, Configuration newConfig) {
+    if (oldConfig.attributes.httpclient)
+        if (oldConfig.attributes.httpclient.authentication == [:])
+            oldConfig.attributes.httpclient.authentication = null
+    return oldConfig.properties == newConfig.properties
+}
+
 parsed_args.each { currentRepo ->
 
     Map<String, String> currentResult = [name: currentRepo.name, format: currentRepo.format, type: currentRepo.type]
@@ -22,7 +46,7 @@ parsed_args.each { currentRepo ->
         if (existingRepository == null) {
             log.info('Creating configuration for new repo {} (Format: {},  Type: {})', currentRepo.name, currentRepo.format, currentRepo.type)
             // Default and/or immutable values
-            configuration = new Configuration(
+            configuration = newConfiguration(
                     repositoryName: currentRepo.name,
                     recipeName: recipeName,
                     online: true,
@@ -61,6 +85,23 @@ parsed_args.each { currentRepo ->
             ]
         }
 
+        // Configs for apt repos
+        if (currentRepo.type == 'proxy' && currentRepo.format == 'apt') {
+            configuration.attributes['apt'] = [
+                    distribution: currentRepo.distribution,
+                    flat        : Boolean.valueOf(currentRepo.flat)
+            ]
+        }
+        if (currentRepo.type == 'hosted' && currentRepo.format == 'apt') {
+            configuration.attributes['apt'] = [
+                    distribution: currentRepo.distribution
+            ]
+            configuration.attributes['aptSigning'] = [
+                    keypair   : currentRepo.keypair,
+                    passphrase: currentRepo.passphrase
+            ]
+        }
+
         // Configs for all proxy repos
         if (currentRepo.type == 'proxy') {
             authentication = currentRepo.remote_username == null ? null : [
@@ -90,11 +131,24 @@ parsed_args.each { currentRepo ->
             ]
         }
 
+        // Configure cleanup policy
+        if (currentRepo.type == 'proxy' || currentRepo.type == 'hosted') {
+            def cleanupPolicies = currentRepo.cleanup_policies as Set
+            if (cleanupPolicies != null)
+            {
+                configuration.attributes['cleanup'] = [
+                    policyName: cleanupPolicies
+                ]
+            }
+        }
+
         // Configs for docker proxy repos
         if (currentRepo.type == 'proxy' && currentRepo.format == 'docker') {
             configuration.attributes['dockerProxy'] = [
                     indexType                  : currentRepo.index_type,
-                    useTrustStoreForIndexAccess: currentRepo.use_nexus_certificates_to_access_index
+                    useTrustStoreForIndexAccess: currentRepo.use_nexus_certificates_to_access_index,
+                    foreignLayerUrlWhitelist   : currentRepo.foreign_layer_url_whitelist,
+                    cacheForeignLayers         : currentRepo.cache_foreign_layers
             ]
         }
 
@@ -121,7 +175,7 @@ parsed_args.each { currentRepo ->
             scriptResults['changed'] = true
             log.info('Configuration for repo {} created', currentRepo.name)
         } else {
-            if (!(configuration.properties == existingRepository.configuration.properties)) {
+            if (!configurationChanged(existingRepository.configuration, configuration)) {
                 repositoryManager.update(configuration)
                 currentResult.put('status', 'updated')
                 log.info('Configuration for repo {} saved', currentRepo.name)

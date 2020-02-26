@@ -22,6 +22,7 @@ nexus_config_npm: true
 nexus_config_nuget: true
 nexus_config_gitlfs: true
 nexus_config_yum: true
+nexus_config_apt: true
 
 nexus_anonymous_access: true
 
@@ -29,6 +30,39 @@ nexus_audit_enabled: true
 
 nexus_rut_auth_realm: false
 nexus_rut_auth_header: "CUSTOM_RUT_HEADER"
+
+nexus_repos_cleanup_policies:
+  - name: mvn_cleanup
+    format: maven2
+    mode:
+    notes: ""
+    criteria:
+      lastBlobUpdated: 60
+      lastDownloaded: 120
+
+nexus_repos_maven_proxy:
+  - name: central
+    remote_url: 'https://repo1.maven.org/maven2/'
+    layout_policy: permissive
+    cleanup_policies:
+      - mvn_cleanup
+  - name: jboss
+    remote_url: 'https://repository.jboss.org/nexus/content/groups/public-jboss/'
+    cleanup_policies:
+      - mvn_cleanup
+
+nexus_repos_maven_hosted:
+  - name: private-release
+    version_policy: release
+    write_policy: allow_once  # one of "allow", "allow_once" or "deny"
+    cleanup_policies:
+      - mvn_cleanup
+
+nexus_repos_maven_group:
+  - name: public
+    member_repos:
+      - central
+      - jboss
 
 nexus_repos_npm_hosted: []
 nexus_repos_npm_group:
@@ -55,30 +89,121 @@ nexus_repos_yum_group:
       - private_yum_centos_7
       - epel_centos_7_x86_64
 
-nexus_scheduled_tasks:
-  #  Example task to purge maven snapshots
-  - name: Purge-maven-snapshots
-    cron: '0 50 23 * * ?'
-    typeId: repository.maven.remove-snapshots
-    task_alert_email: alerts@example.org  # optional
-    taskProperties:
-      repositoryName: "*"
-      minimumRetained: "2"
-      snapshotRetentionDays: "2"
-      gracePeriodInDays: "2"
-    booleanTaskProperties:
-      removeIfReleased: true
+nexus_repos_docker_hosted:
+  - name: docker-private
+    http_port: "5000"
+    force_basic_auth: true
+    v1_enabled: true
+    write_policy: allow
 
-nexus_local_users:
-  - username: jenkins
-    first_name: Jenkins
-    last_name: CI
-    email: support@company.com
-    password: "s3cr3t"
-    roles:
-      - developers
-  - username: olduser  # make sure this old account is removed
-    state: absent
+nexus_repos_apt_hosted:
+  - name: private_ubuntu_18.04
+    distribution: bionic
+    keypair: |-
+      -----BEGIN PGP PRIVATE KEY BLOCK-----
+
+      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
+      =R2n2
+      -----END PGP PRIVATE KEY BLOCK-----
+    passphrase: "nexustest"
+nexus_repos_apt_proxy:
+  - name: apt_ubuntu_18.04
+    remote_url: http://archive.ubuntu.com/ubuntu/
+    distribution: bionic
+    maximum_component_age: -1
+    maximum_metadata_age: -1
+    negative_cache_ttl: 60
+
+nexus_content_selectors:
+  # Docker by namespace. For mode details see:
+  # https://help.sonatype.com/repomanager3/formats/docker-registry/content-selectors-and-docker
+  - name: docker-login-search
+    description: Selector for docker login privilege
+    search_expression: format == "docker" and (path == "/v2/" of path == "/v1/search")
+  - name: docker-private-team1
+    description: Selector for docker team1
+    search_expression: format == "docker" and path =^ "/v2/team1/"
+  - name: docker-private-team2
+    description: Selector for docker team2
+    search_expression: format == "docker" and path =^ "/v2/team2/"
 
 nexus_privileges:
   - name: all-repos-read
@@ -103,6 +228,162 @@ nexus_privileges:
     script_name: the_script_name
     actions:
       - some actions
+  - name: docker-login-search-all
+    type: repository-content-selector
+    contentSelector: docker-login-search
+    description: "Login to and search docker registry"
+    repository: "*"
+    actions:
+      - read
+  - name: docker-private-team1-rw
+    type: repository-content-selector
+    contentSelector: docker-private-team1
+    description: write access to /team1 namespace on docker-private
+    repository: docker-private
+    actions:
+      - read,
+      - add
+      - edit
+      - browse
+  - name: docker-private-team2-rw
+    type: repository-content-selector
+    contentSelector: docker-private-team2
+    description: write access to /team2 namespace on docker-hosted
+    repository: docker-private
+    actions:
+      - read
+      - add
+      - edit
+      - browse
+
+nexus_roles:
+  - name: c-ro-private_yum_centos_7
+    id: c-ro-private_yum_centos_7
+    description: "Custrom read-only role for private_yum_centos_7 hosted repository"
+    privileges:
+      - 'nx-repository-view-yum-private_yum_centos_7-read'
+      - 'nx-repository-view-yum-private_yum_centos_7-browse'
+  - name: developers
+    id: developers
+    description: "Developers"
+    privileges:
+      - all-repos-read
+      - wildcard1
+      - docker-login-search-all
+  - name: role-team1
+    id: role-team1
+    description: "team1"
+    privileges:
+      - docker-private-team1-rw
+  - name: role-team2
+    id: role-team2
+    description: "team2"
+    privileges:
+      - docker-private-team2-rw
+
+nexus_local_users:
+  - username: jenkins
+    first_name: Jenkins
+    last_name: CI
+    email: support@company.com
+    password: "s3cr3t"
+    roles:
+      - developers
+  - username: olduser  # make sure this old account is removed
+    state: absent
+  - username: test_roles
+    first_name: Test
+    last_name: Roles
+    email: test@roles.com
+    password: "s3cr3t"
+    roles:
+      - c-ro-private_yum_centos_7
+  - username: team1
+    first_name: team
+    last_name: one
+    email: team@one.com
+    password: "theone"
+    roles:
+      - developers
+      - role-team1
+  - username: team2
+    first_name: team
+    last_name: two
+    email: team@two.com
+    password: "thetwo"
+    roles:
+      - developers
+      - role-team2
+
+nexus_scheduled_tasks:
+  #  Example task to purge maven snapshots with cron schedule
+  - name: Purge maven snapshots
+    schedule_type: cron
+    cron: '0 50 23 * * ?'
+    typeId: repository.maven.remove-snapshots
+    task_alert_email: alerts@example.org  # optional
+    taskProperties:
+      repositoryName: "*"
+      minimumRetained: "2"
+      snapshotRetentionDays: "2"
+      gracePeriodInDays: "2"
+    booleanTaskProperties:
+      removeIfReleased: true
+  #  Example task to run manually, now, once, daily, and hourly
+  - name: Purge unused maven snapshots manual
+    schedule_type: manual
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "1"
+  - name: Purge-unused-maven-snapshots-now
+    schedule_type: now
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "2"
+  - name: Purge-unused-maven-snapshots-once
+    schedule_type: once
+    start_date_time: "2050-02-02T00:01:02"
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "3"
+  - name: Purge-unused-maven-snapshots-monthly
+    schedule_type: monthly
+    start_date_time: "2050-03-03T00:01:02"
+    monthly_days:
+      - 1
+      - 15
+      - 999  # Last day of month
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "4"
+  - name: Purge-unused-maven-snapshots-weekly
+    schedule_type: weekly
+    start_date_time: "2050-04-04T00:01:02"
+    weekly_days:
+      - MON
+      - WED
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "5"
+  - name: Purge-unused-maven-snapshots-daily
+    schedule_type: daily
+    start_date_time: "2050-05-05T00:01:02"
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "6"
+  - name: Purge-unused-maven-snapshots-hourly
+    schedule_type: hourly
+    start_date_time: "2050-06-06T00:01:02"
+    typeId: repository.maven.purge-unused-snapshots
+    taskProperties:
+      repositoryName: "*"
+      lastUsed: "7"
 
 # proxy configuration depending on env
 nexus_with_http_proxy: "{{ lookup('env', 'http_proxy') | length > 0 | bool }}"

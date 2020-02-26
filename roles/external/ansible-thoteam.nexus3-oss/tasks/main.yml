@@ -15,8 +15,17 @@
     path: /etc/systemd/system/nexus.service
   register: nexus_systemd_service_file
 
+- name: Check if sysv service is installed
+  stat:
+    path: /etc/init.d/nexus
+  register: nexus_sysv_service_file
+
 - include_tasks: nexus_purge.yml
   when: nexus_purge | default(false) | bool
+
+- name: "Digest splited blob list var"
+  include_vars: blob_vars.yml
+  when: nexus_blob_split | bool
 
 - import_tasks: nexus_install.yml
 
@@ -67,14 +76,19 @@
     - name: "{{ nexus_blob_names.mvn.blob }}"
     - name: "{{ nexus_blob_names.gitlfs.blob }}"
     - name: "{{ nexus_blob_names.yum.blob }}"
+    - name: "{{ nexus_blob_names.apt.blob }}"
   when: (nexus_data_dir_contents.stdout | length == 0) and nexus_delete_default_blobstore
 
 - block:
     - include_tasks: setup_ldap_each.yml
       with_items: "{{ ldap_connections }}"
 
-    - include_tasks: create_content_selector_each.yml
-      with_items: "{{ nexus_content_selectors }}"
+    - name: Create/check content selectors
+      include_tasks: call_script.yml
+      vars:
+        script_name: create_content_selectors_from_list
+        args: "{{ nexus_content_selectors }}"
+      when: nexus_content_selectors | length > 0
 
     - name: apply defaults to privileges
       # @todo: fix with easier syntax once the flip filter is released
@@ -86,6 +100,51 @@
             {{ result.append(_nexus_privilege_defaults | combine(privilege)) }}
           {%- endfor -%}
           {{ result | to_json | from_json }}
+
+    - name: Create/Check blobstores
+      when: nexus_restore_point is undefined
+      block:
+
+        - name: Create directories for blob stores.
+          file:
+            path: "{{ item['path'] }}"
+            owner: "{{ nexus_os_user }}"
+            group: "{{ nexus_os_group }}"
+            state: directory
+            recurse: "{{ nexus_blobstores_recurse_owner | default(false) | bool }}"
+          when: item.path is defined
+          loop: "{{ nexus_blobstores }}"
+
+        - name: Create/Check blobstores
+          include_tasks: call_script.yml
+          vars:
+            script_name: create_blobstores_from_list
+            args: "{{ nexus_blobstores }}"
+          when: nexus_blobstores | length > 0
+
+
+  when: nexus_run_provisionning | default(true) | bool
+
+- name: "Restore nexus backup"
+  include_tasks: nexus-restore.yml
+  when: nexus_restore_point is defined
+
+- block:
+    - name: Create/check cleanup policies
+      include_tasks: call_script.yml
+      vars:
+        script_name: create_cleanup_policies_from_list
+        args: "{{ nexus_repos_cleanup_policies }}"
+      when: nexus_repos_cleanup_policies | length > 0
+
+    - name: Apply defaults to repositories configurations and process a single list
+      include_tasks: process_repos_list.yml
+
+    - name: Create configured repositories
+      include_tasks: call_script.yml
+      vars:
+        script_name: create_repos_from_list
+        args: "{{ _nexus_repos_global_list }}"
 
     - name: Create/check privileges
       include_tasks: call_script.yml
@@ -114,49 +173,6 @@
         script_name: setup_ldap_users_from_list
         args: "{{ nexus_ldap_users }}"
       when: nexus_ldap_users | length > 0
-
-    - name: "Digest splited blob list var"
-      include_vars: blob_vars.yml
-      when: nexus_blob_split | bool
-
-    - name: Create/Check blobstores
-      when: nexus_restore_point is undefined
-      block:
-
-        - name: Create directories for blob stores.
-          file:
-            path: "{{ item['path'] }}"
-            owner: "{{ nexus_os_user }}"
-            group: "{{ nexus_os_group }}"
-            state: directory
-            recurse: true
-          when: item.path is defined
-          loop: "{{ nexus_blobstores }}"
-
-        - name: Create/Check blobstores
-          include_tasks: call_script.yml
-          vars:
-            script_name: create_blobstores_from_list
-            args: "{{ nexus_blobstores }}"
-          when: nexus_blobstores | length > 0
-
-
-  when: nexus_run_provisionning | default(true) | bool
-
-- name: "Restore nexus backup"
-  include_tasks: nexus-restore.yml
-  when: nexus_restore_point is defined
-
-- block:
-
-    - name: Apply defaults to repositories configurations and process a single list
-      include_tasks: process_repos_list.yml
-
-    - name: Create configured repositories
-      include_tasks: call_script.yml
-      vars:
-        script_name: create_repos_from_list
-        args: "{{ _nexus_repos_global_list }}"
 
   when: nexus_run_provisionning | default(true) | bool
 

@@ -1,4 +1,10 @@
 [![Build Status](https://travis-ci.org/ansible-ThoTeam/nexus3-oss.svg?branch=master)](https://travis-ci.org/ansible-ThoTeam/nexus3-oss)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ansible-ThoTeam/nexus3-oss)](https://github.com/ansible-ThoTeam/nexus3-oss/releases/latest)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/ansible-ThoTeam/nexus3-oss/latest)
+![Ansible Quality Score](https://img.shields.io/ansible/quality/22637?label=Galaxy%20quality%20score)
+![Ansible Role](https://img.shields.io/ansible/role/d/22637?label=Galaxy%20downloads)
+![GitHub contributors](https://img.shields.io/github/contributors/ansible-ThoTeam/nexus3-oss)
+![GitHub licence](https://img.shields.io/github/license/ansible-ThoTeam/nexus3-oss)
 # Ansible Role: Nexus 3 OSS
 
 This role installs and configures Nexus Repository Manager OSS version 3.x.
@@ -6,6 +12,9 @@ This role installs and configures Nexus Repository Manager OSS version 3.x.
 All configuration can be updated by re-running the role, except for the [blobstores](https://help.sonatype.com/display/NXRM3/Repository+Management#RepositoryManagement-BlobStores) related settings, which are immutable in nexus.
 
 ## Table of Contents
+**Note**: TOC links will not function appropriately when viewing it from ansible galaxy site.
+[View it on github](https://github.com/ansible-ThoTeam/nexus3-oss/blob/master/README.md#table-of-contents)
+
 _(Created with [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))_
 <!-- Run gh-md-toc --insert README.md to update -->
 <!--ts-->
@@ -16,10 +25,12 @@ _(Created with [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))_
       * [Role Variables](#role-variables)
          * [General variables](#general-variables)
          * [Download dir for nexus package](#download-dir-for-nexus-package)
-         * [Nexus port and context path](#nexus-port-and-context-path)
+         * [Nexus port, context path ans listening IP](#nexus-port-context-path-ans-listening-ip)
          * [Nexus OS user and group](#nexus-os-user-and-group)
          * [Nexus instance directories](#nexus-instance-directories)
          * [Nexus JVM Ram setting](#nexus-jvm-ram-setting)
+         * [Plugin installation](#plugin-installation)
+         * [Onboarding Wizard](#onboarding-wizard)
          * [Admin password](#admin-password)
          * [Default anonymous access](#default-anonymous-access)
          * [Public hostname](#public-hostname)
@@ -32,6 +43,7 @@ _(Created with [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))_
          * [Roles](#roles)
          * [Users](#users)
          * [Content selectors](#content-selectors)
+         * [Cleanup policies](#cleanup-policies)
          * [Blobstores and repositories](#blobstores-and-repositories)
          * [Scheduled tasks](#scheduled-tasks)
          * [Backups](#backups)
@@ -44,6 +56,7 @@ _(Created with [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))_
             * [Upgrade nexus to latest version](#upgrade-nexus-to-latest-version)
                * [Fix upgrade failing on timeout waiting for nexus port](#fix-upgrade-failing-on-timeout-waiting-for-nexus-port)
             * [Skip provisionning tasks](#skip-provisionning-tasks)
+            * [Force recursive ownership check of blobstores directories](#force-recursive-ownership-check-of-blobstores-directories)
       * [Dependencies](#dependencies)
       * [Example Playbook](#example-playbook)
       * [Development, Contribution and Testing](#development-contribution-and-testing)
@@ -55,7 +68,7 @@ _(Created with [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))_
       * [License](#license)
       * [Author Information](#author-information)
 
-<!-- Added by: olcla, at: 2019-05-24T15:03+02:00 -->
+<!-- Added by: olcla, at: Thu Feb 13 18:48:38 CET 2020 -->
 
 <!--te-->
 
@@ -70,8 +83,10 @@ We would like to thank the original authors for the work done.
 
 ## Requirements
 
-- Fairly Up-to-date version of ansible. We follow ansible versions during maintenance/development and will take advantage of new features if needed (and update meta/main.yml for minimum version)
-- Compatible OS. This role is tested through travis CI on CentOS 7, Ubuntu Xenial (16.04) and Bionic (18.04), Debian Jessie and stretch for time being.
+- Fairly Up-to-date version of ansible. We follow ansible versions during maintenance/development and will take advantage
+of new features if needed (and update meta/main.yml for minimum version)
+- Compatible OS. This role is tested through travis CI on CentOS 7, Ubuntu Xenial (16.04) and Bionic (18.04),
+Debian stretch and buster for time being.
 - Rsync has to be installed on the target machine (it is not needed on the host running ansible if different)
 - `jmespath` library needs to be installed on the host running the playbook (needed for the `json_query` filter). See `requirements.txt`
 - Java 8 (mandatory)
@@ -92,6 +107,7 @@ Ansible variables, along with the default values (see `default/main.yml`) :
     nexus_version: ''
     nexus_timezone: 'UTC'
     nexus_download_url: "http://download.sonatype.com/nexus/3"
+    # nexus_download_ssl_verify: <unset>
     # nexus_version_running: <unset>
 ```
 
@@ -116,7 +132,9 @@ You may change the download site for packages by tuning `nexus_download_url` (e.
 proxy/cache on your network...). **In this case, the automatic detection of the latest version will most likelly fail
 and you will have to fix the version to download.** If you still want to take advantage of automatic latest version detection,
 a call to `<your_custom_location>/latest-unix.tar.gz` must return an HTTP 302 redirect to the latest available version
-in your cache/proxy.
+in your cache/proxy. If your download location uses https with a self-signed certificate (or a from a private PKI) and
+you are having troubles getting it validated (i.e. download errors in the role) and you fully trust the target
+you can set `nexus_download_ssl_verify: false`.
 
 `nexus_version_running` is a variable used internally. **As such, it should never be set directly**
 It will exist only if nexus is currently installed on the host and will register the current version prior to running
@@ -129,13 +147,23 @@ the role. It can be used later in your playbook if needed (e.g. for an upgrade n
 
 Directory on target where the nexus package will be downloaded.
 
-### Nexus port and context path
+**Important note**: if you intend to run the role periodically to maintain/provision your nexus install, you should make
+sure the downloaded files will persists between run. On RHEL/Centos specifically, you should change this dir to a location that
+is not cleaned up automatically. If the package file does not persit, it will be downloaded again which might cause an unnecessary restart of nexus.
+
+### Nexus port, context path ans listening IP
 ```yaml
     nexus_default_port: 8081
+    nexus_application_host: '{{ httpd_setup_enable | ternary("127.0.0.1", "0.0.0.0") }}'
     nexus_default_context_path: '/'
 ```
 
-Port and context path of the java nexus process. `nexus_default_context_path` has to keep the trailing slash when set, for ex. : `nexus_default_context_path: '/nexus/'`.
+Listening port/ip, and context path of the java nexus process.
+* the listening IP/Interface (i.e. `nexus_application_host`) is by default dependant on the `httpd_setup_enable` setting.
+Nexus will listen only on localhost (127.0.0.1) if reverse proxy is enabled or all configured IP (0.0.0.0) if not. You
+can change this setting to your actual need (i.e. don't install proxy and still bind to 127.0.0.1 only if you install
+your own proxy)
+* `nexus_default_context_path` has to keep the trailing slash when set, for ex. : `nexus_default_context_path: '/nexus/'`.
 
 ### Nexus OS user and group
 ```yaml
@@ -175,6 +203,18 @@ These are the defaults for Nexus. **Please do not modify those values** _unless 
 
 As a second warning, here is an extract from the above document:
 > Increasing the JVM heap memory larger than recommended values in an attempt to improve performance is not recommended. This actually can have the opposite effect, causing the operating system to thrash needlessly.
+
+### Plugin installation
+```yaml
+nexus_plugin_urls: []
+```
+Put list of urls pointing to plugins build for your Nexus version. Only *.kar bundles can be installed this way.
+
+### Onboarding Wizard
+```yaml
+nexus_onboarding_wizard: false
+```
+Controls whether the nexus onboarding wizard runs when the admin user logs in for the first time
 
 ### Admin password
 ```yaml
@@ -238,7 +278,9 @@ The [Auditing capability of nexus](https://help.sonatype.com/repomanager3/securi
 ```
 
 Setup an [SSL Reverse-proxy](https://help.sonatype.com/display/NXRM3/Run+Behind+a+Reverse+Proxy#RunBehindaReverseProxy-Example:ReverseProxySSLTerminationatBasePath).
-This needs httpd installed. Note : when `httpd_setup_enable` is set to `true`, nexus binds to 127.0.0.1:8081 thus *not* being directly accessible on HTTP port 8081 from an external IP.
+This needs httpd installed. Note : when `httpd_setup_enable` is set to `true`, nexus binds by default to 127.0.0.1:8081
+thus *not* being directly accessible on HTTP port 8081 from an external IP. (If you want to change this, you can explicitely
+set `nexus_application_host: 0.0.0.0`)
 
 The default hostname used is `nexus_public_hostname`. If you need different names for whatever reason, you can set
 `httpd_server_name` to a different value.
@@ -421,7 +463,6 @@ Those items are combined with the following default values :
         - read
 ```
 
-
 ### Roles
 ```yaml
     nexus_roles:
@@ -483,6 +524,22 @@ To use content selector add new privilege with `type: repository-content-selecto
   - browse
 ```
 
+### Cleanup policies
+```yaml
+nexus_repos_cleanup_policies:
+#   - name: mvn_cleanup
+#     format: maven2
+#     mode:
+#     notes: ""
+#     criteria:
+#       lastBlobUpdated: 60
+#       lastDownloaded: 120
+#       preRelease: RELEASES
+#       regexKey: "foo.*"
+```
+
+Cleanup policies definitions. Can be added to repo definitions with the option `cleanup_policies`
+
 ### Blobstores and repositories
 ```yaml
     nexus_delete_default_repos: false
@@ -519,12 +576,16 @@ Configuring blobstore on S3 is provided as a convenience and is not part of the 
       - name: central
         remote_url: 'https://repo1.maven.org/maven2/'
         layout_policy: permissive
+        # cleanup_policies:
+        #    - mvn_cleanup
         # maximum_component_age: -1
         # maximum_metadata_age: 1440
         # negative_cache_enabled: true
         # negative_cache_ttl: 1440
       - name: jboss
         remote_url: 'https://repository.jboss.org/nexus/content/groups/public-jboss/'
+        # cleanup_policies:
+        #    - mvn_cleanup
         # maximum_component_age: -1
         # maximum_metadata_age: 1440
         # negative_cache_enabled: true
@@ -547,6 +608,8 @@ Maven [proxy repositories](https://help.sonatype.com/display/NXRM3/Repository+Ma
       - name: private-release
         version_policy: release
         write_policy: allow_once  # one of "allow", "allow_once" or "deny"
+        # cleanup_policies:
+        #    - mvn_cleanup
 ```
 
 Maven [hosted repositories](https://help.sonatype.com/display/NXRM3/Repository+Management#RepositoryManagement-HostedRepository) configuration. Negative cache config is optionnal and will default to the above values if omitted.
@@ -614,6 +677,10 @@ nexus_rut_auth_header: "CUSTOM_HEADER"
 ```
 
 ### Scheduled tasks
+
+These are quick examples and instruction to setup scheduled tasks. For in depth information on available tasks types
+and schedule types, please refer to [the specific section in the repo wiki](https://github.com/ansible-ThoTeam/nexus3-oss/wiki/Scheduled-tasks-configuration)
+
 ```yaml
     nexus_scheduled_tasks: []
     #  #  Example task to compact blobstore :
@@ -660,11 +727,13 @@ nexus_rut_auth_header: "CUSTOM_HEADER"
 * `taskProperties` for all string properties (i.e. repository names, blobstore names, time periods...).
 * `booleanTaskProperties` for all boolean properties (i.e. mainly checkboxes in nexus create task GUI).
 
+
 ### Backups
 ```yaml
       nexus_backup_configure: false
       nexus_backup_cron: '0 0 21 * * ?'  # See cron expressions definition in nexus create task gui
       nexus_backup_dir: '/var/nexus-backup'
+      nexus_backup_dir_create: true
       nexus_restore_log: '{{ nexus_backup_dir }}/nexus-restore.log'
       nexus_backup_rotate: false
       nexus_backup_rotate_first: false
@@ -686,6 +755,8 @@ When using rotation, if you want to save extra disk space during the backup proc
 you can set `nexus_backup_rotate_first: true`. This will configure a pre-rotation
 rather than the default post-rotation. Please note than in this case, old backup(s)
 is/are removed before the current one is done and successful.
+
+If you want to backup to a mounted directory (like s3fs), you can set the `nexus_backup_dir_create` to false.
 
 #### Restore procedure
 Run your playbook with parameter `-e nexus_restore_point=<YYYY-MM-dd-HH-mm-ss>`
@@ -798,6 +869,22 @@ to simply check nexus is correctly installed, or restore a backup, or upgrade ne
 We strongly suggest to use this variable only as an extra var to ansible-playbook call
 ```bash
 ansible-playbook -i your/inventory.ini your_playbook.yml -e nexus_run_provisionning=false
+```
+
+#### Force recursive ownership check of blobstores directories
+_Introduced in version 2.4.9_
+```yaml
+    nexus_blobstores_recurse_owner: true
+```
+In versions prior to 2.4.9, the task creating the blobstores directories was recursively checking the ownership
+of all files. This was not a problem on creation (where dir is empty) or with installations with small
+blobstores, but could lead to extremely long delays for large blobstores with lots of files.
+
+Recursive checking of ownership has been turned off by default to prevent this extra delay. If for some
+reason you need to make sure all files in the blobstore directories are owned by the nexus user, you can
+force the check:
+```bash
+ansible-playbook -i your/inventory.ini your_playbook.yml -e nexus_blobstores_recurse_owner=true
 ```
 
 ## Dependencies
@@ -913,10 +1000,10 @@ Feel free to use them or implement your own install scenario at your convenience
     
     - { role: geerlingguy.java, vars: See role doc for your distribution/version }
     # Debian/Ubuntu only
-    # - { role: geerlingguy.apache, apache_create_vhosts: no, apache_mods_enabled: ["proxy_http.load", "headers.load"], apache_remove_default_vhost: true, tags: ["geerlingguy.apache"] }
+    # - { role: geerlingguy.apache, apache_create_vhosts: no, apache_mods_enabled: ["proxy.load", "proxy_http.load", "headers.load"], apache_remove_default_vhost: true, tags: ["geerlingguy.apache"] }
     # RedHat/CentOS only
     - { role: geerlingguy.apache, apache_create_vhosts: no, apache_remove_default_vhost: true, tags: ["geerlingguy.apache"] }
-    - { role: ansible-ThoTeam.nexus3-oss, tags: ['ansible-ThoTeam.nexus3-oss'] }
+    - { role: ansible-thoteam.nexus3-oss, tags: ['ansible-thoteam.nexus3-oss'] }
 ```
 
 ## Development, Contribution and Testing
@@ -945,8 +1032,8 @@ This role includes tests and CI integration through travis. At time being, we te
 * ansible good practices (ansible lint)
 * a set of basic deployments on 5 different linux platforms
     * centos7
-    * debian jessie
     * debian stretch
+    * debian buster
     * ubuntu xenial (16.04)
     * ubuntu bionic (18.04)
 
@@ -977,20 +1064,20 @@ Please have a look at molecule documentation (a good start is `molecule --help`)
 
 The current proposed scenarii refer to the tested platforms (see `molecule/` directory). If you launch a scenario ans leave the container running (i.e. using `converge` for a simple deploy), you can access the running instance from your browser at https://localhost:<linkedPort>. See the `molecule/<scenario>/molecule.yml` file for detail. As a convenience, here is the correspondence between scenarii and configured ports:
 * default-centos7 => https://localhost:8090
-* default-debian_jessie => https://localhost:8091
+* default-debian_buster => https://localhost:8091
 * default-debian_stretch => https://localhost:8092
 * default-ubuntu_16.04 => https://localhost:8093
 * default-ubuntu_18.04 => https://localhost:8094
 
-To speed up tests, molecule uses automated docker build images on docker hub:
-* https://hub.docker.com/r/thoteam/ansible-centos7-apache-java/
-* https://hub.docker.com/r/thoteam/ansible-debian_jessie-apache-java/
-* https://hub.docker.com/r/thoteam/ansible-debian_stretch-apache-java/
-* https://hub.docker.com/r/thoteam/ansible-ubuntu16_04-apache-java/
-* https://hub.docker.com/r/thoteam/ansible-ubuntu18_04-apache-java/
+To speed up tests, molecule uses docker hub images with automated build.
+* Git repo: https://github.com/docker-ThoTeam/molecule_apache_openjdk8
+* Docker hub registry: https://hub.docker.com/repository/docker/thoteam/molecule_apache_openjdk8
 
 
 #### Molecule selinux scenario
+
+*** Warning: This scenario as been removed for the moment for molecule 3.0 compatibility reason. We it until
+we can decide if it can be re-introduced or not ***
 
 We included a second molecule `selinux` scenario. This one is not run on travis but can be used locally to:
 * test selinux integration (on centos).
@@ -1011,7 +1098,6 @@ You can pass additionnal variables to ansible on the command line to override pl
 You will need to add a security exception for the self signed ssl certificate. If you did not change it with a
 command line var above, the default role admin password is "changeme"
 * When you're happy with your testing, you can recycle the used space with `molecule destroy -s selinux`
-
 
 ## License
 

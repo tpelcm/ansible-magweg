@@ -7,14 +7,17 @@ driver:
   safe_files:
     - nexus-downloads
 
-lint:
-  name: yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
 
 platforms:
 
   - name: nexus3-oss-default
     hostname: nexus3-oss-default
-    image: thoteam/ansible-centos7-apache-java:latest
+    image: thoteam/molecule_apache_openjdk8:centos7
     command: /usr/sbin/init
     pull: true
     pre_build_image: true
@@ -38,11 +41,8 @@ platforms:
 
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
 
 scenario:
-  name: default
   check_sequence:
     - destroy
     - create
@@ -59,5 +59,3 @@ scenario:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8
