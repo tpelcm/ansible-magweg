@@ -28,13 +28,13 @@ reverse_proxy_vhosts:
     port: 443
     proxy_verify: false
     proxy_passes:
-      sq:
+      - name: sonarqube
         proxy_pass: /sonarqube https://1.1.1.4/sonarqube
         #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
-      nexus:
+      - name: nexus
         proxy_pass: /nexus http://1.1.1.7:8081/nexus nocanon
         proxy_pass_reverse: /nexus http://1.1.1.7:8081/nexus
-      jenkins:
+      - name: jenkins
         proxy_pass: /jenkins http://1.1.1.9:8080/jenkins nocanon
         proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
 #squid_cache_rules:

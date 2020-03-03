@@ -2,9 +2,6 @@
 - include: "{{ reverse_proxy_certs }}.yml"
 - include: "{{ ansible_os_family }}.yml"
 
-- debug:
-    var: apache_vhosts
-
 - name: Copy favicon
   copy:
     dest: "{{ apache_vhosts[0].documentroot }}/favicon.ico"

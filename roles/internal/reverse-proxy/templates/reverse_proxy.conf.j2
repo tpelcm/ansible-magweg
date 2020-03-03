@@ -52,11 +52,11 @@ SSLCryptoDevice builtin
     </Directory>
 
 {%   for pp in reverse_proxy_vhosts[hst].proxy_passes %}
-    ProxyPass {{ reverse_proxy_vhosts[hst].proxy_passes[pp]['proxy_pass'] }}
-{%     if reverse_proxy_vhosts[hst].proxy_passes[pp]['proxy_pass_reverse'] is defined  %}
-    ProxyPassReverse {{ reverse_proxy_vhosts[hst].proxy_passes[pp]['proxy_pass_reverse'] }}
+    ProxyPass {{ pp['proxy_pass'] }}
+{%     if pp['proxy_pass_reverse'] is defined  %}
+    ProxyPassReverse {{ pp['proxy_pass_reverse'] }}
 {%     else %}
-    ProxyPassReverse {{ reverse_proxy_vhosts[hst].proxy_passes[pp]['proxy_pass'] }}
+    ProxyPassReverse {{ pp['proxy_pass'] }}
 {%     endif %}
 {%   endfor %}
     LogLevel {{ reverse_proxy_log_level }}
