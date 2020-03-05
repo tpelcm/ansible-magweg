@@ -1,0 +1,24 @@
+---
+- name: Configure ports
+  template:
+    src: ports.conf.j2
+    dest: /etc/httpd/conf.d/ports.conf
+  notify: restart apache
+
+- name: Configure Httpd
+  template:
+    src: reverse_proxy.conf.j2
+    dest: "/etc/httpd/conf.d/reverse_proxy.conf"
+  notify: restart apache
+
+- name: Delete obsolete config
+  file:
+   path: "/etc/httpd/conf.d/{{ item }}"
+   state: absent
+  notify: restart apache
+  with_items:
+     - autoindex.conf
+     - ssl.conf
+     - userdir.conf
+     - vhosts.conf
+     - welcome.conf

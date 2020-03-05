@@ -1,0 +1,20 @@
+
+<VirtualHost *:{{ sites_port }}>
+    ServerAdmin {{ sites_server_admin }}
+    ServerName {{ sites_server_name }}
+
+    AllowEncodedSlashes NoDecode
+
+    DocumentRoot /var/www/html
+
+    <Directory />
+	    AllowOverride all
+	    Allow from all
+    </Directory>
+
+    LogLevel {{ sites_log_level }}
+
+    ErrorLog {{ https_log_dir[ansible_os_family] }}-sites.log
+    CustomLog {{ https_log_dir[ansible_os_family] }}-sites.log combined
+
+</VirtualHost>

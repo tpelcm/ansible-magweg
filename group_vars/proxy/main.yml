@@ -6,6 +6,7 @@ proxy_allowed_ips:
   - 1.1.1.7
   - 1.1.1.8
   - 1.1.1.9
+  - 1.1.1.10
 
 squid_acls:
   - name: localnet

@@ -1,0 +1,23 @@
+---
+sites_server_admin: admin@tpelcm.tech
+sites_server_name: sites
+
+sites_log_level: warn # debug, info, notice, warn, error, crit,
+sites_certs: generate # or download
+
+sites_port: 8080
+
+apache_create_vhosts: no
+apache_remove_default_vhost: true
+
+sites_etc_ssl_private:
+  Debian: /etc/ssl/private/
+  RedHat: /etc/ssl/
+
+sites_etc_ssl_certs:
+  Debian: /etc/ssl/certs/
+  RedHat: /etc/ssl/
+
+https_log_dir:
+  Debian: /var/log/apache2/
+  RedHat: /var/log/httpd/
