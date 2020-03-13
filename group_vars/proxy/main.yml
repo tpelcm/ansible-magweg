@@ -1,5 +1,6 @@
 ---
-proxy_allowed_ips: 
+proxy_allowed_ips:
+  - 1.1.1.1
   - 1.1.1.2
   - 1.1.1.3
   - 1.1.1.4
@@ -7,11 +8,8 @@ proxy_allowed_ips:
   - 1.1.1.8
   - 1.1.1.9
   - 1.1.1.10
-
-squid_acls:
-  - name: localnet
-    classifier: src
-    value: "\"{{ proxy_allowd_ips_file }}\""
+proxy_upstream_always_direct_ips:
+  - 1.1.1.1 
 
 # dynamic vars set in a role cannot be used on other roles 
 # so we set squid_config_directory, squid_config_file here
@@ -20,8 +18,8 @@ squid_config_file: squid.conf
 squid_conf_include_dir: /etc/squid/conf.d
 
 # Configure upstream proxy server
-# proxy_upstream_server: 10.0.2.2
-# proxy_upstream_port: 8888
+proxy_upstream_server: 10.0.2.2
+proxy_upstream_port: 8888
 
 reverse_proxy_vhosts:
   sh:

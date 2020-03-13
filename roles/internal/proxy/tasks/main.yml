@@ -4,6 +4,11 @@
     content: "{{ proxy_allowed_ips | join('\n') }}"
     dest: "{{ proxy_allowd_ips_file }}"
 
+- name: direct IPs
+  copy:
+    content: "{{ proxy_upstream_always_direct | join('\n') }}"
+    dest: "{{ proxy_upstream_always_direct_file }}"
+
 - name: upstream proxy server
   template:
     dest: "{{ squid_conf_include_dir }}/upstream_proxy.conf"
