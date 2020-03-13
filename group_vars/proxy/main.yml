@@ -18,8 +18,8 @@ squid_config_file: squid.conf
 squid_conf_include_dir: /etc/squid/conf.d
 
 # Configure upstream proxy server
-proxy_upstream_server: 10.0.2.2
-proxy_upstream_port: 8888
+# proxy_upstream_server: 10.0.2.2
+# proxy_upstream_port: 8888
 
 reverse_proxy_vhosts:
   sh:
