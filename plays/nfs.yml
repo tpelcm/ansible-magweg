@@ -1,0 +1,8 @@
+---
+- name: nfs.yml
+  hosts: nfs
+  become: yes
+
+  roles:
+    - { role: common,             tags: ["common"] }
+    - { role: nfs,                tags: ["nfs"] }

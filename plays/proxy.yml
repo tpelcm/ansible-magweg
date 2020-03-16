@@ -5,7 +5,5 @@
 
   roles:
     - { role: common,             tags: ["common"] }
-    - { role: nfs,                tags: ["nfs"] }
     - { role: tpelcm.squid,       tags: ["proxy"] }
     - { role: proxy,              tags: ["proxy"] }
-    - { role: reverse-proxy,      tags: ["reverse-proxy"] }
