@@ -43,8 +43,20 @@ def database_version(data,vsn):
 def home_version(data,vsn):
   return os.path.join(os.path.sep,data['home'],os.path.basename(data['home']) + '-' + vsn)
 
+def home_version_home(data,vsn):
+  return os.path.join(home_version(data,vsn), 'home')
+
+def home_version_app(data,vsn):
+  return os.path.join(home_version(data,vsn), 'app')
+
 def home_link(data):
   return os.path.join(os.path.sep, data['home'], os.path.basename(data['home']))
+
+def home_link_home(data):
+  return os.path.join(home_link(data), 'home')
+
+def home_link_app(data):
+  return os.path.join(home_link(data), 'app')
 
 def version_file_link(data):
   return os.path.join(os.path.sep, home_link(data),'VERSION')
@@ -65,6 +77,10 @@ def lcm_info(data):
   "version-file": vsn_file},
   role + '_home_link': home_link(data)}
   fcts[role + '_home_version'] = home_version(data,data['version'])
+  fcts[role + '_home_version_home'] = home_version_home(data,data['version'])
+  fcts[role + '_home_version_app'] = home_version_app(data,data['version'])    
+  fcts[role + '_home_link_home'] = home_link_home(data)
+  fcts[role + '_home_link_app'] = home_link_app(data)
   if data['database'] is not None:
     fcts[role + '_database_name_version'] = database_version(data,data['version'])
   if op == 'upgrade':
