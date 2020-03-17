@@ -1,0 +1,11 @@
+---
+- name: bitbucket.yml
+  hosts: bitbucket
+  become: yes
+
+  roles:
+    - { role: common,                       tags: ["common"] }
+    - { role: postgresql-client,            tags: ["postgresql"] }    
+    - { role: java,                         tags: ["java"] }
+    - { role: bitbucket,                    tags: ["sonarqube"] }
+    - { role: backup,                       tags: ["backup"] }
