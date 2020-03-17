@@ -1,5 +1,4 @@
 ---
-common_packages: ['nfs-common', 'nano']
 common_packages: 
   Debian: ['nfs-common', 'nano' ] 
   RedHat: ['nfs-utils', 'nano' ]
@@ -24,3 +23,5 @@ sudo_users: [tpetools]
 
 # common_ansible_authorized_keys: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
 common_ansible_user_password: whuq0hKZYtmE2
+
+common_terminal_prompt: '\e[01;31m[\u@{{ inventory_hostname }} \h \w]\\$\e[m '
