@@ -6,6 +6,11 @@
   roles:
     - { role: common,                       tags: ["common"] }
     - { role: postgresql-client,            tags: ["postgresql"] }    
-    - { role: java,                         tags: ["java"] }
-    - { role: bitbucket,                    tags: ["sonarqube"] }
+    - { role: geerlingguy.git,              tags: ["bitbucket"] }
+    - { role: bitbucket,                    tags: ["bitbucket"] }
     - { role: backup,                       tags: ["backup"] }
+
+  vars:
+    git_install_from_source: true
+    git_version: "2.16.2"
+    git_install_from_source_force_update: true
