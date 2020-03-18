@@ -2,8 +2,7 @@
 - include: debug.yml
 - include: database.yml
 - include: install.yml
-#- include: configuration.yml
-#- include: plugins.yml
+- include: configuration.yml
 - include: service.yml
 
 
