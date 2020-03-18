@@ -1,0 +1,9 @@
+---
+- include: debug.yml
+- include: database.yml
+- include: install.yml
+#- include: configuration.yml
+#- include: plugins.yml
+- include: service.yml
+
+
