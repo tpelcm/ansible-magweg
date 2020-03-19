@@ -1,2 +1,10 @@
 ---
 bitbucket_database_host: 1.1.1.2
+
+#backup_restore: 
+#  bitbucket:
+#    path_pattern: '*'
+#    folder: home
+#    remove_folder: home/shared/search/data/nodes
+#    force: false
+#    stop_start_service: bitbucket
