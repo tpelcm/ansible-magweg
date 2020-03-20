@@ -8,7 +8,7 @@ This role will create Ansible facts regarding the type of operation that is requ
 
 | Operation         | Conditions           | 
 | ----------------- |:-------------:|
-| install           | The desired version is installed yet. There is not current version or current version is a higher version (downgrade not supported). |
+| install           | The desired version is not installed yet. There is not current version or current version is a higher version (downgrade not supported). |
 | update            | The desired version is installed and current.      | 
 | upgrade           | The desired version is a higher version than the current version.      |   
 | rollback          | The desired and current version are installed and the desired version is lower.      |
