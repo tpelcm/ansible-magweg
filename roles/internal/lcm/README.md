@@ -27,6 +27,13 @@ In Ansible console logging you should see LCM info similar to
         "item": "bitbucket"
     }
 
+To clarify how this role helps you automate LCM operations, consider the following snippet from the bitbucket role.
+
+    + name: stop for upgrade, rollback or rollfoward
+      service: name=bitbucket state=stopped
+      when: bitbucket_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+
+This snippet shuts down the bitbucket service when we are performing for example an upgrade.
 
 ## Requirements
 
