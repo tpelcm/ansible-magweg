@@ -10,7 +10,7 @@
   when: "ansible_service_mgr == 'systemd'" 
   notify: bitbucket-systemctl-daemon-reload
 
-- name: ensure service running and set to start on boot.
+- name: ensure service running and set to start on boot
   service: name=bitbucket state=started enabled=yes
 
 #- name: Allow Sonar time to build on first start.

@@ -1,8 +1,13 @@
 ---
-- include: debug.yml
+- name: stop for upgrade, rollback or rollfoward
+  service: name=bitbucket state=stopped
+  when: bitbucket_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - bitbucket-systemctl-daemon-reload
+    - bitbucket-systemctl-restart
+
+#- include: debug.yml
 - include: database.yml
 - include: install.yml
 - include: configuration.yml
 - include: service.yml
-
-

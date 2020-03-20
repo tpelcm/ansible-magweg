@@ -1,8 +1,4 @@
 ---
-- name: stop for upgrade, rollback or rollfoward
-  service: name=bitbucket state=stopped
-  when: bitbucket_lcm['operation'] in ['upgrade','rollback','rollforward'] 
-
 - name: add bitbucket owner
   user:
     name: "{{ bitbucket_owner }}"
@@ -49,19 +45,33 @@
     state: absent
   when: bitbucket_lcm['operation'] not in ['upgrade','install'] 
 
+- name: Copy home dir
+  command: "rsync -az --delete --recursive {{ bitbucket_home_version_home_current }}/ {{ bitbucket_home_version_home }}/"
+  when: bitbucket_lcm['operation'] == 'upgrade' 
+
 - name: run installer 
   command: "{{ bitbucket_home }}/{{ bitbucket_versions[bitbucket_version]['url']|basename }} -q -varfile {{ bitbucket_home }}/reponse.varfile"
   become: yes
   become_method: sudo
-  become_user: bitbucket
+  become_user: "{{ bitbucket_versions[bitbucket_version]['installer_user']|default('root') }}"
   # become_flags: '-s /bin/sh'
   notify:
+    - lcm-version-file
     - bitbucket-systemctl-daemon-reload
     - bitbucket-systemctl-restart
+  when: bitbucket_lcm['operation'] in ['upgrade','install']
+
+# 7.0.1 installer runs as root, fix this  
+- name: chown bitbucket home version 
+  file: 
+    dest: "{{ bitbucket_home_version }}" 
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"
+    recurse: yes
   when: bitbucket_lcm['operation'] in ['upgrade','install']
 
 - name: Create symbolic link install
   file:
    src: "{{ bitbucket_home_version }}"
    dest: "{{ bitbucket_home_link }}"
-   state: link  
+   state: link

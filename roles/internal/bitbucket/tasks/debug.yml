@@ -1,7 +1,3 @@
 ---
 - debug:
    var: bitbucket_lcm['operation']
-
-# - name: Copy data dir ( part of upgrade )
-#  command: "rsync -az --delete --recursive {{ sonarqube_home_version_current }}/extensions/plugins/ {{ sonarqube_home_version }}/extensions/plugins/"
-#  when: sonarqube_lcm['operation'] == 'upgrade' 

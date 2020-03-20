@@ -58,4 +58,4 @@
 - name: Home link app
   debug:
     var: "{{ item }}_home_link_app" 
-  with_items: '{{ lcm_roles_node }}'  
+  with_items: '{{ lcm_roles_node }}'
