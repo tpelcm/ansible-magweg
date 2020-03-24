@@ -20,6 +20,10 @@ bitbucket_database_admin_username: ansible
 bitbucket_database_admin_password: supersecure
 bitbucket_database_template: template0
 
+#bitbucket_database_jdbc_custom_config:
+#  - jdbc.driver=org.postgresql.Driver
+#  - jdbc...
+
 bitbucket_owner: "bitbucket"
 bitbucket_group: "bitbucket"
 

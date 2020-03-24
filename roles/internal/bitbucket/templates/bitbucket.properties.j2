@@ -6,10 +6,14 @@ setup.sysadmin.username={{ bitbucket_setup['admin']['username'] }}
 setup.sysadmin.password={{ bitbucket_setup['admin']['password'] }}
 setup.sysadmin.displayName={{ bitbucket_setup['admin']['display-name'] }}
 setup.sysadmin.emailAddress={{ bitbucket_setup['admin']['mail'] }}
+{% if bitbucket_database_jdbc_custom_config is defined %}
+{{ bitbucket_database_jdbc_custom_config | join('\n') }}
+{% else %}
 jdbc.driver=org.postgresql.Driver
 jdbc.url=jdbc:postgresql://{{ bitbucket_database_host }}:{{ bitbucket_database_port }}/{{ bitbucket_database_name_version }}
 jdbc.user={{ bitbucket_database_username }}
 jdbc.password={{ bitbucket_database_password }}
+{% endif %}
 server.context-path={{ bitbucket_web_context }}
 server.port={{ bitbucket_web_port }}
 {% if bitbucket_reverse_proxy.enable  %}
