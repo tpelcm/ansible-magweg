@@ -26,3 +26,4 @@ squid_conf_include_dir: /etc/squid/conf.d
 #  - acl: localnet
 #    decision: deny
 
+squid_ssh_proxy_port: 22
