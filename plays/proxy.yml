@@ -5,5 +5,5 @@
 
   roles:
     - { role: common,             tags: ["common"] }
-    - { role: tpelcm.squid,       tags: ["proxy"] }
+    - { role: squid,              tags: ["proxy"] }
     - { role: proxy,              tags: ["proxy"] }
