@@ -1,0 +1,17 @@
+---
+- name: bitbucket.properties
+  template:
+    dest: "{{ bitbucket_home_version_home }}/shared/bitbucket.properties"
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"
+    src: bitbucket.properties.j2
+  notify: bitbucket-systemctl-restart
+
+- name: env file BITBUCKET_HOME etc
+  copy:
+    content: >
+      export BITBUCKET_HOME={{ bitbucket_home_version_home }}
+      export BITBUCKET_USER={{ bitbucket_owner }}
+    dest: /etc/profile.d/bitbucket.sh
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"

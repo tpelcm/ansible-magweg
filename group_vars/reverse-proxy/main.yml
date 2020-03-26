@@ -1,0 +1,19 @@
+---
+reverse_proxy_vhosts:
+  sh:
+    server_name: sh.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      - name: sonarqube
+        proxy_pass: /sonarqube https://1.1.1.4/sonarqube
+      - name: nexus
+        proxy_pass: /nexus http://1.1.1.7:8081/nexus nocanon
+        proxy_pass_reverse: /nexus http://1.1.1.7:8081/nexus
+      - name: jenkins
+        proxy_pass: /jenkins http://1.1.1.9:8080/jenkins nocanon
+        proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
+      - name: bitbucket
+        proxy_pass: /bitbucket http://1.1.1.11:7990/bitbucket
+
+reverse_proxy_global_favicon: favicon-blue.ico

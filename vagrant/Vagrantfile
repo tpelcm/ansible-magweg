@@ -8,16 +8,18 @@ vagrant_box = 'generic/centos7'
 # Ansible inventory
 ansible_groups = {
   'proxy' => ['proxy'],
+  'reverse-proxy' => ['proxy'],
+  'nfs' => ['proxy'],
   'postgresql' => ['postgresql'],
   'sonarqube' => ['sonarqube'],
   'jenkins' => ['jenkins'],  
   'nexus' => ['nexus'],
+  'bitbucket' => ['bitbucket'],  
   'opendj' => ['proxy'],
   'env' => ['env'],  
   'myapp_servers' => %w(myapp myapp2),
-  'nfs' => ['proxy'],
   # 'backup' => %w(sonarqube nexus), # TODO
-  'all:vars' => { 'sudo_include_sudoersd' => 'yes', 'gi' => false },
+  'all:vars' => { 'sudo_include_sudoersd' => 'yes' },
   'postgresql:vars' => { 'hostvar' => 'abc' },
   'sonarqube:vars' => { 'sonarqube_database_host' => '1.1.1.2' },
   'nfs:vars' => { 'nfs_exports' => ['/nfs/backup *(rw,sync,no_root_squash)'] }
@@ -28,11 +30,12 @@ ansible_groups = {
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024 * 4 }
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
-nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy opendj) }
+nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
 nodes['env'] = {  'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
 nodes['jenkins'] = {  'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
 nodes['sites'] = {  'ip' => '1.1.1.10', 'plays' => %w(sites) }
+nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 

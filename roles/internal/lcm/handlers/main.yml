@@ -1,0 +1,7 @@
+---
+- name: lcm-version-file
+  copy:
+    content: "{{ vars[item + '_version'] }}"
+    dest: "{{ vars[item + '_lcm']['version-file'] }}"
+  with_items: '{{ lcm_roles_node }}'    
+  when: lcm_write_version_file == True

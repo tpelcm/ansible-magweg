@@ -1,0 +1,8 @@
+---
+- name: reverse-proxy.yml
+  hosts: reverse-proxy
+  become: yes
+
+  roles:
+    - { role: common,             tags: ["common"] }
+    - { role: reverse-proxy,      tags: ["reverse-proxy"] }

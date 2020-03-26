@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Atlassian Bitbucket {{ bitbucket_version }}
+After=syslog.target network.target
+
+[Service]
+Type=forking
+WorkingDirectory={{ bitbucket_home_version_home }}
+User={{ bitbucket_owner }}
+Group={{ bitbucket_group }}
+ExecStart={{ bitbucket_home_version_app }}/bin/start-bitbucket.sh
+ExecStop={{ bitbucket_home_version_app }}/bin/stop-bitbucket.sh
+PIDFile={{ bitbucket_home_version_home }}/log/bitbucket.pid
+LimitNOFILE=65536
+Environment=BITBUCKET_USER={{ bitbucket_owner }}
+Environment=BITBUCKET_HOME={{ bitbucket_home_version_home }}
+
+
+[Install]
+WantedBy=multi-user.target

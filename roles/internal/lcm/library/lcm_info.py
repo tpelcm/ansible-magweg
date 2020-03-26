@@ -8,7 +8,7 @@ import glob, os, hashlib
 def operation(data, vsn_file_current, vsn_file):
   cv = None
   if os.path.isfile(vsn_file_current):
-    cv = open(vsn_file_current, 'r').read()
+    cv = open(vsn_file_current, 'r').read().rstrip()
     if cv == data['version']:
       operation = 'update'
       descr = 'Current ' + cv + ' is same as requested'
@@ -43,8 +43,20 @@ def database_version(data,vsn):
 def home_version(data,vsn):
   return os.path.join(os.path.sep,data['home'],os.path.basename(data['home']) + '-' + vsn)
 
+def home_version_home(data,vsn):
+  return os.path.join(home_version(data,vsn), 'home')
+
+def home_version_app(data,vsn):
+  return os.path.join(home_version(data,vsn), 'app')
+
 def home_link(data):
   return os.path.join(os.path.sep, data['home'], os.path.basename(data['home']))
+
+def home_link_home(data):
+  return os.path.join(home_link(data), 'home')
+
+def home_link_app(data):
+  return os.path.join(home_link(data), 'app')
 
 def version_file_link(data):
   return os.path.join(os.path.sep, home_link(data),'VERSION')
@@ -57,20 +69,26 @@ def lcm_info(data):
   role =  data['role']
   vsn_file_current = version_file_link(data)
   vsn_file = version_file(data,data['version'])   
-  if os.path.isdir(home_version(data,data['version'])):
-    open(vsn_file,'w').write(data['version'])
   op, op_descr, cv = operation(data,vsn_file_current, vsn_file) 
   fcts = {role + '_lcm':{"operation": op,
   "operation-description": op_descr,
   "version-file": vsn_file},
   role + '_home_link': home_link(data)}
+  if op in ['install', 'upgrade']:
+    fcts['lcm_write_version_file'] = True
   fcts[role + '_home_version'] = home_version(data,data['version'])
+  fcts[role + '_home_version_home'] = home_version_home(data,data['version'])
+  fcts[role + '_home_version_app'] = home_version_app(data,data['version'])    
+  fcts[role + '_home_link_home'] = home_link_home(data)
+  fcts[role + '_home_link_app'] = home_link_app(data)
   if data['database'] is not None:
     fcts[role + '_database_name_version'] = database_version(data,data['version'])
   if op == 'upgrade':
     if data['database'] is not None:
       fcts[role + '_database_template'] = database_version(data,cv)
-    fcts[role + '_home_version_current'] = home_version(data,cv)    
+    fcts[role + '_home_version_current'] = home_version(data,cv)
+    fcts[role + '_home_version_home_current'] = home_version_home(data,cv)
+    fcts[role + '_home_version_app_current'] = home_version_app(data,cv)
   return (has_changed, fcts)
 
 def main():

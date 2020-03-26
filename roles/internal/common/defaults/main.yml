@@ -9,3 +9,6 @@ common_ansible_user_password: supersecure
 common_ansible_user_create: false
 
 # common_ansible_authorized_keys: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+
+# Configure custom prompt
+#common_terminal_prompt: "\e[01;31m[\u@{{ inventory_hostname }}\h \w]\\$\e[m "

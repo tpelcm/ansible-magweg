@@ -45,4 +45,14 @@
     key: '{{ common_ansible_authorized_keys }}'
   when: common_ansible_authorized_keys is defined    
 
+- name: Custom prompt
+  copy:
+    content: 'export PS1="{{ common_terminal_prompt }}"'
+    dest: /etc/profile.d/tpelcm_promp.sh 
+  when: common_terminal_prompt is defined
 
+- name: Remove custom prompt
+  file:
+    state: absent
+    path: /etc/profile.d/tpelcm_promp.sh
+  when: common_terminal_prompt is not defined    

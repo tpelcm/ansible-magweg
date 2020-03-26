@@ -2,6 +2,17 @@
 proxy_allowd_ips_file: /etc/squid-allowed-ips.txt
 proxy_allowed_ips: []
 
+proxy_upstream_always_direct_file: /etc/squid-upstream-always-direct-ips.txt
+proxy_upstream_always_direct: []
+
+squid_acls:
+  - name: localnet
+    classifier: src
+    value: "\"{{ proxy_allowd_ips_file }}\""
+  - name: alwaysdirectnet
+    classifier: src
+    value: "\"{{ proxy_upstream_always_direct_file }}\""
+
 # Configure upstream proxy server
 # proxy_upstream_server: 
 # proxy_upstream_port: 

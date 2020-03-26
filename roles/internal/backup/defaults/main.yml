@@ -9,7 +9,7 @@ backup_cron_jobs: true
 backup_restore_db: false
 backup_restore_home: false
 
-backup_roles_supported: ['sonarqube', 'nexus', 'myapp']
+backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'myapp']
 
 backup_roles:
   sonarqube:
@@ -19,6 +19,9 @@ backup_roles:
     stop_start_service: nexus
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }
     tar_options: -h
+  bitbucket:
+    stop_start_service: bitbucket
+    keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   myapp:
     # stop_start_service: myapp
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }

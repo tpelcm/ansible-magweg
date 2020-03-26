@@ -49,3 +49,13 @@
   debug:
     var: "{{ item }}_home_link" 
   with_items: '{{ lcm_roles_node }}'
+
+- name: Home link home
+  debug:
+    var: "{{ item }}_home_link_home" 
+  with_items: '{{ lcm_roles_node }}'
+
+- name: Home link app
+  debug:
+    var: "{{ item }}_home_link_app" 
+  with_items: '{{ lcm_roles_node }}'

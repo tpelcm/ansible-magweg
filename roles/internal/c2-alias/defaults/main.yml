@@ -23,3 +23,10 @@ c2_alias:
         - "{{ nexus_home | default(omit) }}/nexus-latest/etc/jetty/jetty-https.xml"
         - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus-default.properties"
         - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus.properties"
+    bitbucket:
+      logs: ["/opt/bitbucket/bitbucket/home/log/*.log"]
+      configs: 
+        - /etc/systemd/system/bitbucket.service
+        - /opt/bitbucket/bitbucket/home/shared/bitbucket.properties
+
+

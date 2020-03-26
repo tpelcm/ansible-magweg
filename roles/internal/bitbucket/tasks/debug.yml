@@ -1,0 +1,3 @@
+---
+- debug:
+   var: bitbucket_lcm['operation']

@@ -50,6 +50,14 @@ Create two links for __group_vars__ and __host_vars__ directory in the directory
 
     rake vagrant:group_host_vars 
 
+Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
+
+    ---
+    proxy_port: 3128
+    proxy_host: '1.1.1.3'
+    proxy_no_proxy: 'nip.io' # comma separated list
+
+
 ### Provision
 
 After creating the links you can start provisioning one ore more services:
@@ -58,8 +66,13 @@ After creating the links you can start provisioning one ore more services:
 |----------|-------------|-------------|
 | SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
+<<<<<<< HEAD
 | Jenkins   |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
 | Dimension |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+=======
+| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
+| Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+>>>>>>> 8088f1648252cce884838729c770bbd83f4838bb
 
 LDAP accounts
 | Account   | Password | Role |
@@ -86,6 +99,10 @@ The __env__ node is currently only used to create LDAP groups, accounts on the _
 #### Jenkins ( optional )
 
     vagrant provision jenkins
+
+#### Bitbucket ( optional )
+
+    vagrant provision bitbucket
 
 ### LDAP
 
