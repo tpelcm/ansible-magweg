@@ -38,6 +38,8 @@ reverse_proxy_vhosts:
       - name: jenkins
         proxy_pass: /jenkins http://1.1.1.9:8080/jenkins nocanon
         proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
+      - name: dimension
+        proxy_pass: /dimension http://1.1.1.10:8080/dimension
 #squid_cache_rules:
 #  - acl: localnet
 #    decision: deny

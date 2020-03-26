@@ -21,3 +21,43 @@ sites_etc_ssl_certs:
 https_log_dir:
   Debian: /var/log/apache2/
   RedHat: /var/log/httpd/
+
+sites:
+  example:
+    url: https://github.com/cloudacademy/static-website-example.git
+    context: dimension
+
+sites_ssh:
+  key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    Proc-Type: 4,ENCRYPTED
+    DEK-Info: AES-128-CBC,62A43638AD7253607134E1E29D180B74
+
+    ifnw3zic+lyWHGhFfJvMCFwa0dmMpoudRt1PJNpCWvLTrUXzhhYKU6Ghdg8BTVrC
+    10ifoxAfKxOwGh7FqZcMptutBvO0lqn87Ay3jm2wiTVYtmr3clxY+2AQ3GaIct8W
+    eg8aE/tE5v3A8XQGLbjj8dPswfMOfpm3zisbHRlMZMSIZEr1SPz25K8rVGhztPF+
+    G4gwAbcwzgaNGb8uXF+LVB2YnKo5WNON+0/wzFzFzVRhXMoi/EUSkjfpKqH0utQ7
+    XUc7YntpLlYmbATDLejHhJkJ0FW4RxwUKiQDrDar5bALYYQN/azWq0P1A1sDCT2F
+    9SJtJAmGmfeKJRmetaHW/xY0Fy8N/BeDKxUtwrLqvM0ZLVstWlz9ZYlIE7RgwRNl
+    2ql4MUr6QRHIl7y9dHULHpDGyZdTMwPaJ1zHjwbKXDOQshx8PagBfzfv6d23tIDY
+    xw5Y1YgyLnqNIISMXwhXExNEVKJWTwD39WYrgXiXAluQDRBqwXx/bXHZJM9lEEhO
+    sKospInVy9TKSKMV8i/gyxMZR/kx2w6IE7JtMOiWliQEDNvyoUIZz1MbK16CAzvw
+    GIC/aHqbGX/nXOxseT1DAfp/LnznmjMkd3zo7sGBUOTSwlyIWWADudZP//hBVDrG
+    3v0WjfS+llxpGUzFwnQSKjmTAMeJM4jPNs00M3hzdnoSt6GqOU3Ik9cK6d0H8xsc
+    bR/DPv7KXa1aXJd80W31Lihtqp7AGPYs75/gUIquYKssplhUjyuExKr/V8bZncql
+    VoxeaqNKgBxCPEDgcC4BLrjAa97n9SoCqfXfyVSBY0wlFkP2OrTbTpAZHNVDlQYd
+    l7eQ3PraB1B66uVNRyNbAD6qDqWAPv+LG1bvd6SZBXTwet2ltlI1d3XqbmQQDQgL
+    ceIxWuRN8ln/Cakbf6MqK362g76T55tU3wXnlpt3cbaU3rLGNHQ/c6ojGbTqWKHo
+    U0Swpck9cwPmpunDxBw9OAjuGPPguqtjKx/DLRum7yiH0c4tGOyghVOjtbDpTVDE
+    Jbdw5+b79qEUuleQAjDnAIgUc0TIqGyvxlIqIVytwlskovUssk9T6FSpMTNHfgpq
+    VTTl4N5XqRHvzaKuH4+zN8YYeziLglG8UsR3kDkNRhTucv84xWWo2oLZJkVyDkKf
+    JpE7+15bL9otGF2X02SyvNB6medXMVVgGOBrLZAo5F5UjUQKrnlDLlsGu3skBP8D
+    t8u02OBpKWXHr1g6IepUpFNWdVWNOucneOPVQETXN2w6BdiDd1kGANezfbxY8Hf8
+    XJzexQIcoTumCRuc1Yf0y1uQvg6UB5vemlr1+xhR48leOF3t4xtuy/VcECZoGnAB
+    hQ2t4+son83Dm0xXAqge/MItaEilrQhKjsUVcmP0S+6Nqy0tNIfrAms/E88P812q
+    XauLhW4YXr7DX5q/hs41Y2zuE0LM79tiV3v5cJbMf/6mSRQYp6Lw5u/WBErg4Z8s
+    s+L+pcbrWUrrbpWyM6GoOc0d7tuFEXUuTqdyynF3kFIu2hd8AUY2yRiWJMBdYZW1
+    QWgyG0pk7RNyfpPZsrjuEPdabwbBRABa6l5LmQS6U/RNF9Aseef5TvIbYf4nsKSK
+    -----END RSA PRIVATE KEY-----
+  pub_key: > 
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC4CiLzpkiSbYbsWZS6Xy0Dyby9oQ3o//NFF0tTc8WMvd1OjrJ3SlVt1uVcpLAkVpItFr2nX9c2vR29YQt4717aVI5mv6xkuAFQ/W+zbRx02KIXwEbjM1msOM1b2HXSMbdvMLQVc0hxedm1EhqVJNxGggG6rquY0VlTN7LqclQDE3FW6IqaJ/GLttV9LWT/JPhcVR4SOBS+m6QAlY9J8+VOWLHCEr5Iwtc4Ni36DklI1bGSb9s/4yv/RxLZowndlunWcerFAXZba+5sfekjEEkEK/82WL7hFeBDVldZNZVSCtuDHDRUkBWoCgMXzcZmHbcPbk9LoQ6HqpuBu2zEYkZ ubuntu@ubuntu-Latitude-5591

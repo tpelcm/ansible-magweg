@@ -1,2 +1,23 @@
 ---
 - include: "{{ ansible_os_family }}.yml"
+
+- name: Sites private key
+  copy:
+    content: "{{ sites_ssh['key'] }}"
+    dest: /var/www/key 
+
+- name: Sites pub key
+  copy:
+    content: "{{ sites_ssh['pub_key'] }}"
+    dest: /var/www/html/pub_key 
+
+- git:
+    repo: "{{ sites[item]['url'] }}"
+    dest: "/var/www/html/{{ sites[item]['context'] }}"
+    key_file: /var/www/key
+  with_items: "{{ sites }}"
+
+#- debug: 
+#   var: item
+# with_items: "{{ sites }}"
+  
