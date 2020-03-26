@@ -52,5 +52,6 @@ nexus_content_selectors:
 #  nexus:
 #    path_pattern: '*'
 #    folder: data
+#    remove_folder: data/groovy-raw-scripts/
 #    force: false
 #    stop_start_service: nexus
