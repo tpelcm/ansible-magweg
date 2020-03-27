@@ -1,0 +1,8 @@
+--- 
+- name: jmx.access
+  copy:
+    content: "monitorRole={{ bitbucket_jmx.password }}"
+    dest: "{{ bitbucket_home_version_home }}/shared/jmx.access"
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}" 
+    mode: "400"

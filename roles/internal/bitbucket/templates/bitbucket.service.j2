@@ -15,7 +15,21 @@ PIDFile={{ bitbucket_home_version_home }}/log/bitbucket.pid
 LimitNOFILE=65536
 Environment=BITBUCKET_USER={{ bitbucket_owner }}
 Environment=BITBUCKET_HOME={{ bitbucket_home_version_home }}
-
+{% if bitbucket_versions[bitbucket_version]['jdk'] is defined %}
+Environment=JAVA_HOME={{ bitbucket_versions[bitbucket_version]['jdk'] }}
+{% endif %}
+Environment=JVM_MAXIMUM_MEMORY={{ bitbucket_jvm_maximum_memory }}
+Environment=JVM_MINIMUM_MEMORY={{ bitbucket_jvm_minimum_memory }}
+{% if bitbucket_jvm_support_recommended_args is defined %}
+Environment=JVM_SUPPORT_RECOMMENDED_ARGS="{{ bitbucket_jvm_support_recommended_args }}"
+{% endif %}
+{% if bitbucket_jmx.enable %}
+Environment=JMX_REMOTE_AUTH=password
+Environment=JMX_REMOTE_PORT={{ bitbucket_jmx.remote_port }}
+Environment=JMX_REMOTE_RMI_PORT={{ bitbucket_jmx.rmi_port }}
+Environment=RMI_SERVER_HOSTNAME={{ bitbucket_jmx.rmi_server_hostname }}
+Environment=JMX_PASSWORD_FILE={{ bitbucket_home_version_home }}/shared/jmx.access
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target
