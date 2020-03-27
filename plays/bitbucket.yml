@@ -5,10 +5,11 @@
 
   roles:
     - { role: common,                       tags: ["common"] }
-    - { role: postgresql-client,            tags: ["postgresql"] }    
+    - { role: postgresql-client,            tags: ["bitbucket", "postgresql"] }    
+    - { role: java,                         tags: ["bitbucket", "java"] }
     - { role: geerlingguy.git,              tags: ["bitbucket"] }
     - { role: bitbucket,                    tags: ["bitbucket"] }
-    - { role: backup,                       tags: ["backup"] }
+    - { role: backup,                       tags: ["common", "backup"] }
 
   vars:
     git_install_from_source: true
