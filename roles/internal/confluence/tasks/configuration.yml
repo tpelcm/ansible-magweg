@@ -1,0 +1,17 @@
+---
+- name: confluence.properties
+  template:
+    dest: "{{ confluence_home_version_home }}/shared/confluence.properties"
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+    src: confluence.properties.j2
+  notify: confluence-systemctl-restart
+
+- name: env file CONFLUENCE_HOME etc
+  copy:
+    content: >
+      export CONFLUENCE_HOME={{ confluence_home_version_home }}
+      export CONFLUENCE_USER={{ confluence_owner }}
+    dest: /etc/profile.d/confluence.sh
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"

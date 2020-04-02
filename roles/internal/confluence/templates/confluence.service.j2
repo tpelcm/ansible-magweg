@@ -1,0 +1,35 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Atlassian Bitbucket {{ confluence_version }}
+After=syslog.target network.target
+
+[Service]
+Type=forking
+WorkingDirectory={{ confluence_home_version_home }}
+User={{ confluence_owner }}
+Group={{ confluence_group }}
+ExecStart={{ confluence_home_version_app }}/bin/start-confluence.sh
+ExecStop={{ confluence_home_version_app }}/bin/stop-confluence.sh
+PIDFile={{ confluence_home_version_home }}/log/confluence.pid
+LimitNOFILE=65536
+Environment=BITBUCKET_USER={{ confluence_owner }}
+Environment=BITBUCKET_HOME={{ confluence_home_version_home }}
+{% if confluence_versions[confluence_version]['jdk'] is defined %}
+Environment=JAVA_HOME={{ confluence_versions[confluence_version]['jdk'] }}
+{% endif %}
+Environment=JVM_MAXIMUM_MEMORY={{ confluence_jvm_maximum_memory }}
+Environment=JVM_MINIMUM_MEMORY={{ confluence_jvm_minimum_memory }}
+{% if confluence_jvm_support_recommended_args is defined %}
+Environment=JVM_SUPPORT_RECOMMENDED_ARGS="{{ confluence_jvm_support_recommended_args }}"
+{% endif %}
+{% if confluence_jmx.enable %}
+Environment=JMX_REMOTE_AUTH=password
+Environment=JMX_REMOTE_PORT={{ confluence_jmx.remote_port }}
+Environment=JMX_REMOTE_RMI_PORT={{ confluence_jmx.rmi_port }}
+Environment=RMI_SERVER_HOSTNAME={{ confluence_jmx.rmi_server_hostname }}
+Environment=JMX_PASSWORD_FILE={{ confluence_home_version_home }}/shared/jmx.access
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

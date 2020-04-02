@@ -1,0 +1,77 @@
+---
+- name: add confluence owner
+  user:
+    name: "{{ confluence_owner }}"
+    shell: /bin/bash
+    system: true
+
+- name: home directory
+  file:
+    path: "{{ confluence_home }}"
+    state: directory
+    group: "{{ confluence_owner }}"
+    owner: "{{ confluence_group }}" 
+
+- name: install folder
+  file:
+    path: "{{ confluence_home_version }}"
+    state: directory
+    group: "{{ confluence_owner }}"
+    owner: "{{ confluence_group }}"    
+  #register: install_symlink
+
+- name: response file
+  template:
+   dest: "{{ confluence_home }}/reponse.varfile"
+   owner: "{{ confluence_owner }}"
+   src: response.varfile.j2
+
+- name: download installer
+  get_url:
+    url: "{{ confluence_versions[confluence_version]['url'] }}"
+    dest: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
+    checksum: "{{ confluence_versions[confluence_version]['checksum'] }}"
+    timeout: 300
+    mode: 1373
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+  register: get_url_result
+  until: get_url_result is succeeded
+  when: confluence_lcm['operation'] in ['upgrade','install'] 
+
+- name: remove installer
+  file:
+    path: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
+    state: absent
+  when: confluence_lcm['operation'] not in ['upgrade','install'] 
+
+- name: Copy home dir
+  command: "rsync -az --delete --recursive {{ confluence_home_version_home_current }}/ {{ confluence_home_version_home }}/"
+  when: confluence_lcm['operation'] == 'upgrade' 
+
+- name: run installer 
+  command: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }} -q -varfile {{ confluence_home }}/reponse.varfile"
+  become: yes
+  become_method: sudo
+  become_user: "{{ confluence_versions[confluence_version]['installer_user']|default('root') }}"
+  # become_flags: '-s /bin/sh'
+  notify:
+    - lcm-version-file
+    - confluence-systemctl-daemon-reload
+    - confluence-systemctl-restart
+  when: confluence_lcm['operation'] in ['upgrade','install']
+
+# 7.0.1 installer runs as root, fix this  
+- name: chown confluence home version 
+  file: 
+    dest: "{{ confluence_home_version }}" 
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+    recurse: yes
+  when: confluence_lcm['operation'] in ['upgrade','install']
+
+- name: Create symbolic link install
+  file:
+   src: "{{ confluence_home_version }}"
+   dest: "{{ confluence_home_link }}"
+   state: link

@@ -1,0 +1,6 @@
+---
+- debug:
+    var: confluence_lcm['operation']
+
+- debug: 
+    var: confluence_versions

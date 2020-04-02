@@ -1,0 +1,18 @@
+# {{ ansible_managed }}
+
+app.confluenceHome={{ confluence_home_version_home }}
+app.defaultInstallDir={{ confluence_home_version_app }}
+httpPort={{ confluence_web_port }}
+{% if confluence_lcm['operation'] == 'install' %}
+app.install.service$Boolean=false
+executeLauncherAction$Boolean=false
+installation.type=INSTALL
+{% endif %}
+{% if confluence_lcm['operation'] == 'upgrade' %}
+launch.application$Boolean=false
+installation.type=UPGRADE
+{% endif %}
+launch.application$Boolean=false
+sys.adminRights$Boolean=true
+sys.installationDir={{ confluence_home_version_app }}
+sys.languageId=en
