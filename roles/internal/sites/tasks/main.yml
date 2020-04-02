@@ -1,6 +1,21 @@
 ---
 - include: "{{ ansible_os_family }}.yml"
 
+- name: owner
+  user:
+    name: "{{ sites[item]['owner'] }}"
+    shell: /bin/bash
+  with_items: "{{ sites }}"
+  when: sites[item]['owner'] is defined
+
+- name: owner authorized_key
+  authorized_key:
+    user: "{{ sites[item]['owner'] }}"
+    state: present
+    key: "{{ sites[item]['authorized_key'] }}"
+  with_items: "{{ sites }}"
+  when: sites[item]['owner'] is defined and sites[item]['authorized_key'] is defined
+
 - name: Sites private key
   copy:
     content: "{{ sites_ssh['key'] }}"
@@ -16,6 +31,16 @@
     dest: "/var/www/html/{{ sites[item]['context'] }}"
     key_file: /var/www/key
   with_items: "{{ sites }}"
+  when: sites[item]['url'] is defined
+  notify: chown-site-owner
+
+- file:
+    path: "/var/www/html/{{ sites[item]['context'] }}"
+    owner: "{{ sites[item]['owner'] | default(omit) }}"
+    group: "{{ sites[item]['owner'] | default(omit) }}"    
+    state: directory
+  with_items: "{{ sites }}"
+  when: sites[item]['url'] is not defined
 
 #- debug: 
 #   var: item

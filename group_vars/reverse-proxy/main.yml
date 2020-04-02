@@ -15,5 +15,9 @@ reverse_proxy_vhosts:
         proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
       - name: bitbucket
         proxy_pass: /bitbucket http://1.1.1.11:7990/bitbucket
+      - name: dimension-with-key
+        proxy_pass: /dimension-with-key http://1.1.1.10:8080/dimension-with-key
+      - name: dimension
+        proxy_pass: /dimension http://1.1.1.10:8080/dimension
 
 reverse_proxy_global_favicon: favicon-blue.ico
