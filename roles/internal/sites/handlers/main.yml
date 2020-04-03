@@ -4,7 +4,7 @@
     path: "/var/www/html/{{ sites[item]['context'] }}"
     owner: "{{ sites[item]['owner'] }}"
     group: "{{ sites[item]['owner'] }}"    
-    state: present
+    state: directory
     recurse: yes 
   with_items: "{{ sites }}"
   when: sites[item]['owner'] is defined    
