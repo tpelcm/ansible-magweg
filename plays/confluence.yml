@@ -6,12 +6,5 @@
   roles:
     - { role: common,                       tags: ["common"] }
     - { role: postgresql-client,            tags: ["confluence", "postgresql"] }    
-    - { role: java,                         tags: ["confluence", "java"] }
-    - { role: geerlingguy.git,              tags: ["confluence"] }
-    - { role: confluence,                    tags: ["confluence"] }
+    - { role: confluence,                   tags: ["confluence"] }
     - { role: backup,                       tags: ["common", "backup"] }
-
-  vars:
-    git_install_from_source: true
-    git_version: "2.16.2"
-    git_install_from_source_force_update: true
