@@ -1,0 +1,8 @@
+---
+- name: mail relay
+  hosts: mailrelay
+  become: yes
+
+  roles:
+    - { role: common,             tags: ["common"] }
+    - { role: geerlingguy.postfix,tags: ["proxy","mailrelay"] }
