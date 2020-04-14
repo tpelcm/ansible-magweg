@@ -4,17 +4,12 @@
     name: postfix
     state: present
 
-- name: Update Postfix configuration.
-  lineinfile:
-    dest: "{{ postfix_config_file }}"
-    line: "{{ item.name }} = {{ item.value }}"
-    regexp: "^{{ item.name }} ="
-  with_items:
-    - name: inet_interfaces
-      value: "{{ postfix_inet_interfaces }}"
-    - name: inet_protocols
-      value: "{{ postfix_inet_protocols }}"
-  notify: restart postfix
+- name: Postfix configuration
+  template:
+    dest: /etc/postfix/main.cf
+    mode: 644
+    src: main.cf.j2
+  notify: restart postfix   
 
 - name: Ensure postfix is started and enabled at boot.
   service:

@@ -1,12 +1,6 @@
 # Ansible Role: Postfix
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-postfix.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-postfix)
-
-Installs postfix on RedHat/CentOS or Debian/Ubuntu.
-
-## Requirements
-
-If you're using this as an SMTP relay server, you will need to do that on your own, and open TCP port 25 in your server firewall.
+Installs postfix on RedHat/CentOS and configures a mail relay.
 
 ## Role Variables
 
@@ -26,20 +20,9 @@ The state in which the Postfix service should be after this role runs, and wheth
 
 Options for values `inet_interfaces` and `inet_protocols` in the `main.cf` file.
 
+
+
 ## Dependencies
 
 None.
 
-## Example Playbook
-
-    - hosts: all
-      roles:
-        - geerlingguy.postfix
-
-## License
-
-MIT / BSD
-
-## Author Information
-
-This role was created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
