@@ -12,6 +12,16 @@
 	    Allow from all
     </Directory>
 
+{% for item in sites %}
+{%   if sites[item]['apache_site_directives'] is defined %}
+    <Location /{{ sites[item]['context'] }}>
+{%     for ln in sites[item]['apache_site_directives'] %}
+      {{ ln }}
+{%     endfor %}
+    </Location>
+{%   endif %}
+{% endfor %}
+
     LogLevel {{ sites_log_level }}
 
     ErrorLog {{ https_log_dir[ansible_os_family] }}-sites.log
