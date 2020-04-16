@@ -10,6 +10,7 @@ ansible_groups = {
   'proxy' => ['proxy'],
   'reverse-proxy' => ['proxy'],
   'nfs' => ['proxy'],
+  'mailrelay' => ['proxy'],  
   'postgresql' => ['postgresql'],
   'sonarqube' => ['sonarqube'],
   'jenkins' => ['jenkins'],  
@@ -30,7 +31,8 @@ ansible_groups = {
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024 * 4 }
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
-nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj) }
+# nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay) }
+nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(mailrelay) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
 nodes['env'] = {  'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
 nodes['jenkins'] = {  'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }

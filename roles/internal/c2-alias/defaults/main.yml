@@ -28,5 +28,9 @@ c2_alias:
       configs: 
         - /etc/systemd/system/bitbucket.service
         - /opt/bitbucket/bitbucket/home/shared/bitbucket.properties
+    postfix:
+      logs: ['/var/log/maillog']
+      configs:
+        - /etc/postfix/main.cf
 
 
