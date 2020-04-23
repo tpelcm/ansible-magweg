@@ -2,6 +2,8 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
+c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql']
+
 c2_alias:
   roles:
     proxy:
@@ -9,6 +11,7 @@ c2_alias:
       configs: 
         - "{{ squid_config_directory | default(omit) }}/{{ squid_config_file | default(omit) }}"
         - "{{ proxy_allowd_ips_file | default(omit) }}"
+        - "{{ proxy_upstream_always_direct_file | default(omit) }}"
     opendj:
       logs: 
         - /opt/opendj/logs/server.out
@@ -32,5 +35,21 @@ c2_alias:
       logs: ['/var/log/maillog']
       configs:
         - /etc/postfix/main.cf
+    postgresql:
+      logs: ["/var/lib/pgsql/9.6/data/pg_log/*.log"]
+      configs: 
+        - "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
+        - "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+    nfs:
+      logs: []
+      configs:
+        - /etc/exports
+    reverse-proxy:
+      logs: []
+      configs:
+        - /etc/httpd/conf.d/reverse_proxy.conf
+
+
+
 
 

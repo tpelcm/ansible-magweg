@@ -6,11 +6,3 @@ postgresql_pg_hba_conf:
 
 postgresql_conf:
   - listen_addresses: "'*'"
-
-c2_alias:
-  roles:
-    postgresql:
-      logs: ["/var/log/postgresql/*.log"]
-      configs: 
-        - "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
-        - "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf" 
