@@ -1,0 +1,16 @@
+---
+# Note: Ansible cannot use multiline variables so apache_site_directives 
+# becomes an ugly array
+sites:
+  angularblog:
+    url: https://github.com/iamfaiz/angularblog.git
+    context: angularblog
+    owner: angularblog
+    groups: ['apache']
+    authorized_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDfk2GlYqNKRedzENzvc0rgAnwDxJKm6thoHvVvKvf81HkOSwx6PPpmy/Y5rM2lJgVdEcdd5JGaZZ0TqlV7N1jywmHyRkE02W2v8GjTt2KExvapBFgjeyQEZl9V1EERBBQURsW/fv/urMz9sKvLUas7CUs/+STuVze0c9TgK7ooSRkvm9+Kbh03X2SEAC+cFLEDZtv0iiCaN+0l7epoINhJFiu7FloMeN+4s1M4m2vHupSKdkb4Mg4hTp+7mbWHSN7Gk0kLsKPfilMPGofe3gVv6Es5JK2jeM8/PqvmtQsVRIUqh2PsJb4Eb4RWFZGWVFZqdngtlDaDZ+Ssv2zZtRijywKCfYl6Q/ZbhIIlx70JYDVEoQGDXBH8wBpJboErOEwV//mNg3rtEMlIrGnMFUTKXogMAsc/zjuFjbjII034/RPA8WlT5/4emYHaKMH2cKTVuIslBRFUC0Oq//dUnVmNwNBMZMWU1TpXr0ZuTirZleRuIliFYx6e93j+bOaPQr8oKLRntH8tasMILdlYwdHjZnZofhuyLWa2YFilhLxRTY9Ne2WiZUwf0mE+ExLW5yBo3fLEs7dLX9po/jbUU6lM/ROrDC1XaPs53V99zB+yPr5yOykvnZAAzPh6IfpYG9dcIQD2VPvtKaJzHDl4WVy5mzmuZpuikcgbaGVQHEXhlQ== sites
+    apache_site_directives: 
+      - RewriteEngine on
+      - RewriteCond %{REQUEST_FILENAME} -f [OR]
+      - RewriteCond %{REQUEST_FILENAME} -d
+      - RewriteRule ^.*$ - [NC,L]
+      - RewriteRule ^. /angularblog/index.html [NC,L]
