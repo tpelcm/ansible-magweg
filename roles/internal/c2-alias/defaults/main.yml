@@ -53,3 +53,7 @@ c2_alias:
       configs:
         - /etc/monitrc
         - /etc/monit.d/diskspace        
+    sonarqube:
+      logs: ["/opt/sonarqube/sonarqube/logs/*.log"]
+      configs:
+        - /opt/sonarqube/sonarqube/conf/sonar.properties
