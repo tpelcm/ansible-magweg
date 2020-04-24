@@ -38,8 +38,8 @@ c2_alias:
     postgresql:
       logs: ["/var/lib/pgsql/9.6/data/pg_log/*.log"]
       configs: 
-        - "/var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf"
-        - "/var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf"
+        - "/var/lib/pgsql/{{ postgresql_version | default(omit) }}/data/pg_hba.conf"
+        - "/var/lib/pgsql/{{ postgresql_version | default(omit) }}/data/postgresql.conf"
     nfs:
       logs: []
       configs:
