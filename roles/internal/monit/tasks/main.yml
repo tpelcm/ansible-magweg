@@ -1,0 +1,38 @@
+---
+- name: Monit install and configure fact
+  set_fact:
+   monit_install: "{{ (lvm_roles_node is defined and lvm_roles_node|length>0) or (monit_mounts and monit_mounts|length>0) }}" 
+
+- name: Monit
+  package:
+    name: monit
+    state: present
+  when: monit_install
+
+- name: Ensure monit is running
+  service: "name=monit state=started enabled=yes"
+  when: monit_install
+
+- name: monitrc
+  template:
+    dest: /etc/monitrc
+    mode: "600"
+    src: monitrc.j2
+  when: monit_install
+  notify: reload monit
+
+- name: Disk space
+  template: 
+    dest: /etc/monit.d/diskspace
+    src: diskspace.j2
+  when: monit_install
+  notify: reload monit
+
+#check device var with path /var
+#    if SPACE usage > 80% then alert
+# monit status
+
+#
+#when: groups["GROUP_NAME"] is defined and (groups["GROUP_NAME"]|length>0)#
+#
+#|length>0
