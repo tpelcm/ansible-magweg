@@ -26,8 +26,8 @@ sonarqube_java_bin:
   RedHat: '{{ adoptopenjdk_java_home }}/bin/java'
 
 sonarqube_proxy:
-  host: '{{ proxy_host }}'
-  port: '{{ proxy_port }}'  
+  host: '{{ proxy_host|default(omit) }}'
+  port: '{{ proxy_port|default(omit) }}'  
 
 sonarqube_ldap:
   url: ldap://1.1.1.3:389
