@@ -14,6 +14,7 @@
     dest: "{{sonarqube_home_version }}/extensions/plugins"
     group: sonarqube
     owner: sonarqube
+    timeout: "{{ sonarqube_plugin_download_timeout|default(omit)}}"
   notify: restart sonarqube   
   with_items: "{{ sonarqube_plugins }}"
   when: sonarqube_plugins is defined
@@ -35,6 +36,7 @@
     dest: "{{sonarqube_home_version }}/extensions/plugins"
     group: sonarqube
     owner: sonarqube
+    timeout: "{{ sonarqube_plugin_download_timeout|default(omit)}}"
   notify: restart sonarqube   
   with_items: "{{ sonarqube_versions[sonarqube_version]['plugins'] }}"
   when: sonarqube_versions[sonarqube_version]['plugins'] is defined
