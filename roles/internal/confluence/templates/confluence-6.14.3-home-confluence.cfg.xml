@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<confluence-configuration>
+  <setupStep>complete</setupStep>
+  <setupType>custom</setupType>
+  <buildNumber>7901</buildNumber>
+  <properties>
+    <property name="admin.ui.allow.daily.backup.custom.location">false</property>
+    <property name="admin.ui.allow.manual.backup.download">false</property>
+    <property name="admin.ui.allow.site.support.email">false</property>
+    <property name="atlassian.license.message">AAABOA0ODAoPeNptkL1OwzAURnc/hSUWGFolaRBqJUugJENRm1a0wMJycW6LkeNE13ZE3x7nZygSl rz4+nzHn2/eseLPXvMk5fFyFcerNOZZfuRJFC9Z6etPpN3p1SJZEUdhsRytJNU61RiRNeakPRqJ/ PaA1CHd8eEWH4iPFc+aukaSCjTfKInGIssIoadzcCh6zSx6mCX3LIQ5kK6EGkX+7c2ZHwkMk8ExD +eqQ+HI43hwcEAOSZxA95EjWmxBaVH17NwF9rFttHIK50azogPtB+/EDDHTm46XFgdvtttui5ds/ bRhehy9hR49lLAQbhwaCG2Ln1bRZSqQREOBlO3oDEbZUdI5y/ejnpdYIWkwFTsUpQh7FqjFMl2wy b/OxWad/zO4EnmjVa0cVmzvSX6Bxb8fmLJfFOOZDzAsAhQ90QrlXzsENdklki1nyw0zV+jFnwIUC h2U6hjlIaWc6dBA588J1E139G8=X02fj</property>
+    <property name="attachments.dir">${confluenceHome}/attachments</property>
+    <property name="confluence.setup.server.id">BNMQ-98PB-771M-RU6D</property>
+    <property name="confluence.webapp.context.path"></property>
+    <property name="hibernate.c3p0.acquire_increment">1</property>
+    <property name="hibernate.c3p0.idle_test_period">100</property>
+    <property name="hibernate.c3p0.max_size">30</property>
+    <property name="hibernate.c3p0.max_statements">0</property>
+    <property name="hibernate.c3p0.min_size">0</property>
+    <property name="hibernate.c3p0.timeout">30</property>
+    <property name="hibernate.connection.SetBigStringTryClob">true</property>
+    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <property name="hibernate.connection.isolation">2</property>
+    <property name="hibernate.connection.password">CONFLUENCE1</property>
+    <property name="hibernate.connection.url">jdbc:oracle:thin:@(DESCRIPTION= (ADDRESS=(PROTOCOL=tcp)(HOST=ora-listener-swh04.swh04.local)(PORT=1521)) (CONNECT_DATA= (SERVICE_NAME=CNF_PROD)))</property>
+    <property name="hibernate.connection.username">CONF</property>
+    <property name="hibernate.dialect">com.atlassian.confluence.impl.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.setup">true</property>
+    <property name="jwt.private.key">MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIuYvhuMC4stbOaATfHGN2ImEtIcxohiRwMwvmKys6w1hqxmfbNkv8t+HGAs9Uh89uZZtC07Od3MnjFpk/vJ+wjr/3zUyCtiLLP02nmOwTBN2c/0rslyMwX69BUALHA3x+fxFNEqfpVYUqDFMqGO5uI8zXqaCNndcN/nM5ncNwZpAgMBAAECgYBlFeEsD3hYezdtnqFSn4eBYjKkxcOaBRiJHeXvkJn87PGtq7YAjsc38wVXO5cOu7cKTRDk5AteKoqvG1XWsYc+6+tmSEctUo2QbM5Jzs28y5wX4jVLPERyOBGPiV6Mx1r0LA8D4h/KVrBDgCX3hX4riK14qTzVXynrrVos51l0UQJBAP3WAo4EX8NawJ/PnvYbN0T/OZYB8tu/VQ2TBBfBrie3DRd5v3key4bHt1YGzO4RWUdmlneryNMJnpf9cP/oQqUCQQCMyWiQJw8h2YN2R1Dguu04FQFvdiBTVkiq8YYOuM2FWJNN+ilBMeQCzPb4zOGB67Sl+FDXx0taiPGYdPm7jn11AkAhTi5BohNKl6LElUJfOkzzMaXFp/XMnXs0b8DOuSv3rA38sY3M/5xmz9efYv8KkZ4sPyqpAxIzloSHnspv2XK9AkAK6Jg3gy9C+i2bfo8fupwi2k3QKyD6FBdxV2GBxoP2LxTK1/VWXd1C8kq4oHdgr7jBm2n4LjMCgtXlcDrhc3r5AkEA6e4v8HVL8bT/CLbJHt/k5ZJwBUw6URhXdRr44dX6uK7tGkSc/2Bk3T8lS92X7g5lN/3vm8ijB8L33gw8e10TRA==</property>
+    <property name="jwt.public.key">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCLmL4bjAuLLWzmgE3xxjdiJhLSHMaIYkcDML5isrOsNYasZn2zZL/LfhxgLPVIfPbmWbQtOzndzJ4xaZP7yfsI6/981MgrYiyz9Np5jsEwTdnP9K7JcjMF+vQVACxwN8fn8RTRKn6VWFKgxTKhjubiPM16mgjZ3XDf5zOZ3DcGaQIDAQAB</property>
+    <property name="lucene.index.dir">${localHome}/index</property>
+    <property name="synchrony.btf">true</property>
+    <property name="synchrony.encryption.disabled">true</property>
+    <property name="synchrony.proxy.enabled">true</property>
+    <property name="webwork.multipart.saveDir">${localHome}/temp</property>
+  </properties>
+</confluence-configuration>

@@ -1,4 +1,7 @@
 ---
+- debug:
+    var: confluence_version
+
 - name: add confluence owner
   user:
     name: "{{ confluence_owner }}"
@@ -20,11 +23,11 @@
     owner: "{{ confluence_group }}"    
   #register: install_symlink
 
-- name: response file
-  template:
-   dest: "{{ confluence_home }}/reponse.varfile"
-   owner: "{{ confluence_owner }}"
-   src: response.varfile.j2
+# - name: response file
+#  template:
+#   dest: "{{ confluence_home }}/reponse.varfile"
+#   owner: "{{ confluence_owner }}"
+#   src: response.varfile.j2
 
 - name: download installer
   get_url:
@@ -37,7 +40,7 @@
     group: "{{ confluence_group }}"
   register: get_url_result
   until: get_url_result is succeeded
-  when: confluence_lcm['operation'] in ['upgrade','install'] 
+  #when: confluence_lcm['operation'] in ['upgrade','install'] 
 
 - name: remove installer
   file:
@@ -61,7 +64,8 @@
     - confluence-systemctl-restart
   when: confluence_lcm['operation'] in ['upgrade','install']
 
-# 7.0.1 installer runs as root, fix this  
+# 6.14.3 installer runs as root, fix this  
+# only needed for bitbucket role, remove this 
 - name: chown confluence home version 
   file: 
     dest: "{{ confluence_home_version }}" 

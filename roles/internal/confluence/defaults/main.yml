@@ -1,12 +1,12 @@
 ---
 confluence_home: /opt/confluence
 
-confluence_version: 5.10.1
+confluence_version: 6.14.3
 
 confluence_jvm_minimum_memory: 512m
 confluence_jvm_maximum_memory: 1g
 
-confluence_web_port: 7990
+confluence_web_port: 8090
 confluence_web_context: '/confluence'
 
 confluence_database_username: confluence
@@ -83,16 +83,18 @@ confluence_jmx:
   password: supersecret
 
 confluence_versions: 
-  5.10.1:
-    url: https://product-downloads.atlassian.com/software/stash/downloads/atlassian-confluence-5.10.1-linux-x64.bin
-    checksum: sha256:d2807242530967ed4080a312128eccac2f46682ab986ceaba7fe91cf80840861
+  6.14.3:
+    url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-6.14.3-x64.bin
+    checksum: sha256:fa7ae717060a7cb3db0e3dd56c44daba3586d23a36ebe5796b978a3e18fdca3f
     installer_user: confluence
     # jdk:
-  7.0.1:
-    url: https://product-downloads.atlassian.com/software/stash/downloads/atlassian-confluence-7.0.1-x64.bin
-    checksum: sha256:ad51613eee98671e0e81c41cded58af6dc69eb80bcaadbbb41e41684f3850717
+  7.4.0:
+    url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.4.0-x64.bin
+    checksum: sha256:c838a4574eff529e9186a4c842f8c407c607fe91a5a5c57c2b9497ac28ed157d
+    installer_user: confluence
+    # jdk:
 
-confluence_versions_sequence: ['5.10.1','7.0.1']
+confluence_versions_sequence: ['6.14.3','7.4.0']
 
 
 

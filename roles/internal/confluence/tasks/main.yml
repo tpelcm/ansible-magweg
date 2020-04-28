@@ -1,10 +1,10 @@
 ---
-- name: stop for upgrade, rollback or rollfoward
-  service: name=confluence state=stopped
-  when: confluence_lcm['operation'] in ['upgrade','rollback','rollforward'] 
-  notify:
-    - confluence-systemctl-daemon-reload
-    - confluence-systemctl-restart
+#- name: stop for upgrade, rollback or rollfoward
+#  service: name=confluence state=stopped
+#  when: confluence_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+#  notify:
+#    - confluence-systemctl-daemon-reload
+#    - confluence-systemctl-restart
 
 #- include: debug.yml
 - include: database.yml
