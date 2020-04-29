@@ -9,6 +9,8 @@ confluence_jvm_maximum_memory: 1g
 confluence_web_port: 8090
 confluence_web_context: '/confluence'
 
+confluence_rmi_port: 8000
+
 confluence_database_username: confluence
 confluence_database_password: supersecure
 
@@ -86,12 +88,10 @@ confluence_versions:
   6.14.3:
     url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-6.14.3-x64.bin
     checksum: sha256:fa7ae717060a7cb3db0e3dd56c44daba3586d23a36ebe5796b978a3e18fdca3f
-    installer_user: confluence
     # jdk:
   7.4.0:
     url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.4.0-x64.bin
     checksum: sha256:c838a4574eff529e9186a4c842f8c407c607fe91a5a5c57c2b9497ac28ed157d
-    installer_user: confluence
     # jdk:
 
 confluence_versions_sequence: ['6.14.3','7.4.0']

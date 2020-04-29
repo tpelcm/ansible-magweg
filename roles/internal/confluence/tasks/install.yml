@@ -1,33 +1,8 @@
 ---
-- debug:
-    var: confluence_version
-
-- name: add confluence owner
-  user:
-    name: "{{ confluence_owner }}"
-    shell: /bin/bash
-    system: true
-
-- name: home directory
-  file:
-    path: "{{ confluence_home }}"
-    state: directory
-    group: "{{ confluence_owner }}"
-    owner: "{{ confluence_group }}" 
-
-- name: install folder
-  file:
-    path: "{{ confluence_home_version }}"
-    state: directory
-    group: "{{ confluence_owner }}"
-    owner: "{{ confluence_group }}"    
-  #register: install_symlink
-
-# - name: response file
-#  template:
-#   dest: "{{ confluence_home }}/reponse.varfile"
-#   owner: "{{ confluence_owner }}"
-#   src: response.varfile.j2
+- name: response file
+  template:
+    dest: "{{ confluence_home }}/reponse.varfile"
+    src: response.varfile.j2
 
 - name: download installer
   get_url:
@@ -36,11 +11,9 @@
     checksum: "{{ confluence_versions[confluence_version]['checksum'] }}"
     timeout: 300
     mode: 1373
-    owner: "{{ confluence_owner }}"
-    group: "{{ confluence_group }}"
   register: get_url_result
   until: get_url_result is succeeded
-  #when: confluence_lcm['operation'] in ['upgrade','install'] 
+  when: confluence_lcm['operation'] in ['upgrade','install'] 
 
 - name: remove installer
   file:
@@ -64,8 +37,6 @@
     - confluence-systemctl-restart
   when: confluence_lcm['operation'] in ['upgrade','install']
 
-# 6.14.3 installer runs as root, fix this  
-# only needed for bitbucket role, remove this 
 - name: chown confluence home version 
   file: 
     dest: "{{ confluence_home_version }}" 
@@ -76,6 +47,11 @@
 
 - name: Create symbolic link install
   file:
-   src: "{{ confluence_home_version }}"
-   dest: "{{ confluence_home_link }}"
-   state: link
+    src: "{{ confluence_home_version }}"
+    dest: "{{ confluence_home_link }}"
+    state: link
+
+- file:
+    path: "{{ confluence_home }}"
+    state: directory
+    mode: 0700
