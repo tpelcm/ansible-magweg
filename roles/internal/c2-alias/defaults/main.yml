@@ -54,4 +54,4 @@ c2_alias:
       configs:
         - /opt/confluence/confluence/app/confluence/WEB-INF/classes/confluence-init.properties
         - /etc/systemd/system/confluence.service
-        - /opt/confluence/confluence/home/shared/confluence.properties
+        - /opt/confluence/confluence/home/confluence.cfg.xml

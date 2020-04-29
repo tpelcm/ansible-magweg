@@ -9,22 +9,31 @@
 
 - name: Check confluence.properties exists
   stat:
-    path: "{{ confluence_home_version_home }}/shared/confluence.properties"
-  register: confluence_properties_stat
+    path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
+  register: confluence_cfg_xml
 
+- name: Confluence setup
+  debug:
+    msg: "Confluence has not been setup yet. Use a browser to navigate to http://localhost:{{ confluence_web_port }}  and complete Confluence setup"
+  changed_when: true
+  when: not confluence_cfg_xml.stat.exists
 
-#        when: not stat_result.stat.exists
-#
-#
-#
-#- name: confluence.properties
-#  template:
-#    dest: "{{ confluence_home_version_home }}/shared/confluence.properties"
-#    owner: "{{ confluence_owner }}"
-#    group: "{{ confluence_group }}"
-#    src: confluence.properties.j2
-#  notify: confluence-systemctl-restart
-#
+- name: confluence.cfg.xml
+  replace:
+    path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
+    regexp: "{{ item.key }}\">.*?</property>"
+    replace: "{{ item.key }}\">{{ item.value }}</property>"
+  no_log: true
+  when: confluence_cfg_xml.stat.exists
+  with_items:
+    - key: "hibernate.connection.password" 
+      value: "{{ confluence_database_password }}"
+    - key: "hibernate.connection.url" 
+      value: "jdbc:postgresql://db:{{ confluence_database_port }}/{{ confluence_database_name_version }}"
+    - key: "hibernate.connection.username" 
+      value: "{{ confluence_database_username }}"
+  notify: confluence-systemctl-restart
+
 #- name: env file CONFLUENCE_HOME etc
 #  copy:
 #    content: >
