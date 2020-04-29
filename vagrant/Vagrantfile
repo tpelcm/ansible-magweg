@@ -57,6 +57,7 @@ Vagrant.configure(2) do |config|
         vb.gui = false
         vb.memory = a['memory'] || 1024
         vb.cpus = a['cpus'] || 2
+        add_disk(vb, 1, 120 * 1024, 'cicd-data.vdi', 'IDE Controller')
       end
       cfg.vm.provision 'shell', inline: shell_provision
       a['plays'].each do |p|
@@ -74,4 +75,13 @@ Vagrant.configure(2) do |config|
       end
     end
   end
+end
+
+def add_disk(vb_provider, port = 2, size = 120 * 1024, filename = nil, controller = 'IDE Controller')
+  filename = "disk#{port}.vdi" if filename.nil?
+  disk = File.expand_path(filename)
+  unless File.exist?(disk)
+    vb_provider.customize ['createhd', '--filename', disk, '--format', 'VDI', '--size', size]
+  end
+  vb_provider.customize ['storageattach', :id, '--storagectl', controller, '--port', port, '--device', 0, '--type', 'hdd', '--medium', disk]
 end
