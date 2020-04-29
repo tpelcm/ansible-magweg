@@ -38,7 +38,7 @@ nodes['env'] = {  'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
 nodes['jenkins'] = {  'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
 nodes['sites'] = {  'ip' => '1.1.1.10', 'plays' => %w(sites) }
 nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
-nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory'=> 1024 * 4 }
+nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory'=> 1024 * 4, 'data-disk' => true }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
@@ -57,7 +57,7 @@ Vagrant.configure(2) do |config|
         vb.gui = false
         vb.memory = a['memory'] || 1024
         vb.cpus = a['cpus'] || 2
-        add_disk(vb, 1, 120 * 1024, "cicd-data-#{n}.vdi", 'IDE Controller')
+        add_disk(vb, 1, 120 * 1024, "cicd-data-#{n}.vdi", 'IDE Controller') if a['data-disk'] == true
       end
       cfg.vm.provision 'shell', inline: shell_provision
       a['plays'].each do |p|
