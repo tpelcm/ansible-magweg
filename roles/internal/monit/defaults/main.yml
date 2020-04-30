@@ -1,6 +1,6 @@
 ---
 monit_enable_web_interface: yes
-monit_enable_web_interface_anywhere: yes
+monit_enable_web_interface_anywhere: no
 monit_check_interval_seconds: 30
 monit_admin_username: admin
 monit_admin_password: supersecure
@@ -15,3 +15,5 @@ monit_mail_to: root@localhost
 monit_mailserver: localhost
 monit_mounts: []
 monit_log: /var/log/monit.log # syslog
+
+# monit_rpm_url: https://exampe.com/rpm/monit-5.26.0-1.el7.x86_64.rpm

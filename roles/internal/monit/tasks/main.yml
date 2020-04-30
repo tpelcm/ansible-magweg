@@ -5,7 +5,7 @@
 
 - name: Monit
   package:
-    name: monit
+    name: "{{ monit_rpm_url|default(monit) }}"
     state: present
   when: monit_install
 
@@ -27,12 +27,3 @@
     src: diskspace.j2
   when: monit_install
   notify: reload monit
-
-#check device var with path /var
-#    if SPACE usage > 80% then alert
-# monit status
-
-#
-#when: groups["GROUP_NAME"] is defined and (groups["GROUP_NAME"]|length>0)#
-#
-#|length>0
