@@ -39,7 +39,7 @@
 
 - name: chown confluence home version 
   file: 
-    dest: "{{ confluence_home_version }}" 
+    dest: "{{ confluence_home }}" 
     owner: "{{ confluence_owner }}"
     group: "{{ confluence_group }}"
     recurse: yes
