@@ -2,7 +2,7 @@
 
 {% if lvm_roles_node is defined and lvm_roles_node|length>0 %}
 {%   for rl in lvm_roles_node %}
-check device {{ rl }}_data with path {{ lvm_roles[rl]['path'] }}
+check device {{ rl }}-home with path {{ lvm_roles[rl]['path'] }}
   if SPACE usage > {{ monit_diskspace }} then alert
 {%   endfor %}
 {% endif %}

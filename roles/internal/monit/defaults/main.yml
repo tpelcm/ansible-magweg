@@ -17,3 +17,22 @@ monit_mounts: []
 monit_log: /var/log/monit.log # syslog
 
 # monit_rpm_url: https://exampe.com/rpm/monit-5.26.0-1.el7.x86_64.rpm
+
+# Monitor smtp
+# monit_smtp:
+#   - host: localhost
+#     address: localhost
+#     port: 25
+#     expect_port: "^250.*"
+#     expect_helo: "^220.*"
+
+#monit_system_monitoring:
+#  cpu: 
+#    usage: "95%"
+#    cycles: 10
+#  memory:
+#    usage: "75%"
+#    cycles: 5
+#  swap:
+#    usage: "20%"
+#    cycles: 10

@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{%   for s in monit_smtp %}
+check host {{ s.host }} with address {{ s.address }}
+  if failed
+    port {{ s.port }} and
+    expect "^{{ s.expect_port }}.*"
+    send   "HELO {{ s.host }}\r\n"
+    expect "^{{ s.expect_helo }}.*"
+    send   "QUIT\r\n"
+  then alert
+ {%   endfor %}

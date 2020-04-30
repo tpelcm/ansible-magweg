@@ -1,0 +1,7 @@
+---
+monit_smtp:
+   - host: mailrelay
+     address: localhost
+     port: 25
+     expect_port: "^250.*"
+     expect_helo: "^220.*"
