@@ -2,7 +2,7 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
-c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit']
+c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube']
 
 c2_alias:
   roles:
