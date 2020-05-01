@@ -1,5 +1,6 @@
 # {{ ansible_managed }}
 # install4j response file for Confluence
+# documentation in this role README.md
 
 app.confHome={{ confluence_home_version_home }}
 app.install.service$Boolean=true
@@ -14,18 +15,5 @@ sys.confirmedUpdateInstallationString=false
 sys.installationDir={{ confluence_home_version_app }}
 sys.languageId=en
 
-# app.defaultInstallDir=
-# portChoice={{ confluence_web_port }}
-#{% if confluence_lcm['operation'] == 'install' %}
-# executeLauncherAction$Boolean=false
-# installation.type=INSTALL
-#{% endif %}
-#{% if confluence_lcm['operation'] == 'upgrade' %}
-#sys.confirmedUpdateInstallationString=true
-#{% endif %}
-#launch.application$Boolean=false
-#sys.adminRights$Boolean=true
-#sys.installationDir={{ confluence_home_version_app }}
-#sys.languageId=en
 
 
