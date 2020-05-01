@@ -1,0 +1,17 @@
+---
+- name: jira.properties
+  template:
+    dest: "{{ jira_home_version_home }}/shared/jira.properties"
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
+    src: jira.properties.j2
+  notify: jira-systemctl-restart
+
+- name: env file JIRA_HOME etc
+  copy:
+    content: >
+      export JIRA_HOME={{ jira_home_version_home }}
+      export JIRA_USER={{ jira_owner }}
+    dest: /etc/profile.d/jira.sh
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
