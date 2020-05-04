@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
           ansible.config_file = '../plays/ansible.cfg'
           ansible.playbook = "../plays/#{p}.yml"
           ansible.groups = ansible_groups
-          # ansible.compatibility_mode = '2.0'
+          ansible.compatibility_mode = '2.0'
           # ansible.host_vars = ansible_host_vars
           # ansible.inventory_path = '../development.ini' # NO!
           # ansible.galaxy_role_file = '../roles/requirements.yml'

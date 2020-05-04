@@ -13,12 +13,14 @@ backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'myapp']
 
 backup_roles:
   sonarqube:
-    stop_start_service: sonarqube
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   nexus:
     stop_start_service: nexus
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }
     tar_options: -h
+  jira:
+    stop_start_service: jira
+    keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   bitbucket:
     stop_start_service: bitbucket
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }

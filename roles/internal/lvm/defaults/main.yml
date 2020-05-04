@@ -14,6 +14,7 @@ lvm_roles_supported:
   - sonarqube
   - jenkins
   - bitbucket
+  - jira
   - nexus
   - myapp
   - confluence
@@ -40,6 +41,12 @@ lvm_roles:
   confluence:
     size: '10g' 
     path: '{{ confluence_home if confluence_home is defined else "/opt/confluence" }}'
+  jira:
+    size: '10g' 
+    path: '{{ jira_home if jira_home is defined else "/opt/jira" }}'
+  sites:
+    size: '10g' 
+    path: '/var/www/html'
   sites:
     size: '10g' 
     path: '/var/www/html'

@@ -1,0 +1,8 @@
+--- 
+- name: jmx.access
+  copy:
+    content: "monitorRole={{ jira_jmx.password }}"
+    dest: "{{ jira_home_version_home }}/shared/jmx.access"
+    group: "{{ jira_owner }}"
+    owner: "{{ jira_group }}" 
+    mode: "400"

@@ -47,6 +47,8 @@
     group: sonarqube
     owner: sonarqube    
   when: sonarqube_installed.stat.exists == false
+  notify:
+    - lcm-version-file
 
 - name: Create symbolic link install
   file:

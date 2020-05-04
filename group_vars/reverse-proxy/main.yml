@@ -17,6 +17,8 @@ reverse_proxy_vhosts:
         proxy_pass: /bitbucket http://1.1.1.11:7990/bitbucket
       - name: confluence
         proxy_pass: /confluence http://1.1.1.12:8090/confluence
+      - name: jira
+        proxy_pass: /jira http://1.1.1.14:8080/jira
       - name: dimension-with-key
         proxy_pass: /dimension-with-key http://1.1.1.10:8080/dimension-with-key
       - name: dimension

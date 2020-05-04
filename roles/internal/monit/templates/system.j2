@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+{% if monit_system_monitoring is defined %}
+check system {{ inventory_hostname }}
+  if cpu usage > {{ monit_system_monitoring.cpu.usage }} for {{ monit_system_monitoring.cpu.cycles }} cycles then alert
+  if memory usage > {{ monit_system_monitoring.memory.usage }} for {{ monit_system_monitoring.memory.cycles }} cycles then alert
+  if swap usage > {{ monit_system_monitoring.swap.usage }} for {{ monit_system_monitoring.swap.cycles }} cycles then alert
+{% endif %}

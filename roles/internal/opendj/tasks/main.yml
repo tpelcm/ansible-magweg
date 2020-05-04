@@ -7,15 +7,20 @@
 
 - name: Download opendj
   get_url: url={{opendj_url}} dest={{download_dir}}/{{opendj_zip}}
-  
+
 - name: Create install root
   file: path={{install_root}} state=directory
- 
+
+- name: Add unzip package
+  package:
+    name: unzip
+    state: present
+
 - name: Unpack opendj
   command: chdir={{install_root}} creates={{install_root}}/opendj unzip {{ download_dir }}/{{ opendj_zip }}
 
 - name: Copy opendj props file
-  template: src=opendj.properties.j2 dest=/tmp/opendj.properties 
+  template: src=opendj.properties.j2 dest=/tmp/opendj.properties
 
 #- name: copy backend props file
 #  template: src=backend.properties.j2 dest=/tmp/backend.properties
@@ -24,7 +29,7 @@
   copy:
    dest: "{{ opendj_ldif_file }}"
    src: cicd.ldif
-  
+
 - name: Setup
   command: "{{install_root}}/opendj/setup --cli --propertiesFilePath /tmp/opendj.properties --acceptLicense --no-prompt --doNotStart"
   environment:
@@ -39,7 +44,7 @@
 #  command: "{{install_root}}/opendj/bin/create-rc-script -f /etc/init.d/{{opendj_service_name}} -u root"
 #  environment:
 #    OPENDJ_JAVA_HOME: "{{ opendj_java_home }}"
-#  notify: systemctl-daemon-reload    
+#  notify: systemctl-daemon-reload
 #
 #- name: Start opendj
 #  sysvinit: name={{opendj_service_name}} state=started enabled=yes

@@ -6,9 +6,10 @@
     owner: root
     group: root
     mode: 0755
-  notify: restart sonarqube  
   when: "ansible_service_mgr == 'systemd'" 
-  notify: systemctl-daemon-reload
+  notify: 
+    - systemctl-daemon-reload
+    - restart sonarqube
 
 - name: Ensure Sonar is running and set to start on boot.
   service: name=sonarqube state=started enabled=yes

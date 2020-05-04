@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+{% if lvm_roles_node is defined and lvm_roles_node|length>0 %}
+{%   for rl in lvm_roles_node %}
+check device {{ rl }}-home with path {{ lvm_roles[rl]['path'] }}
+  if SPACE usage > {{ monit_diskspace }} then alert
+{%   endfor %}
+{% endif %}
+
+{% if monit_mounts and monit_mounts|length>0 %}
+{%   for mnt in monit_mounts %}
+check device {{ mnt['name'] }} with path {{ mnt['path'] }}
+  if SPACE usage > {{ monit_diskspace }} then alert
+{%   endfor %}
+{% endif %}
+
