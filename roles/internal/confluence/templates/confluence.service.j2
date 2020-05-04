@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Atlassian Confluence {{ confluence_version }}
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User={{ confluence_owner }}
+PIDFile={{ confluence_home_version_app }}/work/catalina.pid
+ExecStart={{ confluence_home_version_app }}/bin/start-confluence.sh
+ExecStop={{ confluence_home_version_app }}/bin/stop-confluence.sh
+
+[Install]
+WantedBy=multi-user.target

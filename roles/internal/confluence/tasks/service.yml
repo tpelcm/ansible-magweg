@@ -1,0 +1,14 @@
+---
+- name: systemd service
+  template:
+    src: confluence.service.j2
+    dest: /etc/systemd/system/confluence.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart confluence  
+  when: "ansible_service_mgr == 'systemd'" 
+  notify: confluence-systemctl-daemon-reload
+
+- name: ensure service running and set to start on boot
+  service: name=confluence state=started enabled=yes

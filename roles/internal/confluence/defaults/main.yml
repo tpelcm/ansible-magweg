@@ -1,0 +1,100 @@
+---
+confluence_home: /opt/confluence
+
+confluence_version: 6.14.3
+
+confluence_jvm_minimum_memory: 512m
+confluence_jvm_maximum_memory: 1g
+
+confluence_web_port: 8090
+confluence_web_context: '/confluence'
+
+confluence_rmi_port: 8000
+
+confluence_database_username: confluence
+confluence_database_password: supersecure
+
+confluence_database_host: localhost
+confluence_database_port: "5432"
+confluence_database_name: confluence
+confluence_database_admin_username: ansible
+confluence_database_admin_password: supersecure
+confluence_database_template: template0
+
+#confluence_database_jdbc_custom_config:
+#  - jdbc.driver=org.postgresql.Driver
+#  - jdbc...
+
+confluence_owner: "confluence"
+confluence_group: "confluence"
+
+# Allow personal repos to be created
+confluence_personal_repos: no
+
+# TODO
+#confluence_max_map_count: 262144
+
+# Proxy and context path setup.
+confluence_catalina_connector_proxyname: ~
+confluence_catalina_connector_proxyport: ~
+confluence_catalina_connector_scheme: "http"
+confluence_catalina_connector_secure: "false"
+confluence_catalina_context_path: "/"
+
+# Atlassian Support recommended JVM arguments.
+#confluence_jvm_support_recommended_args: >-
+#  -Datlassian.plugins.enable.wait=300
+#  -XX:+UnlockExperimentalVMOptions
+#  -XX:+UseCGroupMemoryLimitForHeap
+#  -XX:MaxRAMFraction=1
+
+# Session timeout.
+confluence_session_timeout: "300"
+
+# Confluence inital setup
+confluence_setup:
+  display-name: Confluence
+  base-url: https://sh.1.1.1.3.nip.io/confluence
+  license: ''
+  admin:
+    username: admin
+    password: supersecure
+    display-name: Andy Kaufman
+    mail: andy.kaufman@cicd.io
+
+confluence_reverse_proxy:
+  enable: yes
+  secure: 'true'
+  scheme: https
+  port: 443
+  hostname: sh.1.1.1.3.nip.io
+
+#confluence_proxy:
+#  host: localhost
+#  port: 3128
+
+# Facts set by lcm role - only
+# confluence_database_name_version: confluence_6_7
+# confluence_home_version: /opt/confluence/confluence_6_7
+
+confluence_jmx:
+  enable: yes
+  remote_port: 3333
+  rmi_port: 3333
+  rmi_server_hostname: sh.1.1.1.11.nip.io
+  password: supersecret
+
+confluence_versions: 
+  6.14.3:
+    url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-6.14.3-x64.bin
+    checksum: sha256:fa7ae717060a7cb3db0e3dd56c44daba3586d23a36ebe5796b978a3e18fdca3f
+    # jdk:
+  7.4.0:
+    url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-7.4.0-x64.bin
+    checksum: sha256:c838a4574eff529e9186a4c842f8c407c607fe91a5a5c57c2b9497ac28ed157d
+    # jdk:
+
+confluence_versions_sequence: ['6.14.3','7.4.0']
+
+
+

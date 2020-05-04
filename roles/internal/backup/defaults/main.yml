@@ -24,6 +24,9 @@ backup_roles:
   bitbucket:
     stop_start_service: bitbucket
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+  confluence:
+    stop_start_service: confluence
+    keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   myapp:
     # stop_start_service: myapp
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }

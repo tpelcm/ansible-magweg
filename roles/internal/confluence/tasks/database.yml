@@ -1,0 +1,30 @@
+---
+- name: create database user
+  postgresql_user:
+    name: "{{ confluence_database_username }}"
+    password: "{{ confluence_database_password }}"
+    db: "postgres"
+    login_host: "{{ confluence_database_host }}"
+    login_password: "{{ confluence_database_admin_password }}"
+    login_user: "{{ confluence_database_admin_username }}"
+    port: "{{ confluence_database_port }}"
+    state: "{{ item.state | default('present') }}"
+  no_log: false
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: create database schema 
+  postgresql_db:
+    name: "{{ confluence_database_name_version }}"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: "{{ confluence_database_template }}"
+    login_host: "{{ confluence_database_host }}"
+    login_password: "{{ confluence_database_admin_password }}"
+    login_user: "{{ confluence_database_admin_username }}"
+    port: "{{ confluence_database_port }}"
+    owner: "{{ confluence_database_username }}"
+    state: "{{ item.state | default('present') }}"
+  vars:
+    ansible_ssh_pipelining: true
