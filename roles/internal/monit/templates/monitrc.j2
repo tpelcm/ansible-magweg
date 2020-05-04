@@ -13,8 +13,8 @@ set httpd port {{ monit_port }} and
 
 {% if monit_mail_alert_enable %}
 set mail-format {
-   from:    Monit <{{ ansible_hostname }}@{{ monit_mail_from_domain }}>
-   subject: Monit alert --  $EVENT $SERVICE
+   from:    {{ monit_mail_from_name }} <{{ inventory_hostname }}@{{ monit_mail_from_domain }}>
+   subject: {{ monit_mail_from_subject }}$EVENT $SERVICE
    message: $EVENT Service $SERVICE
                  Date:        $DATE
                  Action:      $ACTION

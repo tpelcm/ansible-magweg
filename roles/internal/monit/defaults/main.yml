@@ -10,6 +10,8 @@ monit_allow_hosts: localhost
 monit_diskspace: "80%"
 
 monit_mail_alert_enable: true
+monit_mail_from_name: Monit
+monit_mail_from_subject: "Monit alert -- " 
 monit_mail_from_domain: mydomain.com
 monit_mail_to: root@localhost
 monit_mailserver: localhost
