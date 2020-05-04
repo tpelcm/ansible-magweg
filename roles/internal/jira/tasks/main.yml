@@ -1,0 +1,15 @@
+---
+- name: stop for upgrade, rollback or rollfoward
+  service: name=jira state=stopped
+  when: jira_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - jira-systemctl-daemon-reload
+    - jira-systemctl-restart
+
+#- include: debug.yml
+- include: database.yml
+- include: install.yml
+- include: configuration.yml
+- include: jmx.yml
+  when: jira_jmx.enable == True
+- include: service.yml

@@ -31,6 +31,11 @@ c2_alias:
       configs: 
         - /etc/systemd/system/bitbucket.service
         - /opt/bitbucket/bitbucket/home/shared/bitbucket.properties
+    jira:
+      logs: ["/opt/jira/jira/home/log/*.log"]
+      configs: 
+        - /etc/systemd/system/jira.service
+        - /opt/jira/jira/home/shared/jira.properties
     postfix:
       logs: ['/var/log/maillog']
       configs:
