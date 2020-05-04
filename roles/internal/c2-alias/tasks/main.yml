@@ -1,8 +1,17 @@
 ---
+- set_fact: c2_alias_roles_node="{{ c2_alias_roles | intersect(ansible_role_names_cleaned) }}"
+
 - name: Alias file
   template:
     src: c2.sh.j2
-    dest: /etc/profile.d/c2.sh
+    dest: "/etc/profile.d/{{ item }}.sh"
     owner: root
     group: root
     mode: 0644
+  with_items: "{{ c2_alias_roles_node }}"
+
+# TODO remove
+- name: Remove c2.sh
+  file:
+   path: /etc/profile.d/c2.sh
+   state: absent

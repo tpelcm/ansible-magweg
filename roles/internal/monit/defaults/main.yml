@@ -1,0 +1,38 @@
+---
+monit_enable_web_interface: yes
+monit_enable_web_interface_anywhere: no
+monit_check_interval_seconds: 30
+monit_admin_username: admin
+monit_admin_password: supersecure
+monit_port: 2812
+monit_use_address: localhost 
+monit_allow_hosts: localhost
+monit_diskspace: "80%"
+
+monit_mail_alert_enable: true
+monit_mail_from_domain: mydomain.com
+monit_mail_to: root@localhost
+monit_mailserver: localhost
+monit_mounts: []
+monit_log: /var/log/monit.log # syslog
+
+# monit_rpm_url: https://exampe.com/rpm/monit-5.26.0-1.el7.x86_64.rpm
+
+# Monitor smtp
+# monit_smtp:
+#   - host: localhost
+#     address: localhost
+#     port: 25
+#     expect_port: "^250.*"
+#     expect_helo: "^220.*"
+
+#monit_system_monitoring:
+#  cpu: 
+#    usage: "95%"
+#    cycles: 10
+#  memory:
+#    usage: "75%"
+#    cycles: 5
+#  swap:
+#    usage: "20%"
+#    cycles: 10

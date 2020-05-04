@@ -1,0 +1,24 @@
+---
+monit_smtp:
+   - host: mailrelay
+     address: mailrelay
+     port: 25
+     expect_port: "220"
+     expect_helo: "250"
+
+monit_system_monitoring:
+  cpu: 
+    usage: "95%"
+    cycles: 10
+  memory:
+    usage: "75%"
+    cycles: 5
+  swap:
+    usage: "20%"
+    cycles: 10
+
+monit_mounts:
+  - name: root
+    path: /
+  - name: vagrant
+    path: /vagrant

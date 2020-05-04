@@ -14,3 +14,4 @@ dependencies:
 #  - {role: manala.motd,             tags: motd }
   - {role: c2-alias,                tags: alias }
   - {role: marcelnijenhof.firewalld,tags: network, when: ansible_os_family == 'RedHat' }
+  - {role: monit,                   tags: monitoring }

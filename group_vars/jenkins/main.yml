@@ -13,7 +13,7 @@ git_install_path: "/usr"
 git_version: "2.25.0"
 git_install_from_source_force_update: true
 
-jenkins_plugins_disabled: 
+jenkins_plugins: 
   - pipeline-model-api
   - git-server
   - lockable-resources

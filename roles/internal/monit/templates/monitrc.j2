@@ -1,0 +1,28 @@
+# {{ ansible_managed }}
+
+set daemon {{ monit_check_interval_seconds }}
+set log {{ monit_log }}
+{% if monit_enable_web_interface %}
+set httpd port {{ monit_port }} and
+    {% if not monit_enable_web_interface_anywhere %}
+    use address {{ monit_use_address }}
+    allow {{ monit_allow_hosts }}
+    {% endif %}
+    allow {{ monit_admin_username }}:{{ monit_admin_password }}
+{% endif %}
+
+{% if monit_mail_alert_enable %}
+set mail-format {
+   from:    Monit <{{ ansible_hostname }}@{{ monit_mail_from_domain }}>
+   subject: Monit alert --  $EVENT $SERVICE
+   message: $EVENT Service $SERVICE
+                 Date:        $DATE
+                 Action:      $ACTION
+                 Host:        $HOST
+                 Description: $DESCRIPTION
+}
+set alert {{ monit_mail_to }}
+set mailserver {{ monit_mailserver }}
+{% endif %}
+
+include /etc/monit.d/*

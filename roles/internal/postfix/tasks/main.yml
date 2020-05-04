@@ -1,0 +1,18 @@
+---
+- name: Ensure postfix is installed.
+  package:
+    name: postfix
+    state: present
+
+- name: Postfix configuration
+  template:
+    dest: /etc/postfix/main.cf
+    mode: 644
+    src: main.cf.j2
+  notify: restart postfix   
+
+- name: Ensure postfix is started and enabled at boot.
+  service:
+    name: postfix
+    state: "{{ postfix_service_state }}"
+    enabled: "{{ postfix_service_enabled }}"

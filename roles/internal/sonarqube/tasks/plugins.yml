@@ -1,41 +1,50 @@
 ---
+- name: Lib common fact
+  set_fact:
+    lib_common: "{{ sonarqube_plugins_jar_location == sonarqube_home_version + '/lib/common' }}"
+
 - name: Remove other version of plugins
   remove_old_plugin_version:
-    plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
+    #plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
+    plugin_dir: "{{ sonarqube_plugins_jar_location }}"
     pattern: "{{ sonarqube_plugins[item]['pattern'] }}"
     url: "{{ sonarqube_plugins[item]['url'] }}"
   with_items: "{{ sonarqube_plugins }}"
+  when: not lib_common or sonarqube_plugins[item]['lib_common'] is defined
   notify: restart sonarqube
 
 - name: Community plugins
   get_url:
     url: "{{ sonarqube_plugins[item].url }}"
     checksum: "sha256:{{ sonarqube_plugins[item].checksum }}"
-    dest: "{{sonarqube_home_version }}/extensions/plugins"
+    # dest: "{{sonarqube_home_version }}/extensions/plugins"
+    dest: "{{ sonarqube_plugins_jar_location }}"
     group: sonarqube
     owner: sonarqube
-  notify: restart sonarqube   
+    timeout: "{{ sonarqube_plugin_download_timeout|default(omit)}}"
   with_items: "{{ sonarqube_plugins }}"
-  when: sonarqube_plugins is defined
+  when: sonarqube_plugins is defined and (not lib_common or sonarqube_plugins[item]['lib_common'] is defined)
   notify: restart sonarqube
 
 - name: Remove other version of plugins for version
   remove_old_plugin_version:
-    plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
+    # plugin_dir: "{{sonarqube_home_version }}/extensions/plugins"
+    plugin_dir: "{{ sonarqube_plugins_jar_location }}"
     pattern: "{{ sonarqube_versions[sonarqube_version]['plugins'][item]['pattern'] }}"
     url: "{{ sonarqube_versions[sonarqube_version]['plugins'][item]['url'] }}"
   with_items: "{{ sonarqube_versions[sonarqube_version]['plugins'] }}"
-  when: sonarqube_versions[sonarqube_version]['plugins'] is defined  
+  when: sonarqube_versions[sonarqube_version]['plugins'] is defined and (not lib_common or sonarqube_versions[sonarqube_version]['plugins'][item]['lib_common'] is defined)
   notify: restart sonarqube
 
 - name: Version community plugins
   get_url:
     url: "{{ sonarqube_versions[sonarqube_version]['plugins'][item].url }}"
     checksum: "sha256:{{ sonarqube_versions[sonarqube_version]['plugins'][item].checksum }}"
-    dest: "{{sonarqube_home_version }}/extensions/plugins"
+    # dest: "{{sonarqube_home_version }}/extensions/plugins"
+    dest: "{{ sonarqube_plugins_jar_location }}"
     group: sonarqube
     owner: sonarqube
-  notify: restart sonarqube   
+    timeout: "{{ sonarqube_plugin_download_timeout|default(omit)}}"
   with_items: "{{ sonarqube_versions[sonarqube_version]['plugins'] }}"
-  when: sonarqube_versions[sonarqube_version]['plugins'] is defined
+  when: sonarqube_versions[sonarqube_version]['plugins'] is defined and (not lib_common or sonarqube_versions[sonarqube_version]['plugins'][item]['lib_common'] is defined)
   notify: restart sonarqube
