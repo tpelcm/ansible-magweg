@@ -8,8 +8,13 @@ sonarqube_java_bin:
   Debian: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
   RedHat: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.222.b10-0.el7_6.x86_64/jre/bin/java
   
-sonarqube_xms: 32m
-sonarqube_xmx: 32m
+# Web, Elastic search, Compute engine
+sonarqube_xms: 128m
+sonarqube_xmx: 512m
+sonarqube_es_xms: 512m
+sonarqube_es_xmx: 512m
+sonarqube_ce_xms: 128m
+sonarqube_ce_xmx: 512m
 
 sonarqube_web_port: 9000
 sonarqube_web_context: '/sonarqube'
@@ -42,6 +47,7 @@ sonarqube_plugins: []
 sonarqube_jmx_remote:
   enable: no
   remote_port: 10443
+  remote_port_ce: 10444  
   reader_password: supersecure 
   admin_password: supersecure
   # hostname: {{ ansible_default_ipv4.address }}

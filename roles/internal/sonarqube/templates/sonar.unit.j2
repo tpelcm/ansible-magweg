@@ -8,7 +8,7 @@ Type=simple
 User=sonarqube
 Group=sonarqube
 PermissionsStartOnly=true
-ExecStart=/usr/bin/nohup {{ sonarqube_java_bin[ansible_os_family] }} -Xms{{ sonarqube_xms }} -Xmx{{ sonarqube_xmx }} -Djava.net.preferIPv4Stack=true -jar {{ sonarqube_home }}/sonarqube/lib/sonar-application.jar
+ExecStart=/usr/bin/nohup {{ sonarqube_java_bin[ansible_os_family] }} -Djava.net.preferIPv4Stack=true -jar {{ sonarqube_home }}/sonarqube/lib/sonar-application.jar
 StandardOutput=syslog
 LimitNOFILE=65536
 LimitNPROC=8192
