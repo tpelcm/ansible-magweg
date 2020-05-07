@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 sonar.jdbc.username={{ sonarqube_database_username }}
 sonar.jdbc.password={{ sonarqube_database_password }}
 {% if sonarqube_database_url is defined %}
@@ -48,3 +50,16 @@ ldap.group.baseDn={{ sonarqube_ldap['group']['baseDn'] }}
 ldap.group.request={{ sonarqube_ldap['group']['request'] }}
 ldap.group.idAttribute={{ sonarqube_ldap['group']['idAttribute'] }}
 {% endif %}
+
+{% if sonarqube_jmx_remote.enable %}
+# Webserver JMX on port {{ sonarqube_jmx_remote.remote_port }}
+sonar.web.javaAdditionalOpts=-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.port={{ sonarqube_jmx_remote.remote_port }} -Dcom.sun.management.jmxremote.password.file={{ sonarqube_home_version }}/conf/jmxremote.password -Dcom.sun.management.jmxremote.access.file={{ sonarqube_home_version }}/conf/jmxremote.access -Djava.rmi.server.hostname={{ sonarqube_jmx_remote.hostname }}
+# ComputeEngine on port {{ sonarqube_jmx_remote.remote_port_ce }}
+sonar.ce.javaOpts=-Xms{{ sonarqube_ce_xms }} -Xmx{{ sonarqube_ce_xmx }} -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.port={{ sonarqube_jmx_remote.remote_port_ce }} -Dcom.sun.management.jmxremote.password.file={{ sonarqube_home_version }}/conf/jmxremote.password -Dcom.sun.management.jmxremote.access.file={{ sonarqube_home_version }}/conf/jmxremote.access -Djava.rmi.server.hostname={{ sonarqube_jmx_remote.hostname }}
+{% else %}
+sonar.ce.javaOpts=-Xms{{ sonarqube_ce_xms }} -Xmx{{ sonarqube_ce_xmx }}
+{% endif %}
+sonar.web.javaOpts=-Xms{{ sonarqube_xms }} -Xmx{{ sonarqube_xmx }}
+sonar.search.javaOpts=-Xms{{ sonarqube_es_xms }} -Xmx{{ sonarqube_es_xmx }}
+
+

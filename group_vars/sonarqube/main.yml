@@ -45,3 +45,6 @@ sonarqube_ldap:
     idAttribute: cn
 
 apache_remove_default_vhost: true
+
+sonarqube_jmx_remote:
+  enable: yes

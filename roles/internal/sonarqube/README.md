@@ -1,10 +1,10 @@
 # Ansible Role: SonarQube
 
-An Ansible Role that installs [SonarQube](http://www.sonarqube.org/) on RedHat/CentOS and Debian/Ubuntu Linux servers.
+An Ansible Role that installs [SonarQube](http://www.sonarqube.org/) on RedHat/CentOS. This role s
 
 ## Requirements
 
-Requires the `unzip` utility to be installed on the server. 
+
 
 ## Role Variables
 
@@ -55,6 +55,11 @@ __lcm__ role sets facts to "version-enable" home directory and database e.g.
         - geerlingguy.sonar
 
 Using the defaults, you can view the SonarQube home at `http://localhost:9000/` (default System administrator credentials are `admin`/`admin`).
+
+## JMX
+
+To enable JMX remote monitoring, `sonarqube_jmx_remote.enable: yes` and
+configure `sonarqube_jmx_remote` vars. To access it use JConsole or VisualVM. For remote host use something like `service:jmx:rmi:///jndi/rmi://1.1.1.4:10443/jmxrmi` of `1.1.1.4:10443`. Default credentials are `reader` with `secret` or `admin` with `supersecret`.
 
 ## License
 

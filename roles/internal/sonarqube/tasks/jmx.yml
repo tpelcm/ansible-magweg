@@ -1,0 +1,26 @@
+---
+- name: JMX access control file
+  template:
+    dest: "{{ sonarqube_home_version }}/conf/jmxremote.access"
+    owner: sonarqube
+    group: sonarqube
+    src: jmxremote.access.j2
+  when: sonarqube_jmx_remote.enable
+
+- name: JMX access password file
+  template:
+    dest: "{{ sonarqube_home_version }}/conf/jmxremote.password"
+    owner: sonarqube
+    group: sonarqube
+    mode: 0600
+    src: jmxremote.password.j2
+  when: sonarqube_jmx_remote.enable
+
+- name: Disable JMX remote access
+  file:
+    path: "{{ sonarqube_home_version }}/conf/{{ item }}" 
+    state: absent
+  with_items: 
+    - jmxremote.access
+    - jmxremote.password
+  when: sonarqube_jmx_remote.enable == False
