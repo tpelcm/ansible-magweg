@@ -40,7 +40,7 @@ sonarqube_plugins: []
 # sonarqube_home_version: /opt/sonarqube/sonarqube_6_7
 
 sonarqube_jmx_remote:
-  enable: yes
+  enable: no
   remote_port: 10443
   reader_password: supersecure 
   admin_password: supersecure

@@ -58,7 +58,8 @@ Using the defaults, you can view the SonarQube home at `http://localhost:9000/` 
 
 ## JMX
 
-To enable JMX remote monitoring, configure `sonarqube_jmx_remote` vars.
+To enable JMX remote monitoring, `sonarqube_jmx_remote.enable: yes` and
+configure `sonarqube_jmx_remote` vars. To access it use JConsole or VisualVM. For remote host use something like `service:jmx:rmi:///jndi/rmi://1.1.1.4:10443/jmxrmi` of `1.1.1.4:10443`. Default credentials are `reader` with `secret` or `admin` with `supersecret`.
 
 ## License
 
