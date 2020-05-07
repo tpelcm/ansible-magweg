@@ -1,17 +1,49 @@
 ---
-- name: jira.properties
+
+- name: jira-application.properties
   template:
-    dest: "{{ jira_home_version_home }}/shared/jira.properties"
+    dest: "{{ jira_home_version_app }}/application-jira/WEB-INF/classes/jira-application.properties"
     owner: "{{ jira_owner }}"
     group: "{{ jira_group }}"
-    src: jira.properties.j2
+    src: jira-application.properties.j2
   notify: jira-systemctl-restart
 
-- name: env file JIRA_HOME etc
-  copy:
-    content: >
-      export JIRA_HOME={{ jira_home_version_home }}
-      export JIRA_USER={{ jira_owner }}
-    dest: /etc/profile.d/jira.sh
-    owner: "{{ jira_owner }}"
-    group: "{{ jira_group }}"
+- name: Check jira properties dbconfig.xml exists at jira.home
+  stat:
+    path: "{{ jira_home_version_home }}/dbconfig.xml"
+  register: dbconfig.xml
+
+- name: dbconfig.xml at jira-home
+  replace:
+    path: "{{ jira_home_version_home }}/dbconfig.xml"
+    regexp: "{{ item.key }}\">.*?</property>"
+    replace: "{{ item.key }}\">{{ item.value }}</property>"
+  no_log: true
+  when: confluence_cfg_xml.stat.exists
+  with_items:
+    - key: "hibernate.connection.password" 
+      value: "{{ confluence_database_password }}"
+    - key: "hibernate.connection.url" 
+      value: "jdbc:postgresql://db:{{ confluence_database_port }}/{{ confluence_database_name_version }}"
+    - key: "hibernate.connection.username" 
+      value: "{{ confluence_database_username }}"
+  notify: confluence-systemctl-restart
+
+
+
+# - name: jira.properties
+#  template:
+#    dest: "{{ jira_home_version_home }}/shared/jira.properties"
+#    owner: "{{ jira_owner }}"
+#    group: "{{ jira_group }}"
+#    src: jira.properties.j2
+ # notify: jira-systemctl-restart
+
+# - name: env file JIRA_HOME etc
+#  copy:
+#    content: >
+#      export JIRA_HOME={{ jira_home_version_home }}
+#      export JIRA_USER={{ jira_owner }}
+#    dest: /etc/profile.d/jira.sh
+#    owner: "{{ jira_owner }}"
+#    group: "{{ jira_group }}"
