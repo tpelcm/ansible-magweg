@@ -1,8 +1,8 @@
 ---
-backup_restore: 
-  sonarqube:
-    path_pattern: '*'
-    folder: extensions/plugins
-    remove_folder: data/es*
-    force: false
-    stop_start_service: sonarqube
+#backup_restore: 
+#  sonarqube:
+#    path_pattern: '*'
+#    folder: extensions/plugins
+#    remove_folder: data/es*
+#    force: false
+#    stop_start_service: sonarqube

@@ -76,10 +76,10 @@ backup_utility:
       url: https://github.com/tpelcm/omnibus-backup/releases/download/v5.0.0.beta2-1-el7/backup-5.0.0.beta.2-1.el7.x86_64.rpm
       checksum: ce4170985fbce068a9b16d08e916ac570af0a82dcdb9c2286753f800bbb90d77
 
-#backup_restore:
-#   sonarqube: 
-#     folder: 2019.10.03.05.21.29
-#     folder: '*'
-#     path: 
-#     force: true
-
+#backup_restore: 
+#  sonarqube:
+#    path_pattern: '*'
+#    folder: extensions/plugins
+#    remove_folder: data/es*
+#    force: false
+#    stop_start_service: sonarqube
