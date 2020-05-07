@@ -39,6 +39,14 @@ sonarqube_plugins: []
 # sonarqube_database_name_version: sonarqube_6_7
 # sonarqube_home_version: /opt/sonarqube/sonarqube_6_7
 
+sonarqube_jmx_remote:
+  enable: yes
+  remote_port: 10443
+  reader_password: supersecure 
+  admin_password: supersecure
+  # hostname: {{ ansible_default_ipv4.address }}
+  hostname: "1.1.1.4"  
+
 sonarqube_versions: 
   6.7:
     url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-6.7.zip

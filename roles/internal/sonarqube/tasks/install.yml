@@ -76,3 +76,4 @@
   command: '/sbin/sysctl -w vm.max_map_count={{ sonarqube_max_map_count }}'
   when: vm_max_map_count is changed 
   notify: restart sonarqube
+  

@@ -16,3 +16,4 @@
     sonarqube_plugins_jar_location: "{{sonarqube_home_version }}/lib/common"
 
 - include: service.yml
+- include: jmx.yml
