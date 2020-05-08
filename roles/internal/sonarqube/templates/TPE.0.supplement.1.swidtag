@@ -1,0 +1,26 @@
+<SoftwareIdentity
+	xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" 
+    name="TPE"
+    tagId="TPE.0.supplement.1"
+	tagVersion="1"
+	version="0"
+	supplemental="true">
+	
+	<Link
+	   rel="relevant"
+	   href="mailto:loket-tpe.softwareontwikkeling.ict@politie.nl"/>
+	   
+	<Link
+	   rel="relevant"
+	   href="https://confluence.ontwikkel.local/display/TPEMAIN/Home" />
+
+    <Link
+       rel="relevant"
+       href="tel:0031886617559" />
+	   
+	<Neta
+       summary="Team Tool en Process Engineer (TPE) is totaal verantwoordelijk voor de tools en ontwikkelprocessen van de OTAP" 
+	   eenheid="PD" />
+	
+</SoftwareIdentity>
+

@@ -1,0 +1,43 @@
+<SoftwareIdentity 
+	xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd" 
+    name="OTAP.PRD.SonarQube"
+    tagId="OTAP.PRD.Sonarqube.7.9.1.primary"
+	tagVersion="1"
+	version="1.2.3">
+	
+	<Entity
+	    name="SonarQube"
+		regid="sonarqube.org"
+		role"softwareCreator" />
+	
+	<Entity
+	    name="OTAP.PRD.sonarqube"
+		regid="SonarqubePRD"
+		role="tagCreator" />
+    
+	<Link
+	    rel="requires"
+		href="https://cicd.int.politie/sonarqube" />
+		
+	<Link
+	    rel="component"
+		href="gi2bvtpe00043.resource.gi.int.politie"/>
+    
+	<Link
+	    rel="related"
+		href="swid:TPE" />
+			
+	
+	<Link
+		rel="requires"
+		href="swid:OTAP.PRD.sonarqube.postgresql" />
+		
+	
+	<Meta
+	    eenheid="PD"
+		omgeving="O"
+		rubricering="G" 
+		edition="Opensource"
+		summary="Sonarqube PRD server voor OTAP" />
+
+</SoftwareIdentity>
