@@ -9,7 +9,7 @@ backup_cron_jobs: true
 backup_restore_db: false
 backup_restore_home: false
 
-backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'myapp']
+backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp']
 
 backup_roles:
   sonarqube:
