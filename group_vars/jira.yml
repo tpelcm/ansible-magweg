@@ -1,23 +1,4 @@
 ---
+jira_version: 7.12.1
+#jira_version:  8.5.4
 jira_database_host: 1.1.1.2
-# jira_version: 5.10.1
-jira_version: 7.0.1
-
-# jira_database_jdbc_custom_config: []
-
-adoptopenjdk:
-  version: "jdk8_222b10_oj9" # jdk11_0411_oj9
-jira_versions: 
-  5.10.1:
-    #jdk: "{{ adoptopenjdk_java_home }}" # BUG in 5.10.1 installer does not work with pre-installed Java
-  7.0.1:
-    jdk: "{{ adoptopenjdk_java_home }}"      
-adoptopenjdk_java_home_etc_environment: no
-
-#backup_restore: 
-#  jira:
-#    path_pattern: '*'
-#    folder: home
-#    remove_folder: home/shared/search/data/nodes
-#    force: false
-#    stop_start_service: jira
