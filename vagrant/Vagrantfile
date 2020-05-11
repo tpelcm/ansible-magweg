@@ -10,15 +10,16 @@ ansible_groups = {
   'proxy' => ['proxy'],
   'reverse-proxy' => ['proxy'],
   'nfs' => ['proxy'],
-  'mailrelay' => ['proxy'],  
+  'mailrelay' => ['proxy'],
   'postgresql' => ['postgresql'],
   'sonarqube' => ['sonarqube'],
-  'jenkins' => ['jenkins'],  
+  'jenkins' => ['jenkins'],
   'nexus' => ['nexus'],
-  'bitbucket' => ['bitbucket'],  
+  'bitbucket' => ['bitbucket'],
   'confluence' => ['confluence'],
+  'jira' => ['jira'],
   'opendj' => ['proxy'],
-  'env' => ['env'],  
+  'env' => ['env'],
   'myapp_servers' => %w(myapp myapp2),
   # 'backup' => %w(sonarqube nexus), # TODO
   'all:vars' => { 'sudo_include_sudoersd' => 'yes' },
@@ -34,12 +35,12 @@ nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
 nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
-nodes['env'] = {  'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
-nodes['jenkins'] = {  'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
-nodes['sites'] = {  'ip' => '1.1.1.10', 'plays' => %w(sites) }
+nodes['env'] = { 'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
+nodes['jenkins'] = { 'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
+nodes['sites'] = { 'ip' => '1.1.1.10', 'plays' => %w(sites) }
 nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
-nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory'=> 1024 * 4, 'data-disk' => true }
-nodes['jira'] = { 'ip' => '1.1.1.13', 'plays' => %w(jira), 'memory'=> 1024 * 4, 'data-disk' => true }
+nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory' => 1024 * 4, 'data-disk' => true }
+nodes['jira'] = { 'ip' => '1.1.1.13', 'plays' => %w(jira), 'memory' => 1024 * 4, 'data-disk' => true }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
