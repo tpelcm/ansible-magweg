@@ -1,29 +1,7 @@
 ---
-- name: add jira owner
-  user:
-    name: "{{ jira_owner }}"
-    shell: /bin/bash
-    system: true
-
-- name: home directory
-  file:
-    path: "{{ jira_home }}"
-    state: directory
-    group: "{{ jira_owner }}"
-    owner: "{{ jira_group }}" 
-
-- name: install folder
-  file:
-    path: "{{ jira_home_version }}"
-    state: directory
-    group: "{{ jira_owner }}"
-    owner: "{{ jira_group }}"    
-  #register: install_symlink
-
 - name: response file
   template:
    dest: "{{ jira_home }}/reponse.varfile"
-   owner: "{{ jira_owner }}"
    src: response.varfile.j2
 
 - name: download installer
@@ -33,8 +11,6 @@
     checksum: "{{ jira_versions[jira_version]['checksum'] }}"
     timeout: 300
     mode: 1373
-    owner: "{{ jira_owner }}"
-    group: "{{ jira_group }}"
   register: get_url_result
   until: get_url_result is succeeded
   when: jira_lcm['operation'] in ['upgrade','install'] 
@@ -54,24 +30,22 @@
   become: yes
   become_method: sudo
   become_user: "{{ jira_versions[jira_version]['installer_user']|default('root') }}"
-  # become_flags: '-s /bin/sh'
   notify:
     - lcm-version-file
     - jira-systemctl-daemon-reload
     - jira-systemctl-restart
   when: jira_lcm['operation'] in ['upgrade','install']
 
-# 7.0.1 installer runs as root, fix this  
 - name: chown jira home version 
   file: 
     dest: "{{ jira_home_version }}" 
     owner: "{{ jira_owner }}"
     group: "{{ jira_group }}"
     recurse: yes
-  when: jira_lcm['operation'] in ['upgrade','install']
+  # when: jira_lcm['operation'] in ['upgrade','install']
 
 - name: Create symbolic link install
   file:
-   src: "{{ jira_home_version }}"
-   dest: "{{ jira_home_link }}"
-   state: link
+    src: "{{ jira_home_version }}"
+    dest: "{{ jira_home_link }}"
+    state: link

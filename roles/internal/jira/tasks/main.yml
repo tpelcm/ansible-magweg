@@ -10,6 +10,6 @@
 - include: database.yml
 - include: install.yml
 - include: configuration.yml
-- include: jmx.yml
-  when: jira_jmx.enable == True
+#- include: jmx.yml
+#  when: jira_jmx.enable == True
 - include: service.yml

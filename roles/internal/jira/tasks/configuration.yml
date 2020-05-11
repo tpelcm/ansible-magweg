@@ -1,8 +1,7 @@
 ---
-
 - name: jira-application.properties
   template:
-    dest: "{{ jira_home_version_app }}/application-jira/WEB-INF/classes/jira-application.properties"
+    dest: "{{ jira_home_version_app }}/atlassian-jira/WEB-INF/classes/jira-application.properties"
     owner: "{{ jira_owner }}"
     group: "{{ jira_group }}"
     src: jira-application.properties.j2
@@ -11,25 +10,22 @@
 - name: Check jira properties dbconfig.xml exists at jira.home
   stat:
     path: "{{ jira_home_version_home }}/dbconfig.xml"
-  register: dbconfig.xml
+  register: dbconfig_xml
+
+- name: Jira setup check
+  debug:
+    msg: "Jira has not been setup yet. Use a browser to navigate to http://localhost:{{ jira_web_port }}  and complete setup"
+  changed_when: true
+  when: not dbconfig_xml.stat.exists
 
 - name: dbconfig.xml at jira-home
-  replace:
-    path: "{{ jira_home_version_home }}/dbconfig.xml"
-    regexp: "{{ item.key }}\">.*?</property>"
-    replace: "{{ item.key }}\">{{ item.value }}</property>"
-  no_log: true
-  when: confluence_cfg_xml.stat.exists
-  with_items:
-    - key: "hibernate.connection.password" 
-      value: "{{ confluence_database_password }}"
-    - key: "hibernate.connection.url" 
-      value: "jdbc:postgresql://db:{{ confluence_database_port }}/{{ confluence_database_name_version }}"
-    - key: "hibernate.connection.username" 
-      value: "{{ confluence_database_username }}"
-  notify: confluence-systemctl-restart
-
-
+  template:
+    dest: "{{ jira_home_version_home }}/dbconfig.xml"
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
+    src: dbconfig.xml.j2
+  notify: jira-systemctl-restart
+  when: dbconfig_xml.stat.exists 
 
 # - name: jira.properties
 #  template:

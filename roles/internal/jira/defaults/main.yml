@@ -6,38 +6,44 @@ jira_version: 7.12.1
 jira_jvm_minimum_memory: 512m
 jira_jvm_maximum_memory: 1g
 
-jira_web_port: 7990
-jira_web_context: '/jira'
+jira_web_port: 8080
+jira_web_context: /jira
+jira_rmi_port: 8005
+
+jira_owner: jira
+jira_group: jira
 
 jira_database_username: jira
 jira_database_password: supersecure
 
 jira_database_host: localhost
-jira_database_port: "5432"
+jira_database_port: 5432
 jira_database_name: jira
 jira_database_admin_username: ansible
 jira_database_admin_password: supersecure
 jira_database_template: template0
 
+jira_versions:
+  7.12.1:
+    url: https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.12.1-x64.bin
+    checksum: sha256:c01a978294137088f699cfde764ad89e9b48df3c0ce6b9c1503fe7eeb0be9310
+  8.5.4:
+    url: https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-8.5.4-x64.bin
+    checksum: sha256:6782e94b30d480801e5a933c869a0d9be4055ed393d88b1a975c1b7ec7e06721
+
+jira_versions_sequence: ['7.12.1','8.5.4']
+
+
 #jira_database_jdbc_custom_config:
 #  - jdbc.driver=org.postgresql.Driver
 #  - jdbc...
 
-jira_owner: "jira"
-jira_group: "jira"
-
-# Allow personal repos to be created
-jira_personal_repos: no
-
-# TODO
-#jira_max_map_count: 262144
-
 # Proxy and context path setup.
-jira_catalina_connector_proxyname: ~
-jira_catalina_connector_proxyport: ~
-jira_catalina_connector_scheme: "http"
-jira_catalina_connector_secure: "false"
-jira_catalina_context_path: "/"
+#jira_catalina_connector_proxyname: ~
+#jira_catalina_connector_proxyport: ~
+#jira_catalina_connector_scheme: "http"
+#jira_catalina_connector_secure: "false"
+#jira_catalina_context_path: "/"
 
 # Atlassian Support recommended JVM arguments.
 #jira_jvm_support_recommended_args: >-
@@ -47,25 +53,25 @@ jira_catalina_context_path: "/"
 #  -XX:MaxRAMFraction=1
 
 # Session timeout.
-jira_session_timeout: "300"
+#jira_session_timeout: "300"
 
 # Jira inital setup
-jira_setup:
-  display-name: Jira
-  base-url: https://sh.1.1.1.3.nip.io/jira
-  license: ''
-  admin:
-    username: admin
-    password: supersecure
-    display-name: Andy Kaufman
-    mail: andy.kaufman@cicd.io
+#jira_setup:
+#  display-name: Jira
+#  base-url: https://sh.1.1.1.3.nip.io/jira
+#  license: ''
+#  admin:
+#    username: admin
+#    password: supersecure
+#    display-name: Andy Kaufman
+#    mail: andy.kaufman@cicd.io
 
-jira_reverse_proxy:
-  enable: yes
-  secure: 'true'
-  scheme: https
-  port: 443
-  hostname: sh.1.1.1.3.nip.io
+#jira_reverse_proxy:
+#  enable: yes
+#  secure: 'true'
+#  scheme: https
+#  port: 443
+#  hostname: sh.1.1.1.3.nip.io
 
 #jira_proxy:
 #  host: localhost
@@ -75,24 +81,9 @@ jira_reverse_proxy:
 # jira_database_name_version: jira_6_7
 # jira_home_version: /opt/jira/jira_6_7
 
-jira_jmx:
-  enable: yes
-  remote_port: 3333
-  rmi_port: 3333
-  rmi_server_hostname: sh.1.1.1.11.nip.io
-  password: supersecret
-
-jira_versions: 
-  7.12.1:
-    url: https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-7.12.1-x64.bin
-    checksum: sha256:c01a978294137088f699cfde764ad89e9b48df3c0ce6b9c1503fe7eeb0be9310
-    installer_user: jira
-    # jdk:
-  8.5.4:
-    url: https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-8.5.4-x64.bin
-    checksum: sha256:6782e94b30d480801e5a933c869a0d9be4055ed393d88b1a975c1b7ec7e06721
-
-jira_versions_sequence: ['7.12.1','8.5.4']
-
-
-
+#jira_jmx:
+#  enable: yes
+#  remote_port: 3333
+#  rmi_port: 3333
+#  rmi_server_hostname: sh.1.1.1.11.nip.io
+#  password: supersecret

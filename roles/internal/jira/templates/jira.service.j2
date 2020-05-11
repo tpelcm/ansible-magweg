@@ -1,35 +1,14 @@
 # {{ ansible_managed }}
 
 [Unit]
-Description=Atlassian Jira {{ jira_version }}
-After=syslog.target network.target
+Description=Atlassian JIRA {{ jira_version }}
+After=network.target
 
 [Service]
 Type=forking
-WorkingDirectory={{ jira_home_version_home }}
 User={{ jira_owner }}
-Group={{ jira_group }}
 ExecStart={{ jira_home_version_app }}/bin/start-jira.sh
 ExecStop={{ jira_home_version_app }}/bin/stop-jira.sh
-PIDFile={{ jira_home_version_home }}/log/jira.pid
-LimitNOFILE=65536
-Environment=JIRA_USER={{ jira_owner }}
-Environment=JIRA_HOME={{ jira_home_version_home }}
-{% if jira_versions[jira_version]['jdk'] is defined %}
-Environment=JAVA_HOME={{ jira_versions[jira_version]['jdk'] }}
-{% endif %}
-Environment=JVM_MAXIMUM_MEMORY={{ jira_jvm_maximum_memory }}
-Environment=JVM_MINIMUM_MEMORY={{ jira_jvm_minimum_memory }}
-{% if jira_jvm_support_recommended_args is defined %}
-Environment=JVM_SUPPORT_RECOMMENDED_ARGS="{{ jira_jvm_support_recommended_args }}"
-{% endif %}
-{% if jira_jmx.enable %}
-Environment=JMX_REMOTE_AUTH=password
-Environment=JMX_REMOTE_PORT={{ jira_jmx.remote_port }}
-Environment=JMX_REMOTE_RMI_PORT={{ jira_jmx.rmi_port }}
-Environment=RMI_SERVER_HOSTNAME={{ jira_jmx.rmi_server_hostname }}
-Environment=JMX_PASSWORD_FILE={{ jira_home_version_home }}/shared/jmx.access
-{% endif %}
 
 [Install]
 WantedBy=multi-user.target
