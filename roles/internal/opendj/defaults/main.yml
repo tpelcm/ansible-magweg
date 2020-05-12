@@ -29,4 +29,3 @@ opendj_jmx_port: 1689
 
 # Name given to the init.d service file. 
 opendj_service_name: opendj
-

@@ -12,3 +12,5 @@ common_ansible_user_create: false
 
 # Configure custom prompt
 #common_terminal_prompt: "\e[01;31m[\u@{{ inventory_hostname }}\h \w]\\$\e[m "
+
+proxy_skip: false

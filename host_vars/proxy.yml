@@ -5,3 +5,5 @@ monit_smtp:
      port: 25
      expect_port: "^250.*"
      expect_helo: "^220.*"
+
+proxy_skip: true
