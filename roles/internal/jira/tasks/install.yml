@@ -42,7 +42,7 @@
     owner: "{{ jira_owner }}"
     group: "{{ jira_group }}"
     recurse: yes
-  # when: jira_lcm['operation'] in ['upgrade','install']
+  when: jira_lcm['operation'] in ['upgrade','install']
 
 - name: Create symbolic link install
   file:

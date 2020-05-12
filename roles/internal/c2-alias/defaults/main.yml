@@ -2,7 +2,7 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
-c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', confluence]
+c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira']
 
 c2_alias:
   roles:
@@ -69,3 +69,13 @@ c2_alias:
       logs: ["/opt/sonarqube/sonarqube/logs/*.log"]
       configs:
         - /opt/sonarqube/sonarqube/conf/sonar.properties
+    jira:
+      logs:
+        - "{{ jira_home|default(omit) }}/jira/home/log/*.log"
+      configs:
+        - "{{ jira_home|default(omit) }}/jira/app/atlassian-jira/WEB-INF/classes/jira-application.properties"
+        - "{{ jira_home|default(omit) }}/jira/home/dbconfig.xml"
+        - "{{ jira_home|default(omit) }}/jira/app/conf/server.xml"
+        - "{{ jira_home|default(omit) }}/jira/home/jira-config.properties"
+        - "{{ jira_home|default(omit) }}/jira/app/bin/setenv.sh"
+        - /etc/systemd/system/jira.service

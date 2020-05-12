@@ -83,3 +83,8 @@ backup_utility:
 #    remove_folder: data/es*
 #    force: false
 #    stop_start_service: sonarqube
+#  jira:
+#    path_pattern: '*'
+#    folder: .
+#    force: false
+#    stop_start_service: jira

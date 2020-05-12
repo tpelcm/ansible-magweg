@@ -5,3 +5,5 @@ vpass
 .vscode
 *.deb
 *.vdi
+*.tar
+
