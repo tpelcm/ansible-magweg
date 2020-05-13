@@ -31,11 +31,6 @@ c2_alias:
       configs: 
         - /etc/systemd/system/bitbucket.service
         - /opt/bitbucket/bitbucket/home/shared/bitbucket.properties
-    jira:
-      logs: ["/opt/jira/jira/home/log/*.log"]
-      configs: 
-        - /etc/systemd/system/jira.service
-        - /opt/jira/jira/home/shared/jira.properties
     postfix:
       logs: ['/var/log/maillog']
       configs:
@@ -64,11 +59,14 @@ c2_alias:
       logs: ["{{ monit_log | default(omit) }}"]
       configs:
         - /etc/monitrc
-        - /etc/monit.d/diskspace        
+        - /etc/monit.d/diskspace
     sonarqube:
       logs: ["/opt/sonarqube/sonarqube/logs/*.log"]
       configs:
         - /opt/sonarqube/sonarqube/conf/sonar.properties
+        - /etc/security/limits.conf
+        - /usr/lib/sysctl.d/100-sonarqube.conf
+        - /etc/sysctl.conf
     jira:
       logs:
         - "{{ jira_home|default(omit) }}/jira/home/log/*.log"
