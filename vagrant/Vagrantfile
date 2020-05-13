@@ -19,7 +19,7 @@ ansible_groups = {
   'confluence' => ['confluence'],
   'jira' => ['jira'],
   'opendj' => ['proxy'],
-  'env' => ['env'],
+  'env' => ['proxy'],
   'myapp_servers' => %w(myapp myapp2),
   # 'backup' => %w(sonarqube nexus), # TODO
   'all:vars' => { 'sudo_include_sudoersd' => 'yes' },
@@ -33,9 +33,8 @@ ansible_groups = {
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024 * 4 }
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
-nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay) }
+nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay env) }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
-nodes['env'] = { 'ip' => '1.1.1.8', 'plays' => %w(env), 'memory' => 512 }
 nodes['jenkins'] = { 'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
 nodes['sites'] = { 'ip' => '1.1.1.10', 'plays' => %w(sites) }
 nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
