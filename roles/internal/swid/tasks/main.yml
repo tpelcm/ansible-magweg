@@ -1,0 +1,21 @@
+---
+- name: Get roles
+  set_fact: swid_roles_node="{{ swid_roles_supported | intersect(ansible_role_names_cleaned) }}"
+
+- name: Tags dir
+  file:
+    path: /usr/local/tags
+    state: directory
+
+- name: Platform tag
+  template:
+    dest: "/usr/local/tags/{{ swid.tagid }}.primary.swidtag"
+    src: swidtag.xml.j2
+  when: swid_enable
+
+- name: Role tags
+  template:
+    dest: "/usr/local/tags/{{ swid.tagid }}.{{ item }}.primary.swidtag"
+    src: swidtag-roles.xml.j2
+  with_items: "{{ swid_roles_node }}"
+ 

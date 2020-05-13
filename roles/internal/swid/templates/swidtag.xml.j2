@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SoftwareIdentity 
+    name="{{ swid.name }}" 
+    tagId="{{ swid.tagid }}"
+    xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+    <Entity 
+{% for a in swid.entity %}
+      {{ a }}="{{ swid.entity[a] }}"
+{% endfor %}    />
+{% for rl in swid_roles %}
+    <Link 
+      rel="component"
+      href="swid:{{ swid.tagid }}.{{rl}}"/>
+{% endfor %}
+    <Meta 
+{% for a in swid.meta %}
+      {{ a }}="{{ swid.meta[a] }}"
+{% endfor %}    />
+</SoftwareIdentity>

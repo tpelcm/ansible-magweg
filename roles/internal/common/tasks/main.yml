@@ -55,4 +55,4 @@
   file:
     state: absent
     path: /etc/profile.d/tpelcm_promp.sh
-  when: common_terminal_prompt is not defined    
+  when: common_terminal_prompt is not defined

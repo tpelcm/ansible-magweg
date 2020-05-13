@@ -1,0 +1,75 @@
+---
+swid_tagid: cicd-platform 
+swid_enable: false
+swid_roles_supported:
+  - sonarqube
+  - postgresql
+#  - nfs
+#  - jenkins
+#  - bitbucket
+#  - jira
+#  - nexus
+#  - myapp
+#  - confluence
+#  - sites 
+swid:
+  name: CICD Platform
+  tagid: "{{ swid_tagid }}" 
+  meta:
+    summary: CICD Platform description
+    product: CICD Platform
+    eenheid: PD
+    omgeving: O
+    afnemer: ICT
+    phone: 06..
+    mail: tpe@example.com
+  entity:
+    name: TPE
+    regid: tpe@example.com
+    role: tagCreator Aggregator
+  links:
+    component: "swid:{{ swid_tagid }}.postgresql"
+    component: "swid:{{ swid_tagid }}.sonarqube"
+
+swid_roles:
+  sonarqube:
+    name: SonarQube
+    version: "{{ sonarqube_version|default(omit) }}"
+    tagid: "{{ swid_tagid }}.sonarqube"
+    meta:
+      summary: Code Quality and Security
+      product: SonarQube
+      edition: Open Source
+      serverrole: Java application server (embedded Tomcat)
+      eenheid: "{{ swid.meta.eenheid }}"
+      omgeving: "{{ swid.meta.omgeving }}"
+      afnemer: "{{ swid.meta.afnemer }}"
+      phone: "{{ swid.meta.phone }}"
+      mail: "{{ swid.meta.mail }}"
+    entity:
+      name: SonarSource
+      regid: sonarsource.com
+      role: SoftwareCreator
+    links:
+      requires: "swid:{{ swid_tagid }}.postgresql"
+      related: https://www.sonarqube.org/downloads/license/
+  postgresql:
+    name: PostgreSQL
+    version: "{{ postgresql_version|default(omit) }}"
+    tagid: "{{ swid_tagid }}.postgresql"
+    meta:
+      summary: "PostgreSQL: The world's most advanced open source database"
+      product: PostgreSQL
+      edition: Open Source
+      serverrole: Database server
+      eenheid: "{{ swid.meta.eenheid }}"
+      omgeving: "{{ swid.meta.omgeving }}"
+      afnemer: "{{ swid.meta.afnemer }}"
+      phone: "{{ swid.meta.phone }}"
+      mail: "{{ swid.meta.mail }}"
+    entity:
+      name: PostgreSQL
+      regid: www.postgresql.org
+      role: SoftwareCreator
+    links:
+      related: https://www.postgresql.org/about/licence/

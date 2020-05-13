@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SoftwareIdentity 
+    name="{{ swid_roles[item].name }}" 
+    tagId="{{ swid_roles[item].tagid }}"
+    version="{{ swid_roles[item].version }}"
+    xmlns="http://standards.iso.org/iso/19770/-2/2015/schema.xsd"
+    <Entity 
+{% for a in swid.entity %}
+      {{ a }}="{{ swid.entity[a] }}"
+{% endfor %}    />
+    <Entity 
+{% for a in swid_roles[item].entity %}
+      {{ a }}="{{ swid_roles[item].entity[a] }}"
+{% endfor %}    />
+{% for a in swid_roles[item].links %}
+    <Link 
+      rel="{{ a }}"
+      href="{{ swid_roles[item].links[a] }}"/>
+{% endfor %}
+{% if lvm_roles[item] is defined or c2_alias.roles[item] is defined %}
+    <Payload>
+{%   if lvm_roles[item] is defined %}
+      <Directory name="{{lvm_roles[item].path|basename}}" root="{{ lvm_roles[item].path|dirname }}" path-role="Installation"/>
+{%   endif %}
+{%   if c2_alias.roles[item] is defined %}
+{%     for a in c2_alias.roles[item]['logs'] %}
+      <File name="{{ a|basename }}" root="{{a|dirname}}" path-role="Logging"/>
+{%     endfor %}      
+{%     for a in c2_alias.roles[item]['configs'] %}
+      <File name="{{ a|basename }}" root="{{a|dirname}}" path-role="Configuration"/>
+{%     endfor %}      
+{%   endif %}
+    </Payload>
+{% endif %}
+    <Meta 
+{% for a in swid_roles[item].meta %}
+      {{ a }}="{{ swid_roles[item].meta[a] }}"
+{% endfor %}    />
+</SoftwareIdentity>
