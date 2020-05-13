@@ -12,7 +12,9 @@
       employeeNumber: "{{ item['employeeNumber'] }}"
       userPassword: "{{ item['userPassword'] }}"
       description: "{{ item['description'] }}"
-    params: "{{ env_ldap_auth }}"
+    server_uri: "{{ env_ldap_auth['server_uri'] }}"
+    bind_dn: "{{ env_ldap_auth['bind_dn'] }}"
+    bind_pw: "{{ env_ldap_auth['bind_pw'] }}"
   with_items: "{{ env_users }}"
   # no_log: true
 
@@ -36,7 +38,9 @@
     attributes:
       cn: "{{ env_project_groups[item]['cn'] }}"
       member: "{{ env_project_groups[item]['member'] }}"
-    params: "{{ env_ldap_auth }}"
+    server_uri: "{{ env_ldap_auth['server_uri'] }}"
+    bind_dn: "{{ env_ldap_auth['bind_dn'] }}"
+    bind_pw: "{{ env_ldap_auth['bind_pw'] }}"
   with_items: "{{ env_project_groups }}"
 
 - name: Create LDAP groups
@@ -46,5 +50,7 @@
     attributes:
       cn: "{{ item['cn'] }}"
       member: "{{ item['member'] }}"
-    params: "{{ env_ldap_auth }}"
+    server_uri: "{{ env_ldap_auth['server_uri'] }}"
+    bind_dn: "{{ env_ldap_auth['bind_dn'] }}"
+    bind_pw: "{{ env_ldap_auth['bind_pw'] }}"
   with_items: "{{ env_groups }}"
