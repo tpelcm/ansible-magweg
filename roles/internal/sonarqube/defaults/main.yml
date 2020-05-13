@@ -31,9 +31,11 @@ sonarqube_database_template: template0
 
 sonarqube_python_library: python-psycopg2
 
-sonarqube_max_map_count: 262144
-#sonarqube_plugin_download_timeout: 180 # seconds, default 10
+# Elasticsearch settings
+sonarqube_max_map_count: '262144'
+sonarqube_pam_limits_hard_nofile: '262144' # 65535 minimum
 
+#sonarqube_plugin_download_timeout: 180 # seconds, default 10
 sonarqube_plugins: []
 
 #sonarqube_proxy:

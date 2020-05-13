@@ -5,3 +5,17 @@
     dest: "{{ sonarqube_home_version }}/conf/sonar.properties"
     mode: 0755
   notify: restart sonarqube
+
+- name: Raise max number of memory map areas for ElasticSearch
+  sysctl:
+    name: vm.max_map_count
+    value: "{{ sonarqube_max_map_count }}"
+    state: present
+
+- name: Hard nofile limits for ElasticSearch
+  pam_limits:
+    domain: sonarqube
+    limit_type: hard
+    limit_item: nofile
+    value: "{{ sonarqube_pam_limits_hard_nofile }}"
+  notify: restart sonarqube 
