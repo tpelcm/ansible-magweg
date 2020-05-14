@@ -1,4 +1,9 @@
 ---
+- name: Home
+  file:
+    path: "{{ jira_home }}"
+    state: directory
+
 - name: response file
   template:
    dest: "{{ jira_home }}/reponse.varfile"
