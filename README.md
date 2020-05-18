@@ -6,7 +6,7 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 |----------|:-----:|---|
 | [SonarQube](roles/internal/sonarqube)| III |  |
 | [Nexus](roles/internal/nexus)| IV | |
-| [Jira](roles/interna/jira)| II | |
+| [Jira](roles/internal/jira)| II | |
 | [Bitbucket](roles/internal/bitbucket)| II | |
 | [Confluence](roles/internal/confluence)| II | |
 | [Jenkins](roles/internal/jenkins)| I | |
