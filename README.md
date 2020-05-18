@@ -2,10 +2,23 @@
 
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
-Currently the following products are supported:
+| Product   | Phase | Other | 
+|----------|:-----:|---|
+| [SonarQube](roles/internal/sonarqube)| III |  |
+| [Nexus](roles/internal/nexus)| IV | |
+| [Jira](roles/interna/jira)| II | |
+| [Bitbucket](roles/internal/bitbucket)| II | |
+| [Confluence](roles/internal/confluence)| II | |
+| [Jenkins](roles/internal/jenkins)| I | |
+| [Sites](roles/internal/sites)| II | |
 
-- [SonarQube](roles/internal/sonarqube)
-- [Nexus](roles/internal/nexus)
+Phases
+| Phase   | Description | 
+|----------|-------|
+|Phase I - Basic Install|Automated application provisioning and configuration management|
+|Phase II - Full Lifecycle|Upgrade,rollback, rollforward, backup, restore|
+|Phase III - Insights|Basic monitoring, JMX, etc|
+|Phase IV - Project Environment|Managed project creation, access etc|
 
 The repository also includes plays / roles for test and development purposes. See for example 
 - [opendj.yml](plays/opendj.yml) play and [opendj/](roles/internal/opendj) role. This creates a simple LDAP server based on OpenDJ.
@@ -66,13 +79,10 @@ After creating the links you can start provisioning one ore more services:
 |----------|-------------|-------------|
 | SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
-| Jenkins   |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
-| Dimension |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+| Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
 | Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
-| Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
 | Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
 | Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
-| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
 | Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
 
 LDAP accounts
@@ -82,12 +92,11 @@ LDAP accounts
 
 Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
 
-#### Proxy & Env
+#### Proxy
 
-The __env__ node is currently only used to create LDAP groups, accounts on the __proxy__. After __env__ provision it can be destroyed.
+    vagrant up proxy
 
-    vagrant up proxy env
-    vagrant destroy env
+The proxy plays include some test plays opendj and env.
 
 #### SonarQube ( optional )
 
