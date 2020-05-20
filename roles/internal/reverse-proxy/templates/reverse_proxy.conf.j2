@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 
 ProxyRequests Off
 ProxyPreserveHost On
@@ -25,7 +26,7 @@ SSLCryptoDevice builtin
     SSLProxyCheckPeerName off
     SSLProxyCheckPeerExpire off
 {% endif %}
-    SSLCertificateKeyFile {{ reverse_proxy_etc_ssl_private[ansible_os_family] }}reverse_proxy.pem
+    SSLCertificateKeyFile {{ reverse_proxy_etc_ssl_private[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}-pk.pem
     SSLCertificateFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}.pem
 {% if reverse_proxy_certs_bundle_url is defined %}
     SSLCertificateChainFile {{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[hst].server_name }}-bundle.pem
