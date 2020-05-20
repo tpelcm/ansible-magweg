@@ -25,5 +25,12 @@ reverse_proxy_vhosts:
         proxy_pass: /dimension http://1.1.1.10:8080/dimension
       - name: angularblog
         proxy_pass: /angularblog http://1.1.1.10:8080/angularblog
+      - name: awx
+        proxy_pass: /awx http://1.1.1.5:80
+        proxy_pass_reverse: /awx http://1.1.1.5:80
+      - name: awx-static
+        proxy_pass: /static http://1.1.1.5:80/static
+        proxy_pass_reverse: /static http://1.1.1.5:80/static
 
 reverse_proxy_global_favicon: favicon-blue.ico
+

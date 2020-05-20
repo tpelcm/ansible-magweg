@@ -10,5 +10,11 @@
     - postgres_data_dir is defined
     - pg_hostname is not defined
 
+-  pip:
+    name: docker-compose
+    version: 1.9.0
+    state: present
+    extra_args: --upgrade pip
+
 - import_tasks: set_image.yml
 - import_tasks: compose.yml

@@ -6,10 +6,27 @@
   roles:
     - { role: common,                       tags: ["common"] }
     - { role: geerlingguy.docker,           tags: ["awx", "docker"] }
-    - { role: geerlingguy.awx,              tags: ["awx"] }
+    - { role: awx,                          tags: ["awx"] }
 
-#  vars:
-#    nodejs_version: "6.x"
+  vars:
+    dockerhub_base: ansible
+    dockerhub_version: latest
+    awx_task_hostname: awx
+    awx_web_hostname: awxweb
+    postgres_data_dir: "~/.awx/pgdocker"
+    host_port: 80
+    host_port_ssl: 443
+    docker_compose_dir: "~/.awx/awxcompose"
+    pg_username: awx
+    pg_password: awxpass
+    pg_database: awx
+    pg_port: 5432
+    admin_user: admin
+    admin_password: password
+    create_preload_data: True
+    secret_key: awxsecret
+
+    #    nodejs_version: "6.x"
 #    # nodejs_version: "12.16.3" # LTS
 #   pip_install_packages:
 #      - name: docker-py
