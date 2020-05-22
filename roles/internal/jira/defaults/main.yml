@@ -48,6 +48,13 @@ jira_jvm_support_recommended_args: >-
   -XX:+UseCGroupMemoryLimitForHeap
   -XX:MaxRAMFraction=1
 
+#-Djavax.net.ssl.trustStore=/path#
+#-Djavax.net.ssl.trustStore
+#-Dhttp.proxyHost#
+#-Dhttp.proxyPort
+#-Dhttps.proxyHost
+#-Dhttps.proxyPort
+
 # Session timeout.
 #jira_session_timeout: "300"
 
