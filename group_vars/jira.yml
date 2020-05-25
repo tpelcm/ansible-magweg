@@ -3,9 +3,20 @@ jira_version: 7.12.1
 #jira_version:  8.5.4
 jira_database_host: 1.1.1.2
 
-#backup_restore: 
-#  jira:
-#    path_pattern: '*'
-#    folder: .
-#    force: false
-#    stop_start_service: jira
+backup_restore: 
+  jira:
+    path_pattern: '*'
+    folder: .
+    force: false
+    stop_start_service: jira
+
+# Example Oracle settings
+# jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
+# jira_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
+# jira_database_driver_class: oracle.jdbc.OracleDriver
+# jira_database_validation_query: select 1 from dual
+# jira_database_type: oracle10g
+# jira_database_name: jira_lab
+# jira_database_username: jira_lab
+# jira_database_password: sportsbar
+# jira_database_schema: nil
