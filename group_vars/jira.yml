@@ -20,3 +20,14 @@ jira_database_host: 1.1.1.2
 # jira_database_username: jira_lab
 # jira_database_password: sportsbar
 # jira_database_schema: nil
+
+# Atlassian Support recommended JVM arguments and proxy config
+jira_jvm_support_recommended_args: >-
+  -Datlassian.plugins.enable.wait=300
+  -XX:+UnlockExperimentalVMOptions
+  -XX:+UseCGroupMemoryLimitForHeap
+  -XX:MaxRAMFraction=1
+  -Dhttps.proxyHost={{ proxy_host }}
+  -Dhttps.proxyPort={{ proxy_port }}
+  -Dhttp.nonProxyHosts=*.nip.io\|localhost
+# note escape character for nonProxyHosts
