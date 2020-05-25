@@ -3,12 +3,12 @@ jira_version: 7.12.1
 #jira_version:  8.5.4
 jira_database_host: 1.1.1.2
 
-backup_restore: 
-  jira:
-    path_pattern: '*'
-    folder: .
-    force: false
-    stop_start_service: jira
+#backup_restore: 
+#  jira:
+#    path_pattern: '*'
+#    folder: .
+#    force: false
+#    stop_start_service: jira
 
 # Example Oracle settings
 # jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
