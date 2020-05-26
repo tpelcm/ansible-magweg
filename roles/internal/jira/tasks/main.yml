@@ -7,7 +7,9 @@
     - jira-systemctl-restart
 
 #- include: debug.yml
-- include: database.yml
+- include: database.yml 
+  when: jira_database_custom == False
+
 - include: install.yml
 - include: configuration.yml
 #- include: jmx.yml

@@ -27,9 +27,10 @@ jira_database_driver_class: org.postgresql.Driver
 jira_database_validation_query: select 1
 jira_database_schema: public
 jira_datababse_setbigstringtryclob: no # yes for oracle
-
+jira_database_custom: no # yes for oracle
 
 # Oracle example settings
+# jira_database_custom: yes
 # jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
 # jira_database_url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=1.1.1.111)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=jira.localdomain)))
 # jira_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
