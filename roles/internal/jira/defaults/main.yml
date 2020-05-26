@@ -26,6 +26,8 @@ jira_database_type: postgres72
 jira_database_driver_class: org.postgresql.Driver
 jira_database_validation_query: select 1
 jira_database_schema: public
+jira_datababse_setbigstringtryclob: no # yes for oracle
+
 
 # Oracle example settings
 # jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
@@ -35,6 +37,8 @@ jira_database_schema: public
 # jira_database_validation_query: select 1 from dual
 # jira_database_type: oracle10g
 # jira_database_schema: nil
+# jira_datababse_setbigstringtryclob: yes
+
 
 # Proxy and context path setup.
 jira_proxy_name: sh.1.1.1.3.nip.io

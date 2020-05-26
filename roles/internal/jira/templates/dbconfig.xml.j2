@@ -27,5 +27,8 @@
     <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>
     <pool-test-on-borrow>false</pool-test-on-borrow>
     <pool-test-while-idle>true</pool-test-while-idle>
+{% if jira_datababse_setbigstringtryclob == True %}
+    <connection-properties>SetBigStringTryClob=true</connection-properties>
   </jdbc-datasource>
+{% endif %}  
 </jira-database-config>
