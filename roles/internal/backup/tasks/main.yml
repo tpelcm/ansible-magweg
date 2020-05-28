@@ -46,7 +46,14 @@
   template:
    dest: '/etc/cron.d/backup-{{ item }}'
    src: cron.j2
-  when: backup['schedules'][item] is defined
+  when: backup['schedules'][item] is defined and backup_cron_jobs == True
+  with_items: "{{ backup['schedules_default'] }}" 
+
+- name: Disable cron jobs
+  file:
+   path: '/etc/cron.d/backup-{{ item }}'
+   state: absent
+  when: backup['schedules'][item] is not defined or backup_cron_jobs == False
   with_items: "{{ backup['schedules_default'] }}" 
 
 - name: Daily, weekly etc scripts

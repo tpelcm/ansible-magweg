@@ -54,3 +54,13 @@
     src: "{{ jira_home_version }}"
     dest: "{{ jira_home_link }}"
     state: link
+
+- name: Oracle JDBC driver
+  get_url:
+    dest: "{{ jira_home_version_app }}/lib/{{ jira_database_ojdbc_jar_url|basename }}"
+    group: "{{ jira_group }}"
+    owner: "{{ jira_owner }}"
+    url: "{{ jira_database_ojdbc_jar_url }}"
+  when: jira_database_ojdbc_jar_url is defined
+  notify:
+    - jira-systemctl-restart

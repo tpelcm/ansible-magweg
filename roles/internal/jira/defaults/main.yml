@@ -22,10 +22,24 @@ jira_database_name: jira
 jira_database_admin_username: ansible
 jira_database_admin_password: supersecure
 jira_database_template: template0
+jira_database_type: postgres72
+jira_database_driver_class: org.postgresql.Driver
+jira_database_validation_query: select 1
+jira_database_schema: public
+jira_datababse_setbigstringtryclob: no # yes for oracle
+jira_database_custom: no # yes for oracle
 
-#jira_database_jdbc_custom_config:
-#  - jdbc.driver=org.postgresql.Driver
-#  - jdbc...
+# Oracle example settings
+# jira_database_custom: yes
+# jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
+# jira_database_url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=1.1.1.111)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=jira.localdomain)))
+# jira_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
+# jira_database_driver_class: oracle.jdbc.OracleDriver
+# jira_database_validation_query: select 1 from dual
+# jira_database_type: oracle10g
+# jira_database_schema: nil
+# jira_datababse_setbigstringtryclob: yes
+
 
 # Proxy and context path setup.
 jira_proxy_name: sh.1.1.1.3.nip.io
@@ -47,6 +61,13 @@ jira_jvm_support_recommended_args: >-
   -XX:+UnlockExperimentalVMOptions
   -XX:+UseCGroupMemoryLimitForHeap
   -XX:MaxRAMFraction=1
+
+#-Djavax.net.ssl.trustStore=/path#
+#-Djavax.net.ssl.trustStore
+#-Dhttp.proxyHost#
+#-Dhttp.proxyPort
+#-Dhttps.proxyHost
+#-Dhttps.proxyPort
 
 # Session timeout.
 #jira_session_timeout: "300"

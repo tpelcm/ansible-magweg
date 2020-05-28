@@ -16,3 +16,5 @@ dependencies:
   - {role: marcelnijenhof.firewalld,tags: network, when: ansible_os_family == 'RedHat' }
   - {role: monit,                   tags: monitoring }
   - {role: swid,                    tags: swid }
+  - {role: cacerts,                 tags: ssl }
+ 

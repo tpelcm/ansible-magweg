@@ -1,0 +1,20 @@
+---
+cacerts_roles_supported: ['jira']
+cacerts_keystore_pass: changeit
+
+cacerts_roles:
+  jira:
+    keystore_path: "{{ jira_home_version_app|default(omit) }}/jre/lib/security/cacerts"
+    keystore_pass: "{{ cacerts_keystore_pass }}"
+    notify: jira-systemctl-restart
+    executable: "{{ jira_home_version_app|default(omit) }}/jre/bin/keytool"
+
+cacerts_trusted_sites: []
+#cacerts_trusted_sites:
+#  - url: google.com
+#    port: 443
+
+cacerts_import_certs_urls: []
+#cacerts_import_certs_urls:
+#  - name: mycompanybundle
+#    url: https://example.com/SectigoRSADVBundle.crt

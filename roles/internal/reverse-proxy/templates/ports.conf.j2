@@ -1,5 +1,10 @@
+# {{ ansible_managed }}
 
-{% for item in reverse_proxy_vhosts %}
-# {{ item }}
-Listen {{ reverse_proxy_vhosts[item].port }}
+{% set reverse_proxy_ports = [] %}
+{% for itm in reverse_proxy_vhosts %}
+{{ reverse_proxy_ports.append(reverse_proxy_vhosts[itm].port) }}
+{% endfor %}
+
+{% for port in reverse_proxy_ports|unique %}
+Listen {{ port }}
 {% endfor %}

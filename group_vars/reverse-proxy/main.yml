@@ -32,6 +32,13 @@ reverse_proxy_vhosts:
     proxy_passes:
       - name: awx
         proxy_pass: / http://1.1.1.5:80
+  jira:
+    server_name: jira.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      - name: jira
+        proxy_pass: /jira http://1.1.1.13:8080/jira
 
 reverse_proxy_global_favicon: favicon-blue.ico
 

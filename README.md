@@ -2,7 +2,7 @@
 
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
-| Product   | Phase | Other | 
+| Product   | Level | Purpose | 
 |----------|:-----:|---|
 | [SonarQube](roles/internal/sonarqube)| III |  |
 | [Nexus](roles/internal/nexus)| IV | |
@@ -10,15 +10,29 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 | [Bitbucket](roles/internal/bitbucket)| II | |
 | [Confluence](roles/internal/confluence)| II | |
 | [Jenkins](roles/internal/jenkins)| I | |
-| [Sites](roles/internal/sites)| II | |
+| [Sites](roles/internal/sites)| II | Host static sites using Apache|
 
-Phases
-| Phase   | Description | 
+Capability Levels
+| Level   | Description | 
 |----------|-------|
-|Phase I - Basic Install|Automated application provisioning and configuration management|
-|Phase II - Full Lifecycle|Upgrade,rollback, rollforward, backup, restore|
-|Phase III - Insights|Basic monitoring, JMX, etc|
-|Phase IV - Project Environment|Managed project creation, access etc|
+|I - Basic Install|Automated application provisioning and configuration management|
+|II - Full Lifecycle|Upgrade,rollback, rollforward, backup, restore|
+|III - Insights|Basic monitoring, JMX, etc|
+|IV - Project Environment|Managed project creation, access etc|
+
+This repository includes a number of supporting products / components that are typically used in conjunction with the products above:
+
+| Component   |  Purpose | 
+|----------|---|
+| [reverse-proxy](roles/internal/reverse-proxy)| Reverse proxy server |
+| [postgresql](roles/external/geerlingguy.postgresql)| Database for SonarQube, Jira, Bitbucket, Confluence |
+| [cacerts](roles/internal/cacerts)| Import certificates, CA bundles in keystores |
+| [lcm](roles/internal/lcm)| Support LCM operations install, upgrade, rollback, rollforward|
+| [lvm](roles/internal/lvm)| Create, size, manage logical volumes |
+| [monit](roles/internal/monit)| Basic monitoring e.g. disk space, CPU, swap etc |
+| [postfix](roles/internal/postfix)| Mailrelay |
+| [proxy](roles/internal/proxy)| Proxy server based on Squid |
+| [swid](roles/internal/swid)| Create SWID tags |
 
 The repository also includes plays / roles for test and development purposes. See for example 
 - [opendj.yml](plays/opendj.yml) play and [opendj/](roles/internal/opendj) role. This creates a simple LDAP server based on OpenDJ.
