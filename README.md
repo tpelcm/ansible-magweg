@@ -25,7 +25,7 @@ This repository includes a number of supporting products / components that are t
 | Component   |  Purpose | 
 |----------|---|
 | [reverse-proxy](roles/internal/reverse-proxy)| Reverse proxy server |
-| [PostgreSQL](roles/external/geerlingguy.postgresql)| Database for SonarQube, Jira, Bitbucket, Confluence |
+| [postgresql](roles/external/geerlingguy.postgresql)| Database for SonarQube, Jira, Bitbucket, Confluence |
 | [cacerts](roles/internal/cacerts)| Import certificates, CA bundles in keystores |
 | [lcm](roles/internal/lcm)| Support LCM operations install, upgrade, rollback, rollforward|
 | [lvm](roles/internal/lvm)| Create, size, manage logical volumes |
