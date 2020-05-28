@@ -1,0 +1,7 @@
+---
+awx_task_hostname: awxtask.1.1.1.3.nip.io
+awx_web_hostname: awx.1.1.1.3.nip.io
+
+awx_admin_password: password
+awx_secret_key: awxsecret
+awx_pg_password: awxpass
