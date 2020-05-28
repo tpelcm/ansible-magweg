@@ -13,9 +13,9 @@ services:
       {% endif %}
     ports:
       {% if ssl_certificate is defined %}
-      - "{{ host_port_ssl }}:8053"
+      - "{{ awx_host_port_ssl }}:8053"
       {% endif %}
-      - "{{ host_port }}:8052"
+      - "{{ awx_host_port }}:8052"
     hostname: {{ awx_web_hostname }}
     user: root
     restart: unless-stopped
@@ -23,12 +23,12 @@ services:
       - supervisor-socket:/var/run/supervisor
       - rsyslog-socket:/var/run/awx-rsyslog/
       - rsyslog-config:/var/lib/awx/rsyslog/
-      - "{{ docker_compose_dir }}/SECRET_KEY:/etc/tower/SECRET_KEY"
-      - "{{ docker_compose_dir }}/environment.sh:/etc/tower/conf.d/environment.sh"
-      - "{{ docker_compose_dir }}/credentials.py:/etc/tower/conf.d/credentials.py"
-      - "{{ docker_compose_dir }}/nginx.conf:/etc/nginx/nginx.conf:ro"
-      - "{{ docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
-      - "{{ docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "{{ awx_docker_compose_dir }}/environment.sh:/etc/tower/conf.d/environment.sh"
+      - "{{ awx_docker_compose_dir }}/credentials.py:/etc/tower/conf.d/credentials.py"
+      - "{{ awx_docker_compose_dir }}/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "{{ awx_docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
+      - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
     {% if project_data_dir is defined %}
       - "{{ project_data_dir +':/var/lib/awx/projects:rw' }}"
     {% endif %}
@@ -84,11 +84,11 @@ services:
       - supervisor-socket:/var/run/supervisor
       - rsyslog-socket:/var/run/awx-rsyslog/
       - rsyslog-config:/var/lib/awx/rsyslog/
-      - "{{ docker_compose_dir }}/SECRET_KEY:/etc/tower/SECRET_KEY"
-      - "{{ docker_compose_dir }}/environment.sh:/etc/tower/conf.d/environment.sh"
-      - "{{ docker_compose_dir }}/credentials.py:/etc/tower/conf.d/credentials.py"
-      - "{{ docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
-      - "{{ docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "{{ awx_docker_compose_dir }}/environment.sh:/etc/tower/conf.d/environment.sh"
+      - "{{ awx_docker_compose_dir }}/credentials.py:/etc/tower/conf.d/credentials.py"
+      - "{{ awx_docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
+      - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
     {% if project_data_dir is defined %}
       - "{{ project_data_dir +':/var/lib/awx/projects:rw' }}"
     {% endif %}
@@ -135,9 +135,9 @@ services:
       no_proxy: {{ no_proxy | default('') }}
     command: ["/usr/local/etc/redis/redis.conf"]
     volumes:
-      - "{{ docker_compose_dir }}/redis.conf:/usr/local/etc/redis/redis.conf:ro"
-      - "{{ docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
-      - "{{ docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/redis.conf:/usr/local/etc/redis/redis.conf:ro"
+      - "{{ awx_docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
+      - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
 
   memcached:
     image: "{{ memcached_image }}:{{ memcached_version }}"
@@ -149,7 +149,7 @@ services:
       https_proxy: {{ https_proxy | default('') }}
       no_proxy: {{ no_proxy | default('') }}
     volumes:
-      - "{{ docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
 
   {% if pg_hostname is not defined %}
   postgres:
@@ -157,7 +157,7 @@ services:
     container_name: awx_postgres
     restart: unless-stopped
     volumes:
-      - {{ postgres_data_dir }}/10/data/:/var/lib/postgresql/data/pgdata:Z
+      - {{ awx_postgres_data_dir }}/10/data/:/var/lib/postgresql/data/pgdata:Z
     environment:
       POSTGRES_USER: {{ pg_username }}
       POSTGRES_PASSWORD: {{ pg_password }}

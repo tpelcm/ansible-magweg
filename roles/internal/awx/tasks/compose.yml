@@ -1,25 +1,25 @@
 ---
-- name: Create {{ docker_compose_dir }} directory
+- name: Create {{ awx_docker_compose_dir }} directory
   file:
-    path: "{{ docker_compose_dir }}"
+    path: "{{ awx_docker_compose_dir }}"
     state: directory
 
 - name: Create Redis socket directory
   file:
-    path: "{{ docker_compose_dir }}/redis_socket"
+    path: "{{ awx_docker_compose_dir }}/redis_socket"
     state: directory
     mode: 0777
 
 - name: Create Memcached socket directory
   file:
-    path: "{{ docker_compose_dir }}/memcached_socket"
+    path: "{{ awx_docker_compose_dir }}/memcached_socket"
     state: directory
     mode: 0777
 
 - name: Create Docker Compose Configuration
   template:
     src: "{{ item }}.j2"
-    dest: "{{ docker_compose_dir }}/{{ item }}"
+    dest: "{{ awx_docker_compose_dir }}/{{ item }}"
     mode: 0600
   with_items:
     - environment.sh
@@ -31,21 +31,21 @@
 
 - name: Set redis config to other group readable to satisfy redis-server
   file:
-    path: "{{ docker_compose_dir }}/redis.conf"
+    path: "{{ awx_docker_compose_dir }}/redis.conf"
     mode: 0666
 
 - name: Render SECRET_KEY file
   copy:
-    content: "{{ secret_key }}"
-    dest: "{{ docker_compose_dir }}/SECRET_KEY"
+    content: "{{ awx_secret_key }}"
+    dest: "{{ awx_docker_compose_dir }}/SECRET_KEY"
     mode: 0600
-  register: awx_secret_key
+  register: awx_awx_secret_key
 
 - block:
     - name: Start the containers
       docker_compose:
-        project_src: "{{ docker_compose_dir }}"
-        restarted: "{{ awx_compose_config is changed or awx_secret_key is changed }}"
+        project_src: "{{ awx_docker_compose_dir }}"
+        restarted: "{{ awx_compose_config is changed or awx_awx_secret_key is changed }}"
       register: awx_compose_start
 
     - name: Update CA trust in awx_web container
