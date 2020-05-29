@@ -18,6 +18,9 @@ then
   {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
   try systemctl stop {{ vars['backup_roles'][rl]['stop_start_service'] }}
   {% endif %}
+  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
+  try docker stop {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
+  {% endif %}
 fi
 
 if [[ $1 == {{ rl }}* ]] && [ "$2" == "after" ]
@@ -25,6 +28,9 @@ then
   echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
   {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
   try systemctl start {{ vars['backup_roles'][rl]['stop_start_service'] }}
+  {% endif %}
+  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
+  try systemctl start {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
   {% endif %}
 fi
 {% endfor %}
