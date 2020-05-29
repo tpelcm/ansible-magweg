@@ -55,4 +55,4 @@
     - name: Update CA trust in awx_task container
       command: docker exec awx_task '/usr/bin/update-ca-trust'
       when: awx_compose_config.changed or awx_compose_start.changed
-  when: compose_start_containers|bool
+  when: awx_compose_start_containers|bool

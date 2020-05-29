@@ -126,7 +126,7 @@ services:
       SUPERVISOR_WEB_CONFIG_PATH: '/supervisor.conf'
 
   redis:
-    image: {{ redis_image }}
+    image: {{ awx_redis_image }}
     container_name: awx_redis
     restart: unless-stopped
     environment:
@@ -140,7 +140,7 @@ services:
       - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
 
   memcached:
-    image: "{{ memcached_image }}:{{ memcached_version }}"
+    image: "{{ awx_memcached_image }}:{{ awx_memcached_version }}"
     container_name: awx_memcached
     command: ["-s", "/var/run/memcached/memcached.sock", "-a", "0666"]
     restart: unless-stopped
@@ -153,15 +153,15 @@ services:
 
   {% if pg_hostname is not defined %}
   postgres:
-    image: {{ postgresql_image }}
+    image: {{ awx_postgresql_image }}
     container_name: awx_postgres
     restart: unless-stopped
     volumes:
       - {{ awx_postgres_data_dir }}/10/data/:/var/lib/postgresql/data/pgdata:Z
     environment:
-      POSTGRES_USER: {{ pg_username }}
-      POSTGRES_PASSWORD: {{ pg_password }}
-      POSTGRES_DB: {{ pg_database }}
+      POSTGRES_USER: {{ awx_pg_username }}
+      POSTGRES_PASSWORD: {{ awx_pg_password }}
+      POSTGRES_DB: {{ awx_pg_database }}
       PGDATA: /var/lib/postgresql/data/pgdata
       http_proxy: {{ http_proxy | default('') }}
       https_proxy: {{ https_proxy | default('') }}

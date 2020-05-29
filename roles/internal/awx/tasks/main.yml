@@ -7,7 +7,7 @@
 
 - import_tasks: upgrade_postgres.yml
   when:
-    - postgres_data_dir is defined
+    - awx_postgres_data_dir is defined
     - pg_hostname is not defined
 
 -  pip:
