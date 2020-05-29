@@ -7,3 +7,4 @@
     - { role: common,                       tags: ["common"] }
     - { role: geerlingguy.docker,           tags: ["awx", "docker"] }
     - { role: awx,                          tags: ["awx"] }
+    - { role: backup,                       tags: ["backup"] }
