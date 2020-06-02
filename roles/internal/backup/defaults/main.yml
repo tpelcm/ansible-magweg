@@ -28,7 +28,7 @@ backup_roles:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   awx:
-    stop_start_containers: ['awx_task', 'awx_web','awx_redis','awx_memcached','awx_postgres']
+    stop_start_containers: ['awx_postgres','awx_redis','awx_memcached','awx_task','awx_web']
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
   myapp:
     # stop_start_service: myapp

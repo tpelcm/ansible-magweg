@@ -18,7 +18,8 @@ lvm_roles_supported:
   - nexus
   - myapp
   - confluence
-  - sites  
+  - sites
+  - awx  
 
 lvm_roles:
   nfs:
@@ -48,6 +49,9 @@ lvm_roles:
   sites:
     size: '10g' 
     path: '/var/www/html'
+  awx:
+    size: '10g' 
+    path: '/opt/awx'
   myapp:
     size: '1g' 
     path: '{{ myapp_home if myapp_home is defined else "/opt/myapp" }}'

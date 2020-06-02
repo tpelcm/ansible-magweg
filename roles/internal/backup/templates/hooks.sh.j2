@@ -19,7 +19,7 @@ then
   try systemctl stop {{ vars['backup_roles'][rl]['stop_start_service'] }}
   {% endif %}
   {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
-  try docker stop {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
+  try docker stop {{ vars['backup_roles'][rl]['stop_start_containers']|reverse|join(' ') }}
   {% endif %}
 fi
 
@@ -30,7 +30,7 @@ then
   try systemctl start {{ vars['backup_roles'][rl]['stop_start_service'] }}
   {% endif %}
   {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
-  try systemctl start {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
+  try docker start {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
   {% endif %}
 fi
 {% endfor %}

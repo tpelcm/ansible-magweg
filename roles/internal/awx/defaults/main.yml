@@ -15,13 +15,10 @@ awx_pg_database: awx
 awx_pg_port: 5432
 
 awx_dockerhub_base: ansible
-awx_dockerhub_version: 11.2.0
-
-# for backup
-awx_version: "{{ awx_dockerhub_version }}" 
-awx_home_version: "{{ awx_dockerhub_version }}"
+awx_version: 11.2.0
 
 awx_home: /opt/awx
+awx_home_version: /opt/awx # for backup
 awx_redis_image: redis
 
 awx_postgresql_version: 10
@@ -30,9 +27,10 @@ awx_postgresql_image: "postgres:{{awx_postgresql_version}}"
 awx_memcached_image: memcached
 awx_memcached_version: alpine
 
-awx_compose_start_containers: true
+awx_compose_start_containers: false
 
 awx_postgres_data_dir: "{{ awx_home }}/pgdocker"
 awx_docker_compose_dir: "{{ awx_home }}/compose"
+awx_project_data_dir: "{{ awx_home }}/compose"
 
 awx_web_image: awx_web

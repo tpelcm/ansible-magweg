@@ -65,6 +65,6 @@
 
 - name: Set DockerHub Image Paths
   set_fact:
-    awx_web_docker_actual_image: "{{ awx_dockerhub_base }}/awx_web:{{ awx_dockerhub_version }}"
-    awx_task_docker_actual_image: "{{ awx_dockerhub_base }}/awx_task:{{ awx_dockerhub_version }}"
+    awx_web_docker_actual_image: "{{ awx_dockerhub_base }}/awx_web:{{ awx_version }}"
+    awx_task_docker_actual_image: "{{ awx_dockerhub_base }}/awx_task:{{ awx_version }}"
   when: awx_dockerhub_base is defined
