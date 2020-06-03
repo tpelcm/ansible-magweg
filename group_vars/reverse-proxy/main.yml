@@ -32,6 +32,11 @@ reverse_proxy_vhosts:
     proxy_passes:
       - name: awx
         proxy_pass: / http://1.1.1.5:80/
+    custom_directives:
+      - RewriteEngine on
+      - RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+      - RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
+      - RewriteRule .* ws://1.1.1.5:80%{REQUEST_URI} [P]
   jira:
     server_name: jira.1.1.1.3.nip.io 
     port: 443
@@ -41,4 +46,3 @@ reverse_proxy_vhosts:
         proxy_pass: /jira http://1.1.1.13:8080/jira
 
 reverse_proxy_global_favicon: favicon-blue.ico
-
