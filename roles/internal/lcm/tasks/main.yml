@@ -11,9 +11,6 @@
 - name: lcm_roles_node
   set_fact: lcm_roles_node="{{ lcm_roles | intersect(ansible_role_names_cleaned) }}"
 
-- debug:
-    var: lcm_roles_node
-
 #- name: Product role version homes 
 #  set_fact:
 #    "{{ item }}_home_version": "{{ vars[item + '_home'] }}/{{ vars[item + '_home'] | basename }}-{{ vars[item + '_version'] }}"
@@ -31,11 +28,6 @@
     home: "{{ vars[item + '_home'] }}"
     database: "{{ vars[item + '_database_name'] | default(omit) }}"
     versions_sequence: "{{ vars[item + '_versions_sequence'] }}"
-  with_items: '{{ lcm_roles_node }}'
-
-- name: LCM info
-  debug:
-    var: "{{ item }}_lcm" 
   with_items: '{{ lcm_roles_node }}'
 
 - name: Database version
