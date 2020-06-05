@@ -2,15 +2,31 @@
 
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
-| Product   | Level | Purpose | 
-|----------|:-----:|---|
-| [SonarQube](roles/internal/sonarqube)| III |  |
-| [Nexus](roles/internal/nexus)| IV | |
-| [Jira](roles/internal/jira)| II | |
-| [Bitbucket](roles/internal/bitbucket)| II | |
-| [Confluence](roles/internal/confluence)| II | |
-| [Jenkins](roles/internal/jenkins)| I | |
-| [Sites](roles/internal/sites)| II | Host static sites using Apache|
+| Product   | Level | Link |Description | 
+|----------|:-----:|---|---|
+| [SonarQube](roles/internal/sonarqube)| III | [https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/) | |
+| [Nexus](roles/internal/nexus)| IV |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/) | |
+| [Jira](roles/internal/jira)| II |[https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/) | |
+| [Bitbucket](roles/internal/bitbucket)| II | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/) ||
+| [Confluence](roles/internal/confluence)| II |[https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/) | |
+| [Jenkins](roles/internal/jenkins)| I |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/) | |
+| [Sites](roles/internal/sites)| II | [https://sh.1.1.1.3.nip.io/sites/](https://sh.1.1.1.3.nip.io/sites/) | Host static sites using Apache|
+| [AWX](roles/internal/AWX)| I | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)<sup>1</sup> |Open Source Ansible Tower. AWX is very much work in progress, see [README](roles/internal/AWX) for info.|
+
+<sup><sub>1. AWX doesn't support changing web context - it needs to run from root.</sub></sup>
+
+After creating the links you can start provisioning one ore more services:
+
+| Service   | Link      | Accounts|
+|----------|-------------|-------------|
+| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
+| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
+| Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
+| Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
+| Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
+| Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+
 
 Capability Levels
 | Level   | Description | 
