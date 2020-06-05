@@ -29,6 +29,7 @@ services:
       - "{{ awx_docker_compose_dir }}/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "{{ awx_docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
       - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/vpass:/etc/tower/vpass"      
     {% if awx_project_data_dir is defined %}
       - "{{ awx_project_data_dir +':/var/lib/awx/projects:rw' }}"
     {% endif %}
@@ -66,6 +67,7 @@ services:
       http_proxy: {{ http_proxy | default('') }}
       https_proxy: {{ https_proxy | default('') }}
       no_proxy: {{ no_proxy | default('') }}
+      ANSIBLE_VAULT_PASSWORD_FILE: /etc/tower/vpass       
 
   task:
     image: {{ awx_task_docker_actual_image }}
@@ -89,6 +91,7 @@ services:
       - "{{ awx_docker_compose_dir }}/credentials.py:/etc/tower/conf.d/credentials.py"
       - "{{ awx_docker_compose_dir }}/redis_socket:/var/run/redis/:rw"
       - "{{ awx_docker_compose_dir }}/memcached_socket:/var/run/memcached/:rw"
+      - "{{ awx_docker_compose_dir }}/vpass:/etc/tower/vpass"      
     {% if awx_project_data_dir is defined %}
       - "{{ awx_project_data_dir +':/var/lib/awx/projects:rw' }}"
     {% endif %}
@@ -124,6 +127,7 @@ services:
       https_proxy: {{ https_proxy | default('') }}
       no_proxy: {{ no_proxy | default('') }}
       SUPERVISOR_WEB_CONFIG_PATH: '/supervisor.conf'
+      ANSIBLE_VAULT_PASSWORD_FILE: /etc/tower/vpass       
 
   redis:
     image: {{ awx_redis_image }}
