@@ -34,11 +34,17 @@ SSLCryptoDevice builtin
     RequestHeader set X-Forwarded-Proto "https"
     AllowEncodedSlashes NoDecode
 
-{% if reverse_proxy_global_favicon is defined %}
+{% if reverse_proxy_global_favicon is defined and reverse_proxy_vhosts[hst].custom_directives is not defined %}
     RewriteEngine on
     RewriteRule favicon.ico$ /favicon.ico [NC]
     ProxyPass /favicon.ico !
 {% endif %}
+{% if reverse_proxy_vhosts[hst].custom_directives is defined %}
+{%   for d in reverse_proxy_vhosts[hst].custom_directives %}
+    {{ d }}
+{%   endfor %}
+{% endif %}
+
 {% if reverse_proxy_environment is defined %}
     ProxyPass /environment !
 {% endif %}

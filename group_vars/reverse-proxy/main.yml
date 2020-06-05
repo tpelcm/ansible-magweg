@@ -25,6 +25,18 @@ reverse_proxy_vhosts:
         proxy_pass: /dimension http://1.1.1.10:8080/dimension
       - name: angularblog
         proxy_pass: /angularblog http://1.1.1.10:8080/angularblog
+  awx:
+    server_name: awx.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      - name: awx
+        proxy_pass: / http://1.1.1.5:80/
+    custom_directives:
+      - RewriteEngine on
+      - RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+      - RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
+      - RewriteRule .* ws://1.1.1.5:80%{REQUEST_URI} [P]
   jira:
     server_name: jira.1.1.1.3.nip.io 
     port: 443
