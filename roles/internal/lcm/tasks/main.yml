@@ -11,17 +11,7 @@
 - name: lcm_roles_node
   set_fact: lcm_roles_node="{{ lcm_roles | intersect(ansible_role_names_cleaned) }}"
 
-#- name: Product role version homes 
-#  set_fact:
-#    "{{ item }}_home_version": "{{ vars[item + '_home'] }}/{{ vars[item + '_home'] | basename }}-{{ vars[item + '_version'] }}"
-#  with_items: '{{ lcm_roles_node }}'
-
-#- name: Product role version database names 
-#  set_fact:
-#    "{{ item }}_database_name_version": "{{ vars[item + '_database_name'] }}_{{ vars[item + '_version']|replace('.','_') }}"
-#  with_items: '{{ lcm_roles_node }}'
-
-- name: LCM info 
+- name: Determine LCM info facts
   lcm_info:
     role: '{{ item }}'
     version: "{{ vars[item + '_version'] }}"
@@ -30,27 +20,22 @@
     versions_sequence: "{{ vars[item + '_versions_sequence'] }}"
   with_items: '{{ lcm_roles_node }}'
 
-- name: Database version
+- name: LCM info facts
   debug:
-    var: "{{ item }}_database_name_version" 
-  with_items: '{{ lcm_roles_node }}'
+    msg: 
+      - "{{ item }}_lcm['operation']: {{ vars[item + '_lcm']['operation']|default('not defined') }}"
+      - "{{ item }}_lcm['version-file']: {{ vars[item + '_lcm']['version-file']|default('not defined') }}"
+      - "{{ item }}_lcm['operation-description']: {{ vars[item + '_lcm']['operation-description']|default('not defined') }}"
+      - "{{ item }}_version: {{ vars[item + '_version']|default('not defined') }}"
+      - "{{ item }}_home: {{ vars[item + '_home']|default('not defined') }}"
+      - "{{ item }}_database_name_version: {{ vars[item + '_database_name_version']|default('not defined') }}"
+      - "{{ item }}_database_template: {{ vars[item + '_database_template']|default('not defined') }}"      
+      - "{{ item }}_home_version: {{ vars[item + '_home_version']|default('not defined') }}"
+      - "{{ item }}_home_version_current: {{ vars[item + '_home_version_current']|default('not defined') }}"
+      - "{{ item }}_home_version_home_current: {{ vars[item + '_home_version_home_current']|default('not defined') }}"
+      - "{{ item }}_home_version_app_current: {{ vars[item + '_home_version_app_current']|default('not defined') }}"
+      - "{{ item }}_home_link: {{ vars[item + '_home_link']|default('not defined') }}"
+      - "{{ item }}_home_link_home: {{ vars[item + '_home_link_home']|default('not defined') }}"
+      - "{{ item }}_home_link_app: {{ vars[item + '_home_link_app']|default('not defined') }}"
 
-- name: Home version
-  debug:
-    var: "{{ item }}_home_version" 
-  with_items: '{{ lcm_roles_node }}'
-
-- name: Home link
-  debug:
-    var: "{{ item }}_home_link" 
-  with_items: '{{ lcm_roles_node }}'
-
-- name: Home link home
-  debug:
-    var: "{{ item }}_home_link_home" 
-  with_items: '{{ lcm_roles_node }}'
-
-- name: Home link app
-  debug:
-    var: "{{ item }}_home_link_app" 
   with_items: '{{ lcm_roles_node }}'
