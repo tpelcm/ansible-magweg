@@ -27,6 +27,7 @@
     - docker-compose.yml
     - nginx.conf
     - redis.conf
+    - vpass
   register: awx_compose_config
 
 - name: Set redis config to other group readable to satisfy redis-server
