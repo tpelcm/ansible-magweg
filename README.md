@@ -13,8 +13,8 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 | [Sites](roles/internal/sites)| II | [https://sh.1.1.1.3.nip.io/sites/](https://sh.1.1.1.3.nip.io/sites/) | Host static sites using Apache|
 | [AWX](roles/internal/awx)| I | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)<sup>1</sup> |Open Source Ansible Tower. AWX is very much work in progress, see [README](roles/internal/AWX) for info. Login `admin` with pw `secret`|
 
-<sup><sub>1. AWX doesn't support changing web context - it needs to run from root.
-2. Jira and Confluence setup cannot be automated. You have to use the wizard to setup the database, admin account etc.</sub></sup>
+<sup><sub>1. AWX doesn't support changing web context - it needs to run from root.</sub></sup>
+<sup><sub>2. Jira and Confluence setup cannot be automated. You have to use the wizard to setup the database, admin account etc.</sub></sup>
 
 Capability Levels
 | Level   | Description | 
