@@ -1,0 +1,78 @@
+---
+- file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - /data
+    - /data/cert
+    - /etc/docker/certs.d
+    - "/etc/docker/certs.d/{{ harbor_hostname }}"
+
+- name: Generate CA private key
+  openssl_privatekey:
+    path: /data/cert/ca.key
+  register: ca_key
+
+- name: Generate CA CSR
+  openssl_csr:
+    path: /data/cert/ca.csr
+    privatekey_path: /data/cert/ca.key
+    common_name: "{{ harbor_hostname }}"
+  register: ca_csr
+
+- name: Generate CA certificate.
+  openssl_certificate:
+    path: /data/cert/ca.crt
+    privatekey_path: /data/cert/ca.key
+    csr_path: /data/cert/ca.csr
+    provider: selfsigned
+  register: ca_cert
+
+- name: Generate server private key
+  openssl_privatekey:
+    path: "/data/cert/{{ harbor_hostname }}.key"
+
+- name: Generate server CSR
+  openssl_csr:
+    path: "/data/cert/{{ harbor_hostname }}.csr"
+    privatekey_path: "/data/cert/{{ harbor_hostname }}.key"
+    authority_cert_issuer: "DNS:{{ harbor_hostname }}"
+    authority_cert_serial_number: "{{ ca_cert.serial_number }}" 
+    authority_key_identifier: "{{ ca_key.fingerprint.sha1 }}"
+    extended_key_usage: 
+      - serverAuth
+    key_usage: 
+      - digitalSignature
+      - nonRepudiation
+      - keyEncipherment
+      - dataEncipherment
+    basic_constraints: CA:FALSE
+    common_name: "{{ harbor_hostname }}"
+    subject_alt_name: 
+      - "DNS:{{ harbor_hostname }}"
+      - "DNS:{{ inventory_hostname }}"
+      - "DNS:{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+- name: Generate server certificate.
+  openssl_certificate:
+    path: "/data/cert/{{ harbor_hostname }}.cert"
+    csr_path: "/data/cert/{{ harbor_hostname }}.csr"
+    ownca_path:  /data/cert/ca.crt
+    ownca_privatekey_path:  /data/cert/ca.key
+    provider: ownca
+
+- name: Copy certs to Docker certs.d
+  copy:
+    src: "/data/cert/{{ item }}"
+    dest: "/etc/docker/certs.d/{{ harbor_hostname }}/{{ item }}"
+    remote_src: yes
+  with_items: 
+    - "{{ harbor_hostname }}.cert"
+    - "{{ harbor_hostname }}.key"
+    - ca.crt
+  notify: restart docker
+
+# openssl x509 -inform PEM -in yourdomain.com.crt -out yourdomain.com.cert
+#cp yourdomain.com.cert /etc/docker/certs.d/yourdomain.com/
+#cp yourdomain.com.key /etc/docker/certs.d/yourdomain.com/
+#cp ca.crt /etc/docker/certs.d/yourdomain.com/

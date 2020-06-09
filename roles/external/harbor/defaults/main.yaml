@@ -1,0 +1,124 @@
+---
+harbor_home: /opt/harbor
+harbor_version: 2.0.0
+
+# The IP address or hostname to access admin UI and registry service.
+# DO NOT use localhost or 127.0.0.1, because Harbor needs to be accessed by external clients.
+# If you have Harbor running on say "myregistry.company.com", that's what you should have as harbor_hostname
+harbor_hostname: "registry.{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}.nip.io"
+
+harbor_port: 80 # redirect to https port
+harbor_port_https: 443
+
+# Uncomment external_url if you want to enable external proxy
+#harbor_external_url: https://awx.1.1.1.3.nip.io
+
+# The initial password of Harbor admin
+# It only works in first time to install harbor
+# Remember Change the admin password from UI after launching Harbor.
+harbor_admin_password: supersecure
+
+# Harbor DB configuration
+# The password for the root user of Harbor DB. Change this before any production use.
+# The maximum number of connections in the idle connection pool. If it <=0, no idle connections are retained.
+# The maximum number of open connections to the database. If it <= 0, then there is no limit on the number of open connections.
+# Note: the default number of connections is 100 for postgres.
+harbor_database:
+  password: root123
+  max_idle_conns: 50
+  max_open_conns: 100
+
+# PostgreSQL database
+# harbor_database_username: harbor
+# harbor_database_password: supersecure
+# harbor_database_host: localhost
+# harbor_database_port: "5432"
+# harbor_database_name: harbor
+# harbor_database_admin_username: ansible
+# harbor_database_admin_password: supersecure
+# harbor_database_template: template0
+
+# Global proxy
+# Config http proxy for components, e.g. http://my.proxy.com:3128
+# Components doesn't need to connect to each others via http proxy.
+# Remove component from `components` array if want disable proxy
+# for it. If you want use proxy for replication, MUST enable proxy
+# for core and jobservice, and set `http_proxy` and `https_proxy`.
+# Add domain to the `no_proxy` field, when you want disable proxy
+# for some special registry.
+harbor_proxy:
+  http_proxy: 
+  https_proxy:
+  no_proxy:
+  #components:
+  #  - core
+  #  - jobservice
+  #  - clair
+  #  - trivy
+
+harbor_versions:
+  2.0.0:
+    url: https://github.com/goharbor/harbor/releases/download/v2.0.0/harbor-online-installer-v2.0.0.tgz
+    checksum: sha256:e39bd77554ef446180feee7b326512d9a141365a35df3ec9e94d8f4f09f99dd8
+harbor_versions_sequence: ['2.0.0']
+
+#v2.0.0
+# 
+# https://github-production-release-asset-2e65be.s3.amazonaws.com/50613991/00b6e880-9554-11ea-9971-e9a12c341bbd?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200605%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200605T092245Z&X-Amz-Expires=300&X-Amz-Signature=69669ef5d93b1df3e7056f659d9134824f524f3ca8e1ad5c8e52d70841efe7b4&X-Amz-SignedHeaders=host&actor_id=176916&repo_id=50613991&response-content-disposition=attachment%3B%20filename%3Dharbor-online-installer-v2.0.0.tgz&response-content-type=application%2Foctet-stream
+
+harbor_installer_extra_args:
+harbor_extras:
+  # - clair
+  # - notary
+
+# Will create harbor folder inside
+harbor_install_dir: /opt
+# This is related to the internal Nginx. If you are running it behind a proxy that terminates
+# SSL, leave this on http. You will want to set `harbor_registry_realm_protocol` to "https", though.
+harbor_ui_url_protocol: "http"
+harbor_max_job_workers: 10
+
+
+# set to yes if you are running harbor behind an Nginx proxy
+# or elastic load balancing. This will remove the line
+# proxy_set_header X-Forwarded-Proto $scheme;
+# from Harbor's nginx configuration according to the troubleshooting section.
+# https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md#troubleshooting
+# REMEMBER to put this line on YOUR proxy configuration, though.
+harbor_behind_proxy: no
+
+# If you are running behind a proxy and the proxy terminates SSL, you need to set this to "https"
+# as this dictates the *external* access to the registry.
+# This only takes effect if "harbor_behind_proxy" is True.
+harbor_registry_realm_protocol: "http"
+
+# Used in the docker compose file
+harbor_exposed_http_port: 80
+harbor_exposed_https_port: 443
+harbor_install: true
+harbor_self_registration: "on"
+
+# change these if you have your own redis running already
+harbor_redis_host: redis
+
+
+harbor_datadir: "/data"
+harbor_ssl_self_days: 180
+harbor_ssl_self_subject: "/O=Harbor Server/OU=Self signed/CN=test"
+harbor_api_port: "{% if harbor_ui_url_protocol == 'http' %}{{harbor_exposed_http_port}}{% else %}{{harbor_exposed_https_port}}{% endif %}"
+# If you are running Harbor behind your own proxy, override this as it might not match with Harbor.cfg values.
+harbor_api_url: "{{ harbor_ui_url_protocol }}://{{ harbor_hostname }}:{{ harbor_api_port }}/api"
+
+# Example to create project on install
+# harbor_projects:
+#   - project_name: test
+#     is_public: "false"
+#     content_trust: "false"
+#     prevent_vul: "true"
+#     severity: "high"
+#     auto_scan: "true"
+
+
+harbor_installer_with: "{% for e in harbor_extras %} {{ '--with-%s'|format(e) }} {% endfor %}"
+harbor_extra_compose_files: "{% for e in harbor_extras %} + ['docker-compose.{{e}}.yml'] {% endfor %}"
+harbor_docker_compose_files: "['docker-compose.yml'] {{ harbor_extra_compose_files }} "

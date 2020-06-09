@@ -1,0 +1,12 @@
+---
+- name: harbor.yml
+  hosts: harbor
+  become: yes
+
+  roles:
+    - { role: common,                       tags: ["common"] }
+    - { role: postgresql-client,            tags: ["harbor", "postgresql"] }
+    - { role: geerlingguy.docker,           tags: ["harbor", "docker"] }
+    - { role: harbor,                       tags: ["harbor"] }
+    # - { role: backup,                       tags: ["backup"] }
+  

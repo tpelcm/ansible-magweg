@@ -1,0 +1,38 @@
+---
+- name: Ensure PostgreSQL Python libraries are installed.
+  apt:
+    name: "{{ harbor_python_library }}"
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Harbor PostgreSQL user
+  postgresql_user:
+    name: "{{ harbor_database_username }}"
+    password: "{{ harbor_database_password }}"
+    db: "postgres"
+    login_host: "{{ harbor_database_host }}"
+    login_password: "{{ harbor_database_admin_password }}"
+    login_user: "{{ harbor_database_admin_username }}"
+    port: "{{ harbor_database_port }}"
+    state: "{{ item.state | default('present') }}"
+  no_log: true
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Harbor PostgreSQL database
+  postgresql_db:
+    name: "{{ harbor_database_name_version }}"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: "{{ harbor_database_template }}"
+    login_host: "{{ harbor_database_host }}"
+    login_password: "{{ harbor_database_admin_password }}"
+    login_user: "{{ harbor_database_admin_username }}"
+    port: "{{ harbor_database_port }}"
+    owner: "{{ harbor_database_username }}"
+    state: "{{ item.state | default('present') }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true

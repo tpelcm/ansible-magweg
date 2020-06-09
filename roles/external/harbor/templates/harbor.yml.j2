@@ -1,0 +1,48 @@
+# {{ ansible_managed }}
+# Configuration file of Harbor
+
+_version: 2.0.0 # This attribute is for migrator to detect the version of the .cfg file, DO NOT MODIFY!
+
+hostname: {{ harbor_hostname }}
+http:
+  port: {{ harbor_port }}
+https:
+  port: {{ harbor_port_https }}
+  certificate: /data/cert/{{ harbor_hostname }}.cert
+  private_key: /data/cert/{{ harbor_hostname }}.key
+
+{% if harbor_external_url is defined %}
+external_ur: {{ harbor_external_url }}  
+{% endif %}
+harbor_admin_password: {{ harbor_admin_password }}
+database:
+  password: {{ harbor_database.password }}
+  max_idle_conns: {{ harbor_database.max_idle_conns }}
+  max_open_conns: {{ harbor_database.max_open_conns }}
+data_volume: {{ harbor_home_version }}/data
+clair:
+  updaters_interval: 12
+trivy:
+  ignore_unfixed: false
+  skip_update: false
+  insecure: false
+  # github_token: xxx
+jobservice:
+  max_job_workers: 10
+notification:
+  webhook_job_max_retry: 10
+chart:
+  absolute_url: disabled
+log:
+  level: info
+  local:
+    rotate_count: 50
+    rotate_size: 200M
+    location: /var/log/harbor
+proxy:
+  http_proxy: {{ harbor_proxy.http_proxy }}
+  https_proxy: {{ harbor_proxy.https_proxy }}
+  no_proxy: {{ harbor_proxy.no_proxy }}
+{% if harbor_proxy.components is defined %}  
+  components: {{ harbor_proxy.components }}
+{% endif %}

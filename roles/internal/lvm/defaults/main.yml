@@ -52,6 +52,9 @@ lvm_roles:
   awx:
     size: '10g' 
     path: '/opt/awx'
+  harbor:
+    size: '10g' 
+    path: '{{ harbor_home if harbor_home is defined else "/opt/harbor" }}'
   myapp:
     size: '1g' 
     path: '{{ myapp_home if myapp_home is defined else "/opt/myapp" }}'

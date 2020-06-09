@@ -1,0 +1,20 @@
+---
+- name: "Downloading Harbor {{ harbor_version }} (offline installer)"
+  get_url: 
+    url: "{{ harbor_versions[harbor_version].url }}"
+    checksum: "{{ harbor_versions[harbor_version]['checksum'] }}"
+    dest: "/tmp/{{ harbor_versions[harbor_version].url|basename }}"
+    validate_certs: no
+  #when:
+  #  - not harbor_folder_st.stat.exists or (harbor_folder_st.stat.isdir is defined and not harbor_folder_st.stat.isdir)
+
+- name: "Extract /tmp/{{ harbor_versions[harbor_version].url|basename }} to /tmp"
+  unarchive:
+    src: "/tmp/{{ harbor_versions[harbor_version].url|basename }}"
+    remote_src: yes
+    dest: /tmp
+
+- name: Harbor yml
+  template:
+   dest: "/tmp/harbor/harbor.yml"
+   src: harbor.yml.j2

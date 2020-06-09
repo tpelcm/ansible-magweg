@@ -1,0 +1,6 @@
+
+harbor_hostname: "registry.1.1.1.6.nip.io"
+harbor_proxy:
+  http_proxy: http://1.1.1.3:3128
+  https_proxy: http://1.1.1.3:3128
+  no_proxy: nip.io # comma separated list ? TODO
