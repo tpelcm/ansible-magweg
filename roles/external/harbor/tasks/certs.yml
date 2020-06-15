@@ -38,7 +38,7 @@
     privatekey_path: "/data/cert/{{ harbor_hostname }}.key"
     authority_cert_issuer: "DNS:{{ harbor_hostname }}"
     authority_cert_serial_number: "{{ ca_cert.serial_number }}" 
-    authority_key_identifier: "{{ ca_key.fingerprint.sha1 }}"
+    authority_key_identifier: "{{ ca_key.fingerprint.sha256 }}"
     extended_key_usage: 
       - serverAuth
     key_usage: 
@@ -60,6 +60,7 @@
     ownca_path:  /data/cert/ca.crt
     ownca_privatekey_path:  /data/cert/ca.key
     provider: ownca
+    # CAcreateserial
 
 - name: Copy certs to Docker certs.d
   copy:
