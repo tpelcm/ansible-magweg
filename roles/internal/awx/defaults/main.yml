@@ -1,0 +1,38 @@
+---
+awx_task_hostname: awx
+awx_web_hostname: awxweb
+awx_host_port: 80
+awx_host_port_ssl: 443
+
+awx_admin_user: admin
+awx_admin_password: supersecure
+awx_create_preload_data: True
+awx_secret_key: supersecure
+
+awx_pg_username: awx
+awx_pg_password: supersecure
+awx_pg_database: awx
+awx_pg_port: 5432
+
+awx_dockerhub_base: ansible
+awx_version: 11.2.0
+
+awx_home: /opt/awx
+awx_home_version: /opt/awx # for backup
+awx_redis_image: redis
+
+awx_postgresql_version: 10
+awx_postgresql_image: "postgres:{{awx_postgresql_version}}"
+
+awx_memcached_image: memcached
+awx_memcached_version: alpine
+
+awx_compose_start_containers: true
+
+awx_postgres_data_dir: "{{ awx_home }}/pgdocker"
+awx_docker_compose_dir: "{{ awx_home }}/compose"
+awx_project_data_dir: "{{ awx_home }}/compose"
+
+awx_web_image: awx_web
+
+awx_vpass: secret
