@@ -28,9 +28,6 @@ confluence_database_template: template0
 confluence_owner: "confluence"
 confluence_group: "confluence"
 
-# Allow personal repos to be created
-confluence_personal_repos: no
-
 # TODO
 #confluence_max_map_count: 262144
 
