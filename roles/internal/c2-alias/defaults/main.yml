@@ -55,6 +55,7 @@ c2_alias:
         - /opt/confluence/confluence/app/confluence/WEB-INF/classes/confluence-init.properties
         - /etc/systemd/system/confluence.service
         - /opt/confluence/confluence/home/confluence.cfg.xml
+        - /opt/confluence/confluence/app/conf/server.xml
     monit:
       logs: ["{{ monit_log | default(omit) }}"]
       configs:

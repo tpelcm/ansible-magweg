@@ -55,3 +55,13 @@
     path: "{{ confluence_home }}"
     state: directory
     mode: 0700
+
+- name: Oracle JDBC driver
+  get_url:
+    dest: "{{ confluence_home_version_app }}/lib/{{ confluence_database_ojdbc_jar_url|basename }}"
+    group: "{{ confluence_group }}"
+    owner: "{{ confluence_owner }}"
+    url: "{{ confluence_database_ojdbc_jar_url }}"
+  when: confluence_database_ojdbc_jar_url is defined
+  notify:
+    - confluence-systemctl-restart

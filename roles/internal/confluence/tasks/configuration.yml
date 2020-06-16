@@ -34,6 +34,14 @@
       value: "{{ confluence_database_username }}"
   notify: confluence-systemctl-restart
 
+- name: server.xml
+  template:
+    dest: "{{ confluence_home_version_app }}/conf/server.xml"
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+    src: server.xml.j2
+  notify: confluence-systemctl-restart
+
 #- name: env file CONFLUENCE_HOME etc
 #  copy:
 #    content: >
