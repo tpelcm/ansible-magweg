@@ -22,3 +22,11 @@ confluence_version: 6.14.3
 #    remove_folder: home/shared/search/data/nodes
 #    force: false
 #    stop_start_service: confluence
+
+#confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
+#confluence_database_username: confluence_lab
+#confluence_database_password: sportsbar
+#confluence_database_host: db
+#confluence_database_port: "1521"
+#confluence_database_name: confluence_lab.localdomain
+#confluence_database_type: oracle

@@ -7,5 +7,5 @@ ansible_agent_setup_tools_packages:
 
 ansible_agent_setup_tools_pip_packages: ['setuptools', 'pyOpenSSL', 'psycopg2-binary']
 
-ansible_agent_role_packages: []
-#  nexus: ['pip-package']
+ansible_agent_role_packages: 
+  confluence: ['lxml']

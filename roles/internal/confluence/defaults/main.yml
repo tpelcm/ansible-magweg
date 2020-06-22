@@ -23,18 +23,38 @@ confluence_database_name: confluence
 confluence_database_admin_username: ansible
 confluence_database_admin_password: supersecure
 confluence_database_template: template0
+# confluence_database_jdbc_url:  
 
-# Oracle example settings
-# confluence_database_custom: yes
-# confluence_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
-# confluence_database_url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=1.1.1.111)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=jira.localdomain)))
-# confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
-# confluence_database_driver_class: oracle.jdbc.OracleDriver
-# confluence_database_validation_query: select 1 from dual
-# confluence_database_type: oracle10g
-# confluence_database_schema: nil
-# confluence_database_setbigstringtryclob: yes
-
+confluence_database_type: postgresql # postgresql oracle
+confluence_database_hibernate:
+  generic:
+    hibernate.c3p0.acquire_increment: 1
+    hibernate.c3p0.idle_test_period: 100
+    hibernate.c3p0.max_size: 60
+    hibernate.c3p0.max_statements: 0
+    hibernate.c3p0.min_size: 20
+    hibernate.c3p0.timeout: 30
+    hibernate.connection.isolation: 2
+    hibernate.connection.password: "{{ confluence_database_password }}"
+    hibernate.connection.username: "{{ confluence_database_username }}"
+  postgresql:
+    set:
+      hibernate.c3p0.preferredTestQuery: select 1 
+      hibernate.connection.driver_class: org.postgresql.Driver
+      hibernate.connection.url: "jdbc:postgresql://{{ confluence_database_host }}:{{ confluence_database_port }}/{{ confluence_database_name_version }}"
+      hibernate.database.lower_non_ascii_supported: 'true'
+      hibernate.dialect: com.atlassian.confluence.impl.hibernate.dialect.PostgreSQLDialect
+    remove:
+      - hibernate.connection.SetBigStringTryClob
+  oracle:
+    set:
+      hibernate.c3p0.preferredTestQuery: select 1 from dual 
+      hibernate.connection.driver_class: oracle.jdbc.OracleDriver
+      hibernate.connection.url: "jdbc:oracle:thin:@//{{ confluence_database_host }}:{{ confluence_database_port }}/{{ confluence_database_name }}"
+      hibernate.connection.SetBigStringTryClob: 'true'
+      hibernate.dialect: com.atlassian.confluence.impl.hibernate.dialect.OracleDialect
+    remove:
+      - database.lower_non_ascii_supported
 
 confluence_owner: "confluence"
 confluence_group: "confluence"

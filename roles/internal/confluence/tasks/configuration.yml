@@ -19,19 +19,30 @@
   when: not confluence_cfg_xml.stat.exists
 
 - name: confluence.cfg.xml
-  replace:
+  xml:
     path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
-    regexp: "{{ item.key }}\">.*?</property>"
-    replace: "{{ item.key }}\">{{ item.value }}</property>"
-  no_log: true
+    xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
+    value: "{{ confluence_database_hibernate.generic[item] }}"
   when: confluence_cfg_xml.stat.exists
-  with_items:
-    - key: "hibernate.connection.password" 
-      value: "{{ confluence_database_password }}"
-    - key: "hibernate.connection.url" 
-      value: "jdbc:postgresql://db:{{ confluence_database_port }}/{{ confluence_database_name_version }}"
-    - key: "hibernate.connection.username" 
-      value: "{{ confluence_database_username }}"
+  with_items: "{{ confluence_database_hibernate.generic }}"
+  notify: confluence-systemctl-restart
+
+- name: "confluence.cfg.xml {{ confluence_database_type }}"
+  xml:
+    path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
+    xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
+    value: "{{ confluence_database_hibernate[confluence_database_type]['set'][item] }}"
+  when: confluence_cfg_xml.stat.exists
+  with_items: "{{ confluence_database_hibernate[confluence_database_type]['set'] }}"
+  notify: confluence-systemctl-restart
+
+- name: "Remove from confluence.cfg.xml {{ confluence_database_type }}"
+  xml:
+    path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
+    xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
+    state: absent
+  when: confluence_cfg_xml.stat.exists
+  with_items: "{{ confluence_database_hibernate[confluence_database_type]['remove'] }}"
   notify: confluence-systemctl-restart
 
 - name: server.xml
