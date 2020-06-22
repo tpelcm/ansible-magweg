@@ -59,3 +59,13 @@
     group: "{{ jira_group }}"
     src: server.xml.j2
   notify: jira-systemctl-restart
+
+- name: Extra libaries
+  get_url:
+    checksum: "{{ item.checksum }}"
+    dest: "{{ jira_home_version_app }}/atlassian-jira/WEB-INF/lib/{{ item.url|basename }}"
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
+    url: "{{ item.url }}"
+  with_items: "{{ jira_libraries }}" 
+  notify: jira-systemctl-restart
