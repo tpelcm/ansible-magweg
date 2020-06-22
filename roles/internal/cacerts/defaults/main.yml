@@ -1,5 +1,5 @@
 ---
-cacerts_roles_supported: ['jira']
+cacerts_roles_supported: ['jira', 'confluence']
 cacerts_keystore_pass: changeit
 
 cacerts_roles:
