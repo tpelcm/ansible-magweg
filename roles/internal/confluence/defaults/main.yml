@@ -117,5 +117,6 @@ confluence_versions:
 
 confluence_versions_sequence: ['6.14.3','7.4.0']
 
-
-
+confluence_libraries: []
+#  - url: https://github.com/javamelody/jira-confluence-javamelody/releases/download/1.83.0/jira-confluence-javamelody-1.83.0.jar
+#    checksum: sha256:2007bf47db63690f61a919cc828332d1d852c283c48137e07db608dd3c82e65e

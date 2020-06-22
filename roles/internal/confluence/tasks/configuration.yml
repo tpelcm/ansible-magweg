@@ -53,6 +53,16 @@
     src: server.xml.j2
   notify: confluence-systemctl-restart
 
+- name: Extra libaries
+  get_url:
+    checksum: "{{ item.checksum }}"
+    dest: "{{ confluence_home_version_app }}/confluence/WEB-INF/lib/{{ item.url|basename }}"
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+    url: "{{ item.url }}"
+  with_items: "{{ confluence_libraries }}" 
+  notify: confluence-systemctl-restart
+
 #- name: env file CONFLUENCE_HOME etc
 #  copy:
 #    content: >
