@@ -56,6 +56,7 @@ c2_alias:
         - /etc/systemd/system/confluence.service
         - /opt/confluence/confluence/home/confluence.cfg.xml
         - /opt/confluence/confluence/app/conf/server.xml
+        - /opt/confluence/confluence/app/bin/setenv.sh
     monit:
       logs: ["{{ monit_log | default(omit) }}"]
       configs:

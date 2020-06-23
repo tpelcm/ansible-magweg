@@ -63,6 +63,18 @@
   with_items: "{{ confluence_libraries }}" 
   notify: confluence-systemctl-restart
 
+- name: Xms, Xmx and other CATALINA_OPTS in setenv.sh
+  replace:
+    path: "{{ confluence_home_version_app }}/bin/setenv.sh"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items: 
+    - regexp: '^CATALINA_OPTS="-Xms.*$'
+      replace: "CATALINA_OPTS=\"-Xms{{ confluence_jvm_minimum_memory }} -Xmx{{ confluence_jvm_maximum_memory }} -XX:+UseG1GC {{ confluence_cataline_opts }} ${CATALINA_OPTS}\""
+    - regexp: '-XX:ReservedCodeCacheSize=.*? '
+      replace: '-XX:ReservedCodeCacheSize={{ confluence_jvm_reserved_code_cache_size }} '
+  notify: confluence-systemctl-restart
+
 #- name: env file CONFLUENCE_HOME etc
 #  copy:
 #    content: >
