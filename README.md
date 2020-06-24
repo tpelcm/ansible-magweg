@@ -12,7 +12,7 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 | [Jenkins](roles/internal/jenkins)| I |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/) | `admin` with pw `supersecret` |
 | [Sites](roles/internal/sites)| II | [https://sh.1.1.1.3.nip.io/sites/](https://sh.1.1.1.3.nip.io/sites/) | Host static sites using Apache|
 | [AWX](roles/internal/awx)| I | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)<sup>1</sup> |Open Source Ansible Tower. AWX is very much work in progress, see [README](roles/internal/AWX) for info. Login `admin` with pw `secret`|
-| [Guacamole](https://guacamole.apache.org/)| I | [https://sh.1.1.1.3.nip.io/desktop/](https://sh.1.1.1.3.nip.io/desktop/)<sup>1</sup> | Use Docker desktops in your browser with ease.|
+| [Guacamole](https://guacamole.apache.org/)| I | [https://sh.1.1.1.3.nip.io/desktop/](https://sh.1.1.1.3.nip.io/desktop/) | Use Docker based desktops in your browser.|
 
 <sup><sub>1. AWX doesn't support changing web context - it needs to run from root.</sub></sup>  
 <sup><sub>2. Jira and Confluence setup cannot be automated. You have to use the wizard to setup the database, admin account etc.</sub></sup>
