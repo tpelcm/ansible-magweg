@@ -18,6 +18,7 @@ ansible_groups = {
   'bitbucket' => ['bitbucket'],
   'confluence' => ['confluence'],
   'jira' => ['jira'],
+  'desktop' => ['bastion'],
   'awx' => ['awx'],
   'opendj' => ['proxy'],
   'env' => ['proxy'],
@@ -42,6 +43,7 @@ nodes['sites'] = { 'ip' => '1.1.1.10', 'plays' => %w(sites) }
 nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
 nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory' => 1024 * 4, 'data-disk' => true }
 nodes['jira'] = { 'ip' => '1.1.1.13', 'plays' => %w(jira), 'memory' => 1024 * 4, 'data-disk' => true }
+nodes['bastion'] = { 'ip' => '1.1.1.14', 'plays' => %w(desktop), 'memory' => 1024 * 4, 'data-disk' => true }
 # nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
 # nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
 
