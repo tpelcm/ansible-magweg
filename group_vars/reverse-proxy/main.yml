@@ -4,6 +4,10 @@ reverse_proxy_vhosts:
     server_name: sh.1.1.1.3.nip.io 
     port: 443
     proxy_verify: false
+    proxy_guacamole:
+      context: /desktop
+      port: 8080
+      ip: 1.1.1.14
     proxy_passes:
       - name: sonarqube
         proxy_pass: /sonarqube https://1.1.1.4/sonarqube

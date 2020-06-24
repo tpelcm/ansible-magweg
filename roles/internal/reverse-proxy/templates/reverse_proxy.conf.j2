@@ -66,10 +66,29 @@ SSLCryptoDevice builtin
     ProxyPassReverse {{ pp['proxy_pass'] }}
 {%     endif %}
 {%   endfor %}
-    LogLevel {{ reverse_proxy_log_level }}
 
+{% if reverse_proxy_vhosts[hst].proxy_guacamole is defined %}
+    <Location {{ reverse_proxy_vhosts[hst].proxy_guacamole.context }}>
+      Order allow,deny
+      Allow from all
+      ProxyPass http://{{ reverse_proxy_vhosts[hst].proxy_guacamole.ip }}:{{ reverse_proxy_vhosts[hst].proxy_guacamole.port }}/guacamole flushpackets=on
+      ProxyPassReverse http://{{ reverse_proxy_vhosts[hst].proxy_guacamole.ip }}:{{ reverse_proxy_vhosts[hst].proxy_guacamole.port }}/guacamole
+      ProxyPassReverseCookiePath /guacamole {{ reverse_proxy_vhosts[hst].proxy_guacamole.context }}
+    </Location>
+
+    <Location {{ reverse_proxy_vhosts[hst].proxy_guacamole.context }}/websocket-tunnel>
+      Order allow,deny
+      Allow from all
+      ProxyPass ws://{{ reverse_proxy_vhosts[hst].proxy_guacamole.ip }}:{{ reverse_proxy_vhosts[hst].proxy_guacamole.port }}/guacamole/websocket-tunnel
+      ProxyPassReverse ws://{{ reverse_proxy_vhosts[hst].proxy_guacamole.ip }}:{{ reverse_proxy_vhosts[hst].proxy_guacamole.port }}/guacamole/websocket-tunnel
+    </Location>
+{% endif %}
+
+    LogLevel {{ reverse_proxy_log_level }}
     ErrorLog {{ https_log_dir[ansible_os_family] }}ssl-{{ reverse_proxy_vhosts[hst].server_name }}.log
     CustomLog {{ https_log_dir[ansible_os_family] }}ssl-{{ reverse_proxy_vhosts[hst].server_name }}.log combined
 
 </VirtualHost>                                  
 {% endfor %}
+
+

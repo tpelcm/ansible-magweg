@@ -1,0 +1,36 @@
+---
+- pip:
+    name: docker-compose
+    version: 1.9.0
+    state: present
+    extra_args: --upgrade pip
+
+- docker_network:
+    name: guacamole
+
+- docker_image:
+    name: "{{ item.repo }}:{{ item.version }}"
+    source: pull
+  with_items: 
+    - repo: "{{ guacamole_daemon_repo }}"
+      version: "{{ guacamole_version }}"
+    - repo: "{{ guacamole_web_repo }}"
+      version: "{{ guacamole_version }}"
+
+- docker_container:
+    name: "{{ guacamole_daemon_name }}"
+    image: "{{ guacamole_daemon_repo }}:{{ guacamole_version }}"
+    networks:
+      - name: guacamole
+    restart_policy: unless-stopped
+
+- docker_container:
+    name: "{{ guacamole_web_name }}"
+    image: "{{ guacamole_web_repo }}:{{ guacamole_version }}"
+    networks:
+      - name: guacamole
+    etc_hosts: "{{ guacamole_container_extra_hosts }}"
+    env: "{{ guacamole_web_settings }}"
+    ports:
+     - "{{ guacamole_web_port }}:8080"
+    restart_policy: unless-stopped

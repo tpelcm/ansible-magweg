@@ -9,7 +9,7 @@ backup_cron_jobs: true
 backup_restore_db: false
 backup_restore_home: false
 
-backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence']
+backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence', 'guacamole']
 
 backup_roles:
   sonarqube:
@@ -30,6 +30,9 @@ backup_roles:
   awx:
     stop_start_containers: ['awx_postgres','awx_redis','awx_memcached','awx_task','awx_web']
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+  guacamole:
+    stop_start_containers: ['guacamole','guacd']
+    keep: { daily: 3, weekly: 1, monthly: 0, manual: 1 }
   myapp:
     # stop_start_service: myapp
     keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }

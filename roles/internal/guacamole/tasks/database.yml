@@ -1,0 +1,63 @@
+---
+- name: Create user
+  postgresql_user:
+    name: "{{ guacamole_database_username }}"
+    password: "{{ guacamole_database_password }}"
+    db: "postgres"
+    login_host: "{{ guacamole_database_host }}"
+    login_password: "{{ guacamole_database_admin_password }}"
+    login_user: "{{ guacamole_database_admin_username }}"
+    port: "{{ guacamole_database_port }}"
+    state: "{{ item.state | default('present') }}"
+  no_log: true
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Create database
+  postgresql_db:
+    name: "{{ guacamole_database_name_version }}"
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    encoding: 'UTF-8'
+    template: "{{ guacamole_database_template }}"
+    login_host: "{{ guacamole_database_host }}"
+    login_password: "{{ guacamole_database_admin_password }}"
+    login_user: "{{ guacamole_database_admin_username }}"
+    port: "{{ guacamole_database_port }}"
+    owner: "{{ guacamole_database_username }}"
+    state: "{{ item.state | default('present') }}"
+  vars:
+    ansible_ssh_pipelining: true
+
+- stat:
+    path: "{{ guacamole_home_version }}/initdb.sql"
+  register: initdb_script_path
+
+- name: initdb script
+  command:
+    cmd: "docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --postgres"
+  when: not initdb_script_path.stat.exists 
+  register: initdb_script
+
+- name: initdb script to file
+  copy:
+    content: "{{ initdb_script.stdout }}"
+    dest: "{{ guacamole_home_version }}/initdb.sql"
+  when: not initdb_script_path.stat.exists 
+
+- name: Run initdb script
+  postgresql_query:
+    db: "{{ guacamole_database_name_version }}"
+    login_host: "{{ guacamole_database_host }}"
+    login_user: "{{ guacamole_database_username }}"
+    login_password: "{{ guacamole_database_password }}"
+    port: "{{ guacamole_database_port }}"
+    path_to_script: "{{ guacamole_home_version }}/initdb.sql"
+  when: not initdb_script_path.stat.exists 
+
+#- debug:
+#    var: initdb_script.stdout
+
+#postgresql_db
+
+# > {{ guacamole_home_version }}/initdb.sql

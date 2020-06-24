@@ -19,7 +19,8 @@ lvm_roles_supported:
   - myapp
   - confluence
   - sites
-  - awx  
+  - awx
+  - guacamole
 
 lvm_roles:
   nfs:
@@ -52,6 +53,9 @@ lvm_roles:
   awx:
     size: '10g' 
     path: '/opt/awx'
+  guacamole:
+    size: '100m' 
+    path: '{{ guacamole_home|default("/opt/guacamole") }}'
   myapp:
     size: '1g' 
     path: '{{ myapp_home if myapp_home is defined else "/opt/myapp" }}'
