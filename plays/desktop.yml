@@ -7,4 +7,5 @@
     - { role: common,                       tags: ["common"] }
     - { role: geerlingguy.docker,           tags: ["guacamole", "docker"] }
     - { role: guacamole,                    tags: ["guacamole"] }
+    - { role: desktop,                      tags: ["desktop"] }    
     - { role: backup,                       tags: ["backup"] }
