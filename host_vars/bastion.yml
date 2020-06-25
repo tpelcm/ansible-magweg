@@ -1,0 +1,5 @@
+---
+lvm_roles:
+  docker: # geerlingguy.docker
+    size: '60g'
+    path: '/var/lib/docker'  
