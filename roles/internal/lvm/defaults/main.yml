@@ -21,6 +21,7 @@ lvm_roles_supported:
   - sites
   - awx
   - guacamole
+  - docker
 
 lvm_roles:
   nfs:
@@ -50,6 +51,9 @@ lvm_roles:
   sites:
     size: '10g' 
     path: '/var/www/html'
+  docker: # geerlingguy.docker
+    size: '10g'
+    path: '/var/lib/docker'  
   awx:
     size: '10g' 
     path: '/opt/awx'
