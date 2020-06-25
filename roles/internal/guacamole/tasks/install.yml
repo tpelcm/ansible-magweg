@@ -29,7 +29,7 @@
     image: "{{ guacamole_web_repo }}:{{ guacamole_version }}"
     networks:
       - name: guacamole
-    etc_hosts: "{{ guacamole_container_extra_hosts }}"
+    etc_hosts: "{{ guacamole_container_extra_hosts|default(omit) }}"
     env: "{{ guacamole_web_settings }}"
     ports:
      - "{{ guacamole_web_port }}:8080"

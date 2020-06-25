@@ -43,7 +43,7 @@ guacamole_web_settings:
   LDAP_PORT: "389"
   GUACD_HOSTNAME: "guacd"  
 
-guacamole_container_extra_hosts:
-  db: 1.1.1.2
+#guacamole_container_extra_hosts:
+#  db: 1.1.1.2
 
 guacamole_versions_sequence: ['1.1.0']
