@@ -6,8 +6,8 @@ desktop_network: guacamole
 desktop_geometry: 1920x1080
 desktop_home: /opt/desktop
 
-desktop_containers:
-  akaufman_desktop:
-    hosts: 
-      example.com: 192.168.1.22
+desktop_containers: []
+#  akaufman_desktop:
+#    hosts: 
+#      example.com: 192.168.1.22
 #  tclifton_desktop:

@@ -3,3 +3,8 @@ lvm_roles:
   docker: # geerlingguy.docker
     size: '60g'
     path: '/var/lib/docker'  
+
+desktop_containers:
+  akaufman-desktop:
+    hosts: 
+      example.com: 192.168.1.22
