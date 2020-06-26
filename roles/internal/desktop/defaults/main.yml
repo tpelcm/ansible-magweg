@@ -11,3 +11,7 @@ desktop_containers: []
 #    hosts: 
 #      example.com: 192.168.1.22
 #  tclifton_desktop:
+
+desktop_env:
+ DOCKER_DESKTOP_USER: "vagrant"
+ DOCKER_DESKTOP_GEOMETRY: "{{ desktop_geometry }}"

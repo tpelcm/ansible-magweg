@@ -6,3 +6,11 @@ proxy_no_proxy: 'localhost,127.0.0.0/8,nip.io,docker-registry.somecorporation.co
 docker_proxy_http: "http://{{ proxy_host }}:{{ proxy_port }}"
 docker_proxy_https: "http://{{ proxy_host }}:{{ proxy_port }}"
 docker_proxy_no: "{{ proxy_no_proxy }}"
+
+desktop_env:
+  HTTP_PROXY: "http://{{ proxy_host }}:{{ proxy_port }}"
+  HTTPS_PROXY: "http://{{ proxy_host }}:{{ proxy_port }}"
+  NO_PROXY: "{{ proxy_no_proxy }}"
+  http_proxy: "http://{{ proxy_host }}:{{ proxy_port }}"
+  https_proxy: "http://{{ proxy_host }}:{{ proxy_port }}"
+  no_proxy: "{{ proxy_no_proxy }}"

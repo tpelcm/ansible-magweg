@@ -31,9 +31,7 @@
       - name: "{{ desktop_network }}"
     volumes:
       - "{{ item }}:/home/vagrant"
-    env:
-      DOCKER_DESKTOP_USER: "vagrant"
-      DOCKER_DESKTOP_GEOMETRY: "{{ desktop_geometry }}"
+    env: "{{ desktop_env }}"
     command: "/usr/local/bin/vncserver-docker-desktop"
     etc_hosts: "{{ desktop_containers[item].hosts|default(omit) }}"
     #ports:
