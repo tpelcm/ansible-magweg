@@ -4,7 +4,19 @@ lvm_roles:
     size: '60g'
     path: '/var/lib/docker'  
 
+desktop_volumes:
+  - akaufman-desktop
+  - tclifton-desktop  
+
 desktop_containers:
   akaufman-desktop:
     hosts: 
-      example.com: 192.168.1.22
+      db: 1.1.1.2
+    volumes:
+      - "akaufman-desktop:/home/vagrant"
+      - "/etc/environment:/etc/environment"
+  tclifton-desktop:
+    hosts: 
+      db: 1.1.1.2
+    volumes:
+      - "tclifton-desktop:/home/vagrant"

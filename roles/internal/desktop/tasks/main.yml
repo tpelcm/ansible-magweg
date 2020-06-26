@@ -22,15 +22,14 @@
 
 - docker_volume:
     name: "{{ item }}"
-  with_items: "{{ desktop_containers }}"
+  with_items: "{{ desktop_volumes }}"
 
 - docker_container:
     name: "{{ item }}"
     image: "{{ desktop_image }}:{{ desktop_version }}"
     networks:
       - name: "{{ desktop_network }}"
-    volumes:
-      - "{{ item }}:/home/vagrant"
+    volumes: "{{ desktop_containers[item]['volumes']|default(omit) }}"
     env: "{{ desktop_env }}"
     command: "/usr/local/bin/vncserver-docker-desktop"
     etc_hosts: "{{ desktop_containers[item].hosts|default(omit) }}"

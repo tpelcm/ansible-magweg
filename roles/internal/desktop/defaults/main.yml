@@ -6,11 +6,19 @@ desktop_network: guacamole
 desktop_geometry: 1920x1080
 desktop_home: /opt/desktop
 
+desktop_volumes: []
 desktop_containers: []
-#  akaufman_desktop:
+#  akaufman-desktop:
 #    hosts: 
-#      example.com: 192.168.1.22
-#  tclifton_desktop:
+#      db: 1.1.1.2
+#    volumes:
+#      - "akaufman-desktop:/home/vagrant"
+#      - "/etc/environment:/etc/environment"
+#  tclifton-desktop:
+#    hosts: 
+#      db: 1.1.1.2
+#    volumes:
+#      - "tclifton-desktop:/home/vagrant"
 
 desktop_env:
  DOCKER_DESKTOP_USER: "vagrant"
