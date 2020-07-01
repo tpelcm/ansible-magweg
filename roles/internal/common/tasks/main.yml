@@ -36,6 +36,7 @@
     comment: Ansible 
     shell: /bin/bash
     password: '{{ common_ansible_user_password }}'
+    expires: '{{ common_ansible_user_expires }}'
   when: common_ansible_user_create == true
 
 - name: Set authorized keys taken from url

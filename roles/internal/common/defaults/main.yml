@@ -7,6 +7,7 @@ common_role_packages:
 common_ansible_user: tpetools
 common_ansible_user_password: supersecure
 common_ansible_user_create: false
+common_ansible_user_expires: -1
 
 # common_ansible_authorized_keys: https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
 
