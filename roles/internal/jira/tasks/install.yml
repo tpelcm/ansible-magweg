@@ -1,4 +1,9 @@
 ---
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+  with_items: "{{ jira_packages[ansible_distribution] }}" 
+
 - name: Home
   file:
     path: "{{ jira_home }}"
