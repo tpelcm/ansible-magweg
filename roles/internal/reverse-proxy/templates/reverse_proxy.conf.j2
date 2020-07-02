@@ -2,9 +2,10 @@
 
 ProxyRequests Off
 ProxyPreserveHost On
+ProxyTimeout {{ reverse_proxy_proxy_timout }}
 
 SSLSessionCache shmcb:/var/cache/mod_ssl/scache(512000)
-SSLSessionCacheTimeout 300
+SSLSessionCacheTimeout {{ reverse_proxy_ssl_session_cache_timeout }}
 # SSLMutex default
 Mutex default
 SSLRandomSeed startup file://dev/urandom 256
