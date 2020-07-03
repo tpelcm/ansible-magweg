@@ -6,9 +6,9 @@
     owner: root
     group: root
     mode: 0755
-  notify: restart jira  
   when: "ansible_service_mgr == 'systemd'" 
   notify: jira-systemctl-daemon-reload
 
 - name: ensure service running and set to start on boot
   service: name=jira state=started enabled=yes
+  when: jira_manual_upgrade == False

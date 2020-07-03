@@ -1,0 +1,21 @@
+---
+- name: Download installer
+  get_url:
+    url: "{{ jira_versions[jira_version]['url'] }}"
+    dest: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }}"
+    checksum: "{{ jira_versions[jira_version]['checksum'] }}"
+    timeout: 300
+    mode: 1373
+  register: get_url_result
+  until: get_url_result is succeeded
+
+- name: Run installer 
+  command: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }} -q -varfile {{ jira_home }}/response.varfile"
+  become: yes
+  become_method: sudo
+  become_user: "{{ jira_versions[jira_version]['installer_user']|default('root') }}"
+  notify:
+    - lcm-version-file
+    - jira-systemctl-daemon-reload
+    - jira-systemctl-restart
+  when: jira_manual_upgrade == False

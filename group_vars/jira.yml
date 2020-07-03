@@ -1,6 +1,8 @@
 ---
 jira_version: 7.12.1
-#jira_version:  8.5.4
+# jira_version:  8.5.5
+#jira_manual_upgrade: yes
+
 jira_database_host: 1.1.1.2
 
 #backup_restore: 

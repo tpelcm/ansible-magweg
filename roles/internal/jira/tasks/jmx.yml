@@ -6,3 +6,4 @@
     group: "{{ jira_owner }}"
     owner: "{{ jira_group }}" 
     mode: "400"
+  when: jira_jmx.enable == True

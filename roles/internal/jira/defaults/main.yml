@@ -13,6 +13,8 @@ jira_rmi_port: 8005
 jira_owner: jira
 jira_group: jira
 
+jira_manual_upgrade: no
+
 jira_database_username: jira
 jira_database_password: supersecure
 
@@ -76,8 +78,8 @@ jira_jvm_support_recommended_args: >-
 # Session timeout.
 #jira_session_timeout: "300"
 
-#jira_jmx:
-#  enable: yes
+jira_jmx:
+  enable: no
 #  remote_port: 3333
 #  rmi_port: 3333
 #  rmi_server_hostname: sh.1.1.1.11.nip.io
@@ -90,4 +92,4 @@ jira_libraries: []
 # https://confluence.atlassian.com/x/PRCEOQ
 jira_packages:
   RedHat: ['fontconfig']
-  CentOS: ['dejavu-sans-fonts']
+  CentOS: ['dejavu-sans-fonts','fontconfig']

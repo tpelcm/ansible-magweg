@@ -7,34 +7,6 @@
     src: jira-application.properties.j2
   notify: jira-systemctl-restart
 
-- name: Check dbconfig.xml exists
-  stat:
-    path: "{{ jira_home_version_home }}/dbconfig.xml"
-  register: dbconfig_xml
-
-- name: Jira setup check
-  debug:
-    msg: "Jira has not been setup yet. Use a browser to navigate to http://{{ jira_proxy_name }}:{{ jira_proxy_port }}{{ jira_web_context }}  and complete setup"
-  changed_when: true
-  when: not dbconfig_xml.stat.exists
-
-- name: dbconfig.xml
-  template:
-    dest: "{{ jira_home_version_home }}/dbconfig.xml"
-    owner: "{{ jira_owner }}"
-    group: "{{ jira_group }}"
-    src: dbconfig.xml.j2
-  notify: jira-systemctl-restart
-  when: dbconfig_xml.stat.exists 
-
-- name: Enable MS Excel export
-  template:
-    dest: "{{ jira_home_version_home }}/jira-config.properties"
-    owner: "{{ jira_owner }}"
-    group: "{{ jira_group }}"
-    src: jira-config.properties.j2
-  notify: jira-systemctl-restart
-
 - name: setenv.sh
   replace:
     path: "{{ jira_home_version_app }}/bin/setenv.sh"
@@ -69,3 +41,13 @@
     url: "{{ item.url }}"
   with_items: "{{ jira_libraries }}" 
   notify: jira-systemctl-restart
+
+- name: Oracle JDBC driver
+  get_url:
+    dest: "{{ jira_home_version_app }}/lib/{{ jira_database_ojdbc_jar_url|basename }}"
+    group: "{{ jira_group }}"
+    owner: "{{ jira_owner }}"
+    url: "{{ jira_database_ojdbc_jar_url }}"
+  when: jira_database_ojdbc_jar_url is defined
+  notify:
+    - jira-systemctl-restart
