@@ -26,4 +26,8 @@ common_ansible_user_password: whuq0hKZYtmE2
 
 # common_terminal_prompt: '\e[01;31m[\u@{{ inventory_hostname }} \h \w]\\$\e[m '
 
-swid_enable: true
+swid_enable: false
+
+cacerts_trusted_sites:
+  - url: sh.1.1.1.3.nip.io
+    port: 443
