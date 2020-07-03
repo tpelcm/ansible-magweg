@@ -28,7 +28,8 @@ jira_database_validation_query: select 1
 jira_database_schema: public
 jira_datababse_setbigstringtryclob: no # yes for oracle
 jira_database_custom: no # yes for oracle
-
+jira_database_lc_collate: C
+jira_database_lc_ctype: C
 # Oracle example settings
 # jira_database_custom: yes
 # jira_database_url: jdbc:oracle:thin:@//1.1.1.111:1521/jira_lab.localdomain
