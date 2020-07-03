@@ -14,9 +14,9 @@
 - name: Create database
   postgresql_db:
     name: "{{ vars[item + '_database_name_version']  }}"
-    lc_collate: 'en_US.UTF-8' # TODO - uit rol halen
-    lc_ctype: 'en_US.UTF-8'
-    encoding: 'UTF-8'
+    lc_collate: "{{ vars[item + '_database_lc_collate']|default('en_US.UTF-8') }}"
+    lc_ctype: "{{ vars[item + '_database_lc_ctype']|default('en_US.UTF-8') }}"
+    encoding: "{{ vars[item + '_database_encoding']|default('UTF-8') }}"
     template: 'template0'
     login_host: "{{ vars[item + '_database_host'] }}"
     login_password: "{{ vars[item + '_database_admin_password'] }}"
