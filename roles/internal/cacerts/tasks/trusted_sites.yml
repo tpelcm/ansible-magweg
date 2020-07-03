@@ -9,3 +9,4 @@
     state: present
   with_items: "{{ cacerts_trusted_sites }}"
   notify: "{{ cacerts_roles[role].notify|default(omit) }}"
+  ignore_errors: true
