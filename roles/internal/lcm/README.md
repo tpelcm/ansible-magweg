@@ -1,10 +1,10 @@
-# Ansible Role: LCM
+# LCM
 
 An Ansible Role that helps with automating specific LCM operations. 
 
 Downgrade is typically not an operation that products support so a provision that requests a earlier version than the one currently installed, performs a __install__ operation.
 
-This role will create Ansible facts regarding the type of operation that is requested for example a variable named `<role>_lcm.operation` will have the operation.
+This role will create Ansible facts for the type of operation that is requested.
 
 | Operation         | Conditions           | 
 | ----------------- |:-------------:|
@@ -14,17 +14,28 @@ This role will create Ansible facts regarding the type of operation that is requ
 | rollback          | The desired and current version are installed and the desired version is lower.      |
 | rollforward       | The desired and current version are installed and the desired version is higher.      |
 
-In Ansible console logging you should see LCM info similar to
+In Ansible console logging you should see LCM info for roles that use / support this role. The example below shows LCM info for a Jira upgrade.
 
-    TASK [lcm : LCM info] **********************************************************
-    ok: [bitbucket] => (item=bitbucket) => {
-        "ansible_loop_var": "item", 
-        "bitbucket_lcm": {
-            "operation": "rollback", 
-            "operation-description": "Rollback 7.0.1 to 5.10.1", 
-            "version-file": "/opt/bitbucket/bitbucket-5.10.1/VERSION"
-        }, 
-        "item": "bitbucket"
+    TASK [lcm : LCM info facts] ****************************************************
+    ok: [jira] => (item=jira) => {
+        "msg": [
+            "jira_lcm['operation']: upgrade", 
+            "jira_lcm['version-file']: /opt/jira/jira-8.5.5/VERSION", 
+            "jira_lcm['operation-description']: Upgrade 7.12.1 to 8.5.5", 
+            "jira_version: 8.5.5", 
+            "jira_home: /opt/jira", 
+            "jira_database_name_version: jira_8_5_5", 
+            "jira_database_template: jira_7_12_1", 
+            "jira_home_version: /opt/jira/jira-8.5.5", 
+            "jira_home_version_current: /opt/jira/jira-7.12.1", 
+            "jira_home_version_home: /opt/jira/jira-8.5.5/home", 
+            "jira_home_version_home_current: /opt/jira/jira-7.12.1/home", 
+            "jira_home_version_app: /opt/jira/jira-8.5.5/app", 
+            "jira_home_version_app_current: /opt/jira/jira-7.12.1/app", 
+            "jira_home_link: /opt/jira/jira", 
+            "jira_home_link_home: /opt/jira/jira/home", 
+            "jira_home_link_app: /opt/jira/jira/app"
+        ]
     }
 
 To clarify how this role helps you automate LCM operations, consider the following snippet from the bitbucket role.
