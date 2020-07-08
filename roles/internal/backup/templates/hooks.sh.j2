@@ -15,10 +15,10 @@ fi
 if [[ $1 == {{ rl }}* ]] && [ "$2" == "before" ]
 then
   echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
-  {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
+  {% if vars['backup_roles'][rl]['stop_start_service'] is defined and vars['backup_roles'][rl]['stop_start_service'] != False %}
   try systemctl stop {{ vars['backup_roles'][rl]['stop_start_service'] }}
   {% endif %}
-  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
+  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined and vars['backup_roles'][rl]['stop_start_containers'] != False %}
   try docker stop {{ vars['backup_roles'][rl]['stop_start_containers']|reverse|join(' ') }}
   {% endif %}
 fi
@@ -26,10 +26,10 @@ fi
 if [[ $1 == {{ rl }}* ]] && [ "$2" == "after" ]
 then
   echo "$1-$2 hook $(date)" >> $BACKUP_LOGFILE 2>&1
-  {% if vars['backup_roles'][rl]['stop_start_service'] is defined %}
+  {% if vars['backup_roles'][rl]['stop_start_service'] is defined and vars['backup_roles'][rl]['stop_start_service'] != False %}
   try systemctl start {{ vars['backup_roles'][rl]['stop_start_service'] }}
   {% endif %}
-  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined %}
+  {% if vars['backup_roles'][rl]['stop_start_containers'] is defined and vars['backup_roles'][rl]['stop_start_containers'] != False %}
   try docker start {{ vars['backup_roles'][rl]['stop_start_containers']|join(' ') }}
   {% endif %}
 fi

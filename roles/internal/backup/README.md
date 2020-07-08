@@ -16,6 +16,19 @@ The path is created as follows
 
     {{ backup_archives }}/{{ inventory_hostname }}/{{ role }}_{{ schedule }}/{{ date-time }}/{{ role }}_{{ schedule }}.tar
 
+For each supported role default settings are configured for example
+
+    backup_roles:
+      jira:
+        stop_start_service: jira
+        keep: { daily: 3, weekly: 1, monthly: 0, manual: 1 }
+
+If you don't want to stop and start services or containers override default settings using `no` as follows
+
+    backup_roles:
+      jira:
+        stop_start_service: no
+
 ## Restore
 
 To support restore a `backup_restore` fact should be configured for example as follows
