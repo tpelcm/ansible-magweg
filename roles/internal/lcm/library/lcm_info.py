@@ -74,6 +74,7 @@ def lcm_info(data):
   "operation-description": op_descr,
   "version-file": vsn_file},
   role + '_home_link': home_link(data)}
+  fcts[role + '_lcm_operation'] = op
   if op in ['install', 'upgrade']:
     fcts['lcm_write_version_file'] = True
   fcts[role + '_home_version'] = home_version(data,data['version'])

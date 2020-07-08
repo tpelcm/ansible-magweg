@@ -24,6 +24,7 @@
   debug:
     msg: 
       - "{{ item }}_lcm['operation']: {{ vars[item + '_lcm']['operation']|default('not defined') }}"
+      - "{{ item }}_lcm_operation: {{ vars[item + '_lcm_operation']|default('not defined') }}"
       - "{{ item }}_lcm['version-file']: {{ vars[item + '_lcm']['version-file']|default('not defined') }}"
       - "{{ item }}_lcm['operation-description']: {{ vars[item + '_lcm']['operation-description']|default('not defined') }}"
       - "{{ item }}_version: {{ vars[item + '_version']|default('not defined') }}"

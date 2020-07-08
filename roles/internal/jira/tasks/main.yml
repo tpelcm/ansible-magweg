@@ -6,7 +6,9 @@
     - jira-systemctl-daemon-reload
     - jira-systemctl-restart
 
-- include: database.yml 
+- include: ../../postgresql/tasks/database.yml 
+  vars:
+      lcm_role_upgrade: "jira"
   when: jira_database_custom == False
 
 - include: install.yml
