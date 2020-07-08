@@ -1,5 +1,6 @@
 ---
 jira_version: 7.12.1
+# jira_version: 7.13.14
 # jira_version:  8.5.5
 #jira_manual_upgrade: yes
 
