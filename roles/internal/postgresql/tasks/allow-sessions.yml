@@ -1,0 +1,12 @@
+---
+- name: Allow sessions
+  postgresql_query:
+    db: postgres
+    login_host: "{{ vars[ lcm_role_upgrade + '_database_host' ] }}"
+    login_user: "{{ vars[ lcm_role_upgrade + '_database_admin_username' ] }}"
+    login_password: "{{ vars[ lcm_role_upgrade + '_database_admin_password' ] }}"
+    port: "{{ vars[ lcm_role_upgrade + '_database_port' ] }}"
+    query: update pg_database SET datallowconn = 'true' WHERE datname = %s
+    positional_args:
+      - "{{ vars[lcm_role_upgrade + '_database_template' ] }}"
+     

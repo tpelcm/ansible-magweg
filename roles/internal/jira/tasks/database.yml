@@ -13,6 +13,13 @@
   vars:
     ansible_ssh_pipelining: true
 
+# Terminate and block sessions to the template database on upgrade
+# A database cannot be copied with active sessions
+- include: ../../postgresql/tasks/terminate-block-sessions.yml 
+  vars:
+      lcm_role_upgrade: "jira"
+  when: jira_lcm['operation'] == 'upgrade'
+
 - name: create database schema 
   postgresql_db:
     name: "{{ jira_database_name_version }}"
@@ -28,3 +35,8 @@
     state: "{{ item.state | default('present') }}"
   vars:
     ansible_ssh_pipelining: true
+
+- include: ../../postgresql/tasks/allow-sessions.yml 
+  vars:
+      lcm_role_upgrade: "jira"
+  when: jira_lcm['operation'] == 'upgrade'
