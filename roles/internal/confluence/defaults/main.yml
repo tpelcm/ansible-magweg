@@ -61,6 +61,8 @@ confluence_database_hibernate:
 confluence_owner: "confluence"
 confluence_group: "confluence"
 
+confluence_manual_upgrade: no
+
 # TODO
 #confluence_max_map_count: 262144
 
@@ -101,7 +103,7 @@ confluence_reverse_proxy:
 # confluence_home_version: /opt/confluence/confluence_6_7
 
 confluence_jmx:
-  enable: yes
+  enable: no
   remote_port: 3333
   rmi_port: 3333
   rmi_server_hostname: sh.1.1.1.11.nip.io

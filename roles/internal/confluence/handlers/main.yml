@@ -4,6 +4,7 @@
     daemon_reload: true
   changed_when: false
   ignore_errors: true
+  when: confluence_manual_upgrade == False
 
 - name: confluence-systemctl-restart
   service:
@@ -15,3 +16,4 @@
   run_once: true
   changed_when: false
   ignore_errors: true
+  when: confluence_manual_upgrade == False

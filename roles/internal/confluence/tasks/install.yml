@@ -1,41 +1,39 @@
 ---
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ confluence_home }}"
+    - "{{ confluence_home_version }}"
+    - "{{ confluence_home_version_home }}"    
+
+- name: Create symbolic link install
+  file:
+    src: "{{ confluence_home_version }}"
+    dest: "{{ confluence_home_link }}"
+    state: link
+
 - name: response file
   template:
     dest: "{{ confluence_home }}/reponse.varfile"
     src: response.varfile.j2
 
-- name: download installer
-  get_url:
-    url: "{{ confluence_versions[confluence_version]['url'] }}"
-    dest: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
-    checksum: "{{ confluence_versions[confluence_version]['checksum'] }}"
-    timeout: 300
-    mode: 1373
-  register: get_url_result
-  until: get_url_result is succeeded
-  when: confluence_lcm['operation'] in ['upgrade','install'] 
-
-- name: remove installer
-  file:
-    path: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
-    state: absent
-  when: confluence_lcm['operation'] not in ['upgrade','install'] 
-
 - name: Copy home dir
-  command: "rsync -az --delete --recursive {{ confluence_home_version_home_current }}/ {{ confluence_home_version_home }}/"
+  command: "rsync -az --delete --recursive --exclude='VERSION' {{ confluence_home_version_current }}/ {{ confluence_home_version }}/"
   when: confluence_lcm['operation'] == 'upgrade' 
-
-- name: run installer 
-  command: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }} -q -varfile {{ confluence_home }}/reponse.varfile"
-  become: yes
-  become_method: sudo
-  become_user: "{{ confluence_versions[confluence_version]['installer_user']|default('root') }}"
-  # become_flags: '-s /bin/sh'
   notify:
     - lcm-version-file
-    - confluence-systemctl-daemon-reload
-    - confluence-systemctl-restart
-  when: confluence_lcm['operation'] in ['upgrade','install']
+
+- include: installer.yml 
+  when: confluence_lcm['operation'] == 'install'
+
+- include: configure-home.yml
+
+- include: installer.yml 
+  when: confluence_lcm['operation'] == 'upgrade'
+
+- include: configure-app.yml
 
 - name: chown confluence home version 
   file: 
@@ -45,23 +43,8 @@
     recurse: yes
   when: confluence_lcm['operation'] in ['upgrade','install']
 
-- name: Create symbolic link install
+- name: remove installer
   file:
-    src: "{{ confluence_home_version }}"
-    dest: "{{ confluence_home_link }}"
-    state: link
-
-- file:
-    path: "{{ confluence_home }}"
-    state: directory
-    mode: 0700
-
-- name: Oracle JDBC driver
-  get_url:
-    dest: "{{ confluence_home_version_app }}/lib/{{ confluence_database_ojdbc_jar_url|basename }}"
-    group: "{{ confluence_group }}"
-    owner: "{{ confluence_owner }}"
-    url: "{{ confluence_database_ojdbc_jar_url }}"
-  when: confluence_database_ojdbc_jar_url is defined
-  notify:
-    - confluence-systemctl-restart
+    path: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
+    state: absent
+  when: confluence_lcm['operation'] not in ['upgrade','install'] 
