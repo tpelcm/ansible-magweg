@@ -10,6 +10,13 @@ confluence_libraries:
 
 confluence_manual_upgrade: no
 
+backup_roles:
+  confluence:
+    stop_start_service: confluence
+    keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+    snapshot: yes
+    backup_lvm_snapshot_size: 2G
+
 #backup_restore: 
 #  confluence:
 #    path_pattern: '*'
