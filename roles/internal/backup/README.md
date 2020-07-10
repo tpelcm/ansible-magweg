@@ -29,6 +29,14 @@ If you don't want to stop and start services or containers override default sett
       jira:
         stop_start_service: no
 
+If you want to skip the database backup use `skip_database` for example as shown below
+
+    backup_roles:
+      jira:
+        stop_start_service: jira
+        keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+        skip_database: yes
+
 ## Restore
 
 To support restore a `backup_restore` fact should be configured for example as follows

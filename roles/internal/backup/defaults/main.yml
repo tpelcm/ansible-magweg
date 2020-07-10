@@ -21,6 +21,7 @@ backup_roles:
   jira:
     stop_start_service: jira
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+    # skip_database: yes
   bitbucket:
     stop_start_service: bitbucket
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
