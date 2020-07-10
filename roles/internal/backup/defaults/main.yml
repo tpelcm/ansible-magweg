@@ -8,6 +8,7 @@ backup_alias_prefix: tpelcm
 backup_cron_jobs: true
 backup_restore_db: false
 backup_restore_home: false
+backup_lvm_snapshot_size: 1G
 
 backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence', 'guacamole']
 
@@ -28,6 +29,8 @@ backup_roles:
   confluence:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+    # snapshot: yes
+    # backup_lvm_snapshot_size: 2G
   awx:
     stop_start_containers: ['awx_postgres','awx_redis','awx_memcached','awx_task','awx_web']
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }

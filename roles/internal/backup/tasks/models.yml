@@ -1,6 +1,13 @@
 ---
-- name: Backup model rb 
+- name: Backup model  
   template:
     dest: '/etc/backup/models/{{ item }}.rb'
     src: model.rb.j2
+  with_items: '{{ backup_roles_node }}'
+
+- name: Ater and before hook
+  template:
+    dest: '/etc/backup/scripts/{{ item }}_hooks.sh'
+    src: model.sh.j2
+    mode: 755
   with_items: '{{ backup_roles_node }}'

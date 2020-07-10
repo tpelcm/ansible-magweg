@@ -29,15 +29,6 @@
     src: config.rb.j2
     dest: /etc/backup/config.rb
 
-- name: Scripts
-  template:
-   dest: '/etc/backup/scripts/{{ item }}.sh'
-   src: '{{ item }}.sh.j2'
-   mode: 0755   
-  with_items: 
-    - helpers
-    - hooks 
-
 - include_tasks: "models.yml"
 
 - include_tasks: "alias.yml"
@@ -71,3 +62,12 @@
 
 - include_tasks: "restore.yml"
   when: backup_restore is defined
+
+# TODO remove
+- name: Remove obsolete hook file
+  file:
+    path: "{{ item }}"
+    state: "absent"
+  with_items: 
+    - "/etc/backup/scripts/hooks.sh"
+    - "/etc/backup/scripts/helpers.sh"

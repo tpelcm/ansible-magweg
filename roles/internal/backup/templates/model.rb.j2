@@ -14,9 +14,19 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
   split_into_chunks_of {{ backup_split_into_chunks_of }}
   compress_with Gzip
 
-  # <%= render '_mount_test_before_hook.erb', :cookbook => 'ok-backup' %>
+  logfile = File.join('{{ backup_logs }}',"{{ inventory_hostname }}_{{ item }}_{{ schdl }}.log")
+
+  before do
+    File.delete(logfile) if File.exists?(logfile)
+    `/etc/backup/scripts/{{ item }}_hooks.sh before #{logfile}`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Error in #{self.trigger}-before"
+    end
+  end  
 
 {% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
   database PostgreSQL do |db|
     db.name = '{{ vars[item + '_database_name_version'] }}'
     db.username = '{{ vars[item + '_database_username'] }}'
@@ -25,11 +35,16 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
     db.port = '{{ vars[item + '_database_port'] }}'
     db.additional_options = []
   end
+{%    endif %}
 {% endif %}
 
 {% if vars[item + '_home'] is defined %}
   archive :home do |archive|
+{%   if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
+    archive.root '{{ vars[item + '_home_backup_version'] }}'
+{%   else %}
     archive.root '{{ vars[item + '_home_version'] }}'
+{%   endif %}
     archive.add '.'
 {%   if backup_roles[item]['tar_options'] is defined %}
     archive.tar_options '{{ backup_roles[item]['tar_options'] }}'
@@ -41,6 +56,15 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
     local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
     local.keep = {{ backup_roles[item]['keep'][schdl] }}
   end
+
+  after do 
+    `/etc/backup/scripts/{{ item }}_hooks.sh after #{logfile}`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Error in #{self.trigger}-after"
+    end
+  end
+
 end
 
 {% endfor %}

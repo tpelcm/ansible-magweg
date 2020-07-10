@@ -43,6 +43,12 @@ def database_version(data,vsn):
 def home_version(data,vsn):
   return os.path.join(os.path.sep,data['home'],os.path.basename(data['home']) + '-' + vsn)
 
+def home_backup(data,vsn):
+  return data['home'] + '-backup'
+
+def home_backup_version(data,vsn):
+  return os.path.join(home_backup(data,vsn),os.path.basename(data['home']) + '-' + vsn)
+
 def home_version_home(data,vsn):
   return os.path.join(home_version(data,vsn), 'home')
 
@@ -77,6 +83,8 @@ def lcm_info(data):
   fcts[role + '_lcm_operation'] = op
   if op in ['install', 'upgrade']:
     fcts['lcm_write_version_file'] = True
+  fcts[role + '_home_backup'] = home_backup(data,data['version'])
+  fcts[role + '_home_backup_version'] = home_backup_version(data,data['version'])
   fcts[role + '_home_version'] = home_version(data,data['version'])
   fcts[role + '_home_version_home'] = home_version_home(data,data['version'])
   fcts[role + '_home_version_app'] = home_version_app(data,data['version'])    

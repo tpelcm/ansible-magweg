@@ -1,0 +1,87 @@
+#!/bin/bash
+# {{ ansible_managed }}
+#
+# Hooks file for {{ item }} with before and after hook 
+# This hook file is called from /etc/backup/models/{{ item }}.rb 
+#
+# LVM volume group: {{ lvm_vg }}
+# LVM volume name: {{ item }}
+# LVM volume name snapshot: {{ item }}-snapshot
+# LVM volume path snapshot: /dev/{{ lvm_vg }}/{{ item }}-snapshot
+# LVM volume size snapshot: {{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }}
+# Mount volume mount: {{ vars[item+'_home'] }}
+# Mount volume backup snapshot: {{ vars[item+'_home_backup'] }}
+# Backup directory: {{ vars[item+'_home_backup_version'] }}
+#
+# The log file passed from {{ item }}.rb are for example:
+{% for schdl in backup['schedules_default'] %}
+# - {{ backup_logs }}/{{ inventory_hostname }}_{{ item }}_{{ schdl }}.log
+{% endfor %}
+
+{% include './templates/_helpers.sh.j2' %}
+
+
+if [ $# -eq 0 ]
+then
+    echo "No arguments supplied!" 
+    echo "First argument should be 'before' or 'after', second argument should be path for a log file"
+    exit 1
+fi
+
+export BACKUP_LOGFILE=$2
+
+echo "Logging to $BACKUP_LOGFILE"
+
+if [[ $1 == "before" ]]
+then
+{% set role_props = vars['backup_roles'][item] %}
+  echo "{{ item }} before hook $(date)" >> $BACKUP_LOGFILE 2>&1
+  try mountpoint -q {{ backup_mount }} >> $BACKUP_LOGFILE 2>&1
+{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
+  try systemctl stop {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
+  try docker stop {{ role_props['stop_start_containers']|reverse|join(' ') }} >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+{% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  umount {{ vars[item+'_home_backup'] }} 2> /dev/null | true
+  lvdisplay {{ lvm_vg }}/{{ item }}-snapshot &>/dev/null
+  if [ $? -eq 0 ]
+  then
+    echo "Snapshot volume still exists!" >> $BACKUP_LOGFILE 2>&1
+    try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
+  fi
+  try lvcreate -prw -L{{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }} -s -n {{ item }}-snapshot /dev/mapper/{{ lvm_vg }}-{{ item }} >> $BACKUP_LOGFILE 2>&1
+  try mkdir -p {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+  try mount /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
+{%   if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  try systemctl start {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
+{%   endif %}
+{% endif %}
+{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
+{%   if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  try docker start {{ role_props['stop_start_containers']|join(' ') }}  >> $BACKUP_LOGFILE 2>&1
+{%   endif %}
+{% endif %}
+fi
+
+if [[ $1 == "after" ]]
+then
+  echo "{{ item }} after hook $(date)" >> $BACKUP_LOGFILE 2>&1
+{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
+{%   if role_props['snapshot'] is not defined or role_props['snapshot'] != True %}
+  try systemctl start {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
+{%   endif %}
+{% endif %}
+{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
+{%   if role_props['snapshot'] is not defined or role_props['snapshot'] != True %}
+  try docker start {{ role_props['stop_start_containers']|join(' ') }}  >> $BACKUP_LOGFILE 2>&1
+{%   endif %}
+{% endif %}
+{% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  umount {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+  lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+fi

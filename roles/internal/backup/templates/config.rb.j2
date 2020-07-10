@@ -17,17 +17,6 @@ preconfigure 'GenericBackup' do
   FileUtils.mkdir_p('{{ backup_tmp }}')
   FileUtils.mkdir_p('{{ backup_archives }}')
 
-  logfile = File.join('{{ backup_logs }}',"{{ inventory_hostname }}_#{self.trigger}.log")
-
-  before do
-    File.delete(logfile) if File.exists?(logfile)
-    `/etc/backup/scripts/hooks.sh #{self.trigger} before #{logfile}`
-    if $? != 0
-      Logger.error File.read(logfile) if File.exists?(logfile)
-      raise "Error in #{self.trigger}-before"
-    end
-  end
-
 {% if backup_notify_mail['enabled'] == true %}
   notify_by Mail do |mail|
 {% if backup_notify_mail['from'] is defined %}  
@@ -60,13 +49,6 @@ preconfigure 'GenericBackup' do
     end    
   end
 {% endif %}  
-  after do 
-    `/etc/backup/scripts/hooks.sh #{self.trigger} after #{logfile}`
-    if $? != 0
-      Logger.error File.read(logfile) if File.exists?(logfile)
-      raise "Error in #{self.trigger}-after"
-    end
-  end
 end
 
 tmp_path  File.join('{{ backup_tmp }}', '{{ inventory_hostname }}')
