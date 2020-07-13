@@ -15,6 +15,7 @@ backup_roles:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
     snapshot: yes
+    incremental: yes
     backup_lvm_snapshot_size: 2G
 
 #backup_restore: 
