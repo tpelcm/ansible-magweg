@@ -18,6 +18,7 @@
     - /etc/backup
     - /etc/backup/models
     - /etc/backup/scripts
+    - /etc/backup/rsnapshot
 
 - name: Generate example config file
   command: /opt/backup/bin/backup generate:config --config-file=/etc/backup/config-example.rb
@@ -30,7 +31,7 @@
     dest: /etc/backup/config.rb
 
 - include_tasks: "models.yml"
-
+- include_tasks: "rsnapshot.yml"
 - include_tasks: "alias.yml"
 
 - name: Cron
@@ -63,10 +64,13 @@
     - "db_snapshot.sql" 
     - "db_snapshot_drop.sql" 
 
-- name: Rsync
+- name: Packages
   package:
-    name: rsync
+    name: "{{ item }}"
     state: present
+  with_items: 
+    - rsync
+    - rsnapshot
 
 - include_tasks: "restore.yml"
   when: backup_restore is defined

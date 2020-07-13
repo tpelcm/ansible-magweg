@@ -18,7 +18,7 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
 
   before do
     File.delete(logfile) if File.exists?(logfile)
-    `/etc/backup/scripts/{{ item }}_hooks.sh before #{logfile}`
+    `/etc/backup/scripts/{{ item }}_hooks.sh before #{logfile} {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-before"
@@ -43,26 +43,39 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
 {% endif %}
 
 {% if vars[item + '_home'] is defined %}
+{%   if backup_roles[item]['incremental'] is not defined or backup_roles[item]['incremental'] == False %}
   archive :home do |archive|
-{%   if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
+{%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
     archive.root '{{ vars[item + '_home_backup_version'] }}'
-{%   else %}
+{%     else %}
     archive.root '{{ vars[item + '_home_version'] }}'
-{%   endif %}
+{%     endif %}
     archive.add '.'
-{%   if backup_roles[item]['tar_options'] is defined %}
+{%     if backup_roles[item]['tar_options'] is defined %}
     archive.tar_options '{{ backup_roles[item]['tar_options'] }}'
-{%   endif %}
+{%     endif %}
   end
+{%   endif %}
 {% endif %}
 
+{%  if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
+  # Storing db backup in home for incremental backup
+  store_with RSync do |rs|
+{%    if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
+    rs.path = '{{ vars[item + '_home_backup_version'] }}/db'
+{%    else %}
+    rs.path = '{{ vars[item + '_home_version'] }}/db'
+{%  endif %}
+  end
+{%  else %}
   store_with Local do |local|
     local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
     local.keep = {{ backup_roles[item]['keep'][schdl] }}
   end
+{%  endif %}
 
   after do 
-    `/etc/backup/scripts/{{ item }}_hooks.sh after #{logfile}`
+    `/etc/backup/scripts/{{ item }}_hooks.sh after #{logfile} {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-after"

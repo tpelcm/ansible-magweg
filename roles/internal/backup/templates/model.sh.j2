@@ -34,6 +34,9 @@ if [ $# -eq 0 ]
 then
     echo "No arguments supplied!" 
     echo "First argument should be 'before' or 'after', second argument should be path for a log file"
+{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
+    echo "Third argument should be the schedule: {{ backup['schedules_default'] }}"
+{% endif %}
     exit 1
 fi
 
@@ -87,6 +90,9 @@ fi
 if [[ $1 == "after" ]]
 then
   echo "{{ item }} after hook $(date)" >> $BACKUP_LOGFILE 2>&1
+{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
+  try /bin/rsnapshot -c /etc/backup/rsnapshot/{{ item }}.conf $3 >> $BACKUP_LOGFILE 2>&1
+{% endif %}
 {% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
 {%   if role_props['snapshot'] is not defined or role_props['snapshot'] != True %}
   try systemctl start {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
@@ -98,8 +104,8 @@ then
 {%   endif %}
 {% endif %}
 {% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  umount {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-  lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
+  try umount {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+  try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
 {% endif %}
 {% if vars[item + '_database_host'] is defined %}
 {%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}

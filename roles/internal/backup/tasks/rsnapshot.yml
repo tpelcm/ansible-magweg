@@ -1,0 +1,6 @@
+---
+- name: Rsnapshot configs  
+  template:
+    dest: '/etc/backup/rsnapshot/{{ item }}.conf'
+    src: rsnapshot.conf.j2
+  with_items: '{{ backup_roles_node }}'
