@@ -30,6 +30,7 @@
       - "{{ item }}_version: {{ vars[item + '_version']|default('not defined') }}"
       - "{{ item }}_home: {{ vars[item + '_home']|default('not defined') }}"
       - "{{ item }}_database_name_version: {{ vars[item + '_database_name_version']|default('not defined') }}"
+      - "{{ item }}_database_name_version_backup: {{ vars[item + '_database_name_version_backup']|default('not defined') }}"      
       - "{{ item }}_database_template: {{ vars[item + '_database_template']|default('not defined') }}"      
       - "{{ item }}_home_version: {{ vars[item + '_home_version']|default('not defined') }}"
       - "{{ item }}_home_version_current: {{ vars[item + '_home_version_current']|default('not defined') }}"

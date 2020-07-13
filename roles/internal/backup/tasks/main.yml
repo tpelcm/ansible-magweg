@@ -55,6 +55,14 @@
   when: backup['schedules'][item] is defined
   with_items: "{{ backup['schedules_default'] }}" 
 
+- name: Sql scripts
+  template:
+   dest: '/etc/backup/scripts/{{ item }}'
+   src: "{{ item }}.j2"
+  with_items: 
+    - "db_snapshot.sql" 
+    - "db_snapshot_drop.sql" 
+
 - name: Rsync
   package:
     name: rsync

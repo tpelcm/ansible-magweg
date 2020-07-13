@@ -17,7 +17,16 @@
 {% for schdl in backup['schedules_default'] %}
 # - {{ backup_logs }}/{{ inventory_hostname }}_{{ item }}_{{ schdl }}.log
 {% endfor %}
-
+#
+{% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
+# Database name: '{{ vars[item + '_database_name_version'] }}'
+# Database owner: '{{ vars[item + '_database_username'] }}'
+# Database admin: '{{ vars[item + '_database_admin_username'] }}'
+# Database host: '{{ vars[item + '_database_host'] }}'
+# Database port: '{{ vars[item + '_database_port'] }}'  
+{%   endif %}
+{% endif %}
 {% include './templates/_helpers.sh.j2' %}
 
 
@@ -29,6 +38,7 @@ then
 fi
 
 export BACKUP_LOGFILE=$2
+export PGPASSWORD={{ vars[item + '_database_admin_password'] }} 
 
 echo "Logging to $BACKUP_LOGFILE"
 
@@ -54,6 +64,13 @@ then
   try lvcreate -prw -L{{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }} -s -n {{ item }}-snapshot /dev/mapper/{{ lvm_vg }}-{{ item }} >> $BACKUP_LOGFILE 2>&1
   try mkdir -p {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
   try mount /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+{% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
+{%     if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  try psql -v v1={{ vars[item + '_database_name_version'] }} -v v2={{ vars[item + '_database_name_version_backup'] }} -v v3={{ vars[item + '_database_username'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot.sql
+{%     endif %}
+{%   endif %}
 {% endif %}
 {% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
 {%   if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
@@ -83,5 +100,12 @@ then
 {% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
   umount {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
   lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
+{% endif %}
+{% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
+{%     if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
+  try psql -v v1={{ vars[item + '_database_name_version_backup'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot_drop.sql
+{%     endif %}
+{%   endif %}
 {% endif %}
 fi

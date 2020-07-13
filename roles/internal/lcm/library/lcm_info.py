@@ -40,6 +40,9 @@ def database_version(data,vsn):
     vsn = data['version'] 
   return data['database'] + '_' + vsn.replace('.', '_')
 
+def database_version_backup(data,vsn):
+  return database_version(data,vsn) + '_snapshot'
+
 def home_version(data,vsn):
   return os.path.join(os.path.sep,data['home'],os.path.basename(data['home']) + '-' + vsn)
 
@@ -92,6 +95,7 @@ def lcm_info(data):
   fcts[role + '_home_link_app'] = home_link_app(data)
   if data['database'] is not None:
     fcts[role + '_database_name_version'] = database_version(data,data['version'])
+    fcts[role + '_database_name_version_backup'] = database_version_backup(data,data['version'])
   if op == 'upgrade':
     if data['database'] is not None:
       fcts[role + '_database_template'] = database_version(data,cv)

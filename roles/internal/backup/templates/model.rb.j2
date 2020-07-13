@@ -28,7 +28,11 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
 {% if vars[item + '_database_host'] is defined %}
 {%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
   database PostgreSQL do |db|
+{%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
+    db.name = '{{ vars[item + '_database_name_version_backup'] }}'
+{%     else %}
     db.name = '{{ vars[item + '_database_name_version'] }}'
+{%     endif %}
     db.username = '{{ vars[item + '_database_username'] }}'
     db.password = '{{ vars[item + '_database_password'] }}'
     db.host = '{{ vars[item + '_database_host'] }}'
