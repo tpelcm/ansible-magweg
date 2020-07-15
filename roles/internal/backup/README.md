@@ -55,6 +55,44 @@ A custom ansible module __restore_info.py__ is used to gather restore facts to e
 - Leave `folder` empty to restore complete home directory ( `<role>_home` ). Enter a subdirectory or path to limit restore to a specific directory.
 - Use `force` to force restore even if restored has already been performed. 
 
+## LVM and database snapshots
+
+It is possible to use LVM and database snapshots to create zero or near zero downtime backups. To backup Confluence using this feature configure for example:
+
+    backup_roles:
+      confluence:
+        snapshot: yes
+        backup_lvm_snapshot_size: 2G
+
+## Incremental backups
+
+Icremental backups using [rsnapshot](https://rsnapshot.org/) are supported. To use incremental backups use `incremental: yes` for example as follows:
+
+    backup_roles:
+      confluence:
+        incremental: yes
+
+Rsnapshots has the concept of backup levels to configure levels for rotation. __These levels must be unique and in ascending order__. Schedules are translated to a rsnapshot level.
+
+    backup:
+      rsnapshot_levels:
+        daily: alpha
+        weekly: beta
+        monthly: gamma
+
+The most recent backup is always __alpha.0__.
+
+If you running a higher level backup e.g. *beta* or *gamma* this will not backup anything. It will just rename the highest / oldest alpha level to a beta level.
+
+So to perform a weekly backup first run the higher level and then the lower level backup.
+
+    /bin/rsnapshot -c /etc/backup/rsnapshot/test.conf beta # e.g. alpha.2 → beta.0
+    /bin/rsnapshot -c /etc/backup/rsnapshot/test.conf alpha # e.g. → alpha.0
+
+To perform a monthly backup you first run *gamma*, then *beta*, then *alpha*.
+
+To understand in detail how this works see the [BACKUP.md](../myapp/BACKUP.md) in the [myapp](../myapp) role. 
+
 ## Issues 
 
 Ansible module `postgresql_db` ignores any and all errors during execution of PostgreSQL commands. As a workaround for this bug, `failed_when` is used.
