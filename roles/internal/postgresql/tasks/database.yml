@@ -1,4 +1,8 @@
 ---
+- set_fact: 
+    lcm_role_upgrade: "{{ role_name }}"
+  when: lcm_role_upgrade is not defined
+
 - name: create database user
   postgresql_user:
     name: "{{ vars[lcm_role_upgrade + '_database_username'] }}"
