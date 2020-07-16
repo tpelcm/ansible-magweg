@@ -1,0 +1,15 @@
+---
+- name: systemd service
+  template:
+    src: myapp.service.j2
+    dest: /etc/systemd/system/myapp.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: 
+    - myapp-systemctl-daemon-reload
+    - myapp-systemctl-restart
+
+- name: ensure service running and set to start on boot
+  service: name=myapp state=started enabled=yes
+  when: myapp_manual_upgrade == False

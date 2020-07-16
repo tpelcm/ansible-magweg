@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=MyApp
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User={{ myapp_owner }}
+ExecStart={{ myapp_home_link }}/start.sh
+
+[Install]
+WantedBy=multi-user.target

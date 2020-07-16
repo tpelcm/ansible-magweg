@@ -1,0 +1,14 @@
+---
+- name: myapp-systemctl-daemon-reload
+  systemd:
+    daemon_reload: true
+  changed_when: false
+  when: myapp_manual_upgrade == False
+
+- name: myapp-systemctl-restart
+  service:
+    name: "myapp"
+    state: "restarted"
+    enabled: true
+  changed_when: false
+  when: myapp_manual_upgrade == False

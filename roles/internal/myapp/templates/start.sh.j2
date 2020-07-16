@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+yell() { echo "$(date +%H:%M:%S) $0: $*" >> /var/log/myapp/myapp.log 2>&1; }
+die() { yell "$*"; exit 111; }
+try() { yell "$*"; "$@" || die "cannot $*"; }
+
+for (( ; ; ))
+do
+  try echo "Run insert"
+  try {{ myapp_home_version }}/insert.sh
+  try {{ myapp_home_version }}/select.sh >> /var/log/myapp/myapp.log
+  sleep 300
+done
