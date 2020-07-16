@@ -1,10 +1,19 @@
 ---
-backup_restore: 
+myapp_version: 0.1.0
+# myapp_version: 0.1.1
+
+backup_roles:
+  myapp:
+    keep: { daily: 3, weekly: 2, monthly: 1, manual: 0 }
+    snapshot: yes
+    incremental: yes
+    # skip_database: yes
+    
+backup_restore:
   myapp:
     path_pattern: '*'
-    # path_pattern: /backup/archives/*/myapp_*/*/*.tar')
+    # path_pattern: 'alpha.2'
+    # path_pattern: /backup/archives/*/myapp_0_1_0*/*/*.tar
+    # path_pattern: /backup/snapshots/*/myapp_0_1_0/*
     folder: data
     force: false
-
-myapp_version: 0.1.0
-

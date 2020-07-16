@@ -114,6 +114,8 @@ As root run the backup manually using alias `tpelcm_myapp_daily`. This creates a
     7 directories, 2 files
     [root@myapp ~]# 
 
+The [backup](../backup) role also supports incremental backups and backups using snapshots. See the [BACKUP.md](../myapp/BACKUP.md) for more information on how this works and can be used.  
+
 ## MyApp VM
 
 The __MyApp__ VM is identical to __MyApp2__. The only difference is that it uses a different database.  
@@ -265,3 +267,4 @@ This fact can be used to perform tasks that are specific to a certain LCM operat
       command: "rsync -az --delete --recursive {{ myapp_home_version_current }}/data/ {{ myapp_home_version }}/data/"
       when: myapp_lcm['operation'] == 'upgrade' 
 [roles/internal/myapp/tasks/main.yml](../../../roles/internal/myapp/tasks/main.yml)
+

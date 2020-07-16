@@ -147,7 +147,7 @@ The rsnapshot config file `/etc/backup/rsnapshot/myapp.conf` contains amongst ot
 Rsnapshot backup levels differ a lot from schedules with a tar backup. 
 
 1. Backup levels are sorted *alphabetically*! The **alpha** level is the first level, **beta** second and **gamma** third.
-2. Only **alpha** will backup the current data. Higher levels will only perform rotation.
+2. Only **alpha** will backup the current data. Higher levels will only perform recycling of existing snapshot folders.
 3. To correctly perform a higher level backup, you run that level and then all lower levels in descending sequence. For a monthly backup for example run **gamma**, then **beta**, then **alpha**.
 4. The first directory which is **alpha.0** always contains the most recent backup.
 
@@ -172,7 +172,11 @@ To elaborate this further as before create backup same as before using alias `tp
 
 The we run daily another two times and then weekly using alias `tpelcm-myapp-daily-backup`. The weekly backup executed `rsnapshot` with level **beta** and then **alpha**. 
 
-The **beta** level did not backup anything. It just renamed `alpha.2` to `beta.0`. Two alpha levels remained. Then **alpha** was executed. This created a new `alpha.0`. `alpha.0` was renamed `alpha.1` and `alpha.1` was renamed `alpha.2`. 
+The **beta** level did not backup anything. It just renamed `alpha.2` to `beta.0`. Two alpha levels remained. Then **alpha** was executed. This does the following:
+
+1. `alpha.1` renamed to `alpha.2`
+2. `alpha.0` renamed to `alpha.1` 
+3. Backup data to a new `alpha.0`
 
 ```
 [root@myapp ~]# tree -L 2 /backup/snapshots/myapp
@@ -185,3 +189,13 @@ The **beta** level did not backup anything. It just renamed `alpha.2` to `beta.0
 ```
 
 ## Incremental without snapshots
+
+Of course it is also possible to create incremental backups without snapshots. Configure `snapshots: no` and provision again. Notice the following differences compare to before - incremental with snapshots:
+
+1. Rsnapshot config `/etc/backup/rsnapshot/myapp.conf` now has `/opt/myapp/myapp-0.1.0` configered for backup.
+2. The backup model `/etc/backup/models/myapp.rb` now has database `myapp_0_1_0` configured. This database is stored in the `opt/myapp/myapp-0.1.0/db`.
+3. The hooks file `/etc/backup/hooks/myapp.sh` of course is much simpler. The *before* hook stops the myapp service. The *after* hook calls `rsnapshot` and starts the service. 
+
+
+
+

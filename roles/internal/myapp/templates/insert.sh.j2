@@ -1,8 +1,8 @@
 # {{ ansible_managed }}
 
-somestring=$(date +%s | sha256sum | base64 | head -c 32)
-echo "INSERT INTO myapp_table (story) VALUES ('My story ${somestring} on  {{ inventory_hostname }} about myapp version {{ myapp_version }}');" | psql -h {{ myapp_database_host }} -U {{ myapp_owner }} {{ myapp_database_name_version }}
-touch {{ myapp_home_version }}/data/$somestring
-
-somestring=$(date +%s | sha256sum | base64 | head -c 32)
-touch {{ myapp_home_version }}/$somestring
+word=$(shuf -n1  /usr/share/dict/words)
+filename="{{ inventory_hostname }}-myapp-{{ myapp_version }}-${word}.txt"
+echo "INSERT INTO myapp_table (story) VALUES ('${filename}');" | psql -h {{ myapp_database_host }} -U {{ myapp_owner }} {{ myapp_database_name_version }}
+dir=$(date -d "2 days" "+%Y-%m-%d")
+mkdir -p {{ myapp_home_version }}/data/$dir
+touch {{ myapp_home_version }}/data/$dir/$filename

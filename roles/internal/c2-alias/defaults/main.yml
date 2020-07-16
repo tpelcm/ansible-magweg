@@ -2,10 +2,14 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
-c2_alias_roles: ['proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira']
+c2_alias_roles: ['myapp','proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira']
 
 c2_alias:
   roles:
+    myapp:
+      logs: ["/var/log/myapp/myapp.log"]
+      configs: 
+        - "/etc/systemd/system/myapp.service"
     proxy:
       logs: ["/var/log/squid/*.log","/var/log/squid/squid.out"]
       configs: 

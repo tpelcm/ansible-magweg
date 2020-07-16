@@ -1,41 +1,14 @@
 ---
-- name: Ensure PostgreSQL Python libraries are installed.
-  apt:
-    name: "{{ myapp_python_library }}"
-    state: present
-  when: ansible_os_family == 'Debian'
+- name: stop for upgrade, rollback or rollfoward
+  #service: name=myapp state=stopped
+  debug:
+    msg: "TODO stop service" 
+  when: myapp_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - myapp-systemctl-daemon-reload
+    - myapp-systemctl-restart
 
-- name: SonarQube PostgreSQL user
-  postgresql_user:
-    name: "{{ myapp_database_username }}"
-    password: "{{ myapp_database_password }}"
-    db: "postgres"
-    login_host: "{{ myapp_database_host }}"
-    login_password: "{{ myapp_database_admin_password }}"
-    login_user: "{{ myapp_database_admin_username }}"
-    port: "{{ myapp_database_port }}"
-    state: "{{ item.state | default('present') }}"
-  no_log: false
-  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
-  vars:
-    ansible_ssh_pipelining: true
-
-- name: SonarQube PostgreSQL database
-  postgresql_db:
-    name: "{{ myapp_database_name_version }}"
-    lc_collate: 'en_US.UTF-8'
-    lc_ctype: 'en_US.UTF-8'
-    encoding: 'UTF-8'
-    template: "{{ myapp_database_template }}"
-    login_host: "{{ myapp_database_host }}"
-    login_password: "{{ myapp_database_admin_password }}"
-    login_user: "{{ myapp_database_admin_username }}"
-    port: "{{ myapp_database_port }}"
-    owner: "{{ myapp_database_username }}"
-    state: "{{ item.state | default('present') }}"
-  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
-  vars:
-    ansible_ssh_pipelining: true
+- include: ../../postgresql/tasks/database.yml 
 
 - name: Table
   postgresql_table:
@@ -61,6 +34,13 @@
     group: '{{ myapp_owner }}'
     owner: '{{ myapp_owner }}' 
 
+- name: Create log directory
+  file:
+    path: "/var/log/myapp"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'
+
 - name: Create install folder
   file:
     path: "{{ myapp_home_version }}"
@@ -72,6 +52,8 @@
   copy:
     content: "myapp={{ myapp_version }}"
     dest: "{{ myapp_home_version }}/myapp.txt"
+  notify:
+    - lcm-version-file
 
 - name: Create a data folder
   file:
@@ -81,8 +63,10 @@
     owner: '{{ myapp_owner }}'    
 
 - name: Copy data dir ( part of upgrade )
-  command: "rsync -az --delete --recursive {{ myapp_home_version_current }}/data/ {{ myapp_home_version }}/data/"
+  command: "rsync -az --delete --recursive --exclude='VERSION' {{ myapp_home_version_current }}/data/ {{ myapp_home_version }}/data/"
   when: myapp_lcm['operation'] == 'upgrade' 
+  notify:
+    - lcm-version-file
 
 - name: Create symbolic link install
   file:
@@ -92,7 +76,7 @@
 
 - name: App scripts
   template:
-    dest: '/home/myapp/{{ item }}.sh'
+    dest: "{{ myapp_home_version }}/{{ item }}.sh"
     src: '{{ item }}.sh.j2'
     group: "myapp"
     mode: "755"
@@ -101,6 +85,9 @@
     - insert
     - select
     - delete
+    - start
+    - stop
+  notify: myapp-systemctl-restart
 
 - name: Password file
   copy:
@@ -109,3 +96,12 @@
    group: "myapp"
    owner: "myapp"
    mode: "0600"
+
+- package:
+    name: "{{ item }}"
+    state: "present"
+  with_items: 
+    - tree
+    - words
+
+- include: service.yml
