@@ -10,6 +10,8 @@ backup_cron_jobs: true
 backup_restore_db: false
 backup_restore_home: false
 backup_lvm_snapshot_size: 1G
+backup_rsnapshot_id_file: .backup-id
+backup_rsnapshot_backup_db_folder: db-rsnapshot-backup
 
 backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence', 'guacamole']
 
@@ -39,13 +41,23 @@ backup_roles:
     stop_start_containers: ['guacamole','guacd']
     keep: { daily: 3, weekly: 1, monthly: 0, manual: 1 }
   myapp:
-    # stop_start_service: myapp
-    keep: { daily: 1, weekly: 0, monthly: 0, manual: 1 }
-    # snapshot: true
-    # schedules: ['daily', 'weekly', 'monthly', 'manual']
+    stop_start_service: myapp
+    keep: { daily: 3, weekly: 2, monthly: 1, manual: 0 }
+    # snapshot: yes
+    # incremental: yes
+    # schedules: ['daily', 'weekly', 'monthly', 'manual'] # TODO
 
 backup:
   schedules_default: ['daily', 'weekly', 'monthly', 'manual']
+  rsnapshot_levels: ['alpha','beta','gamma']
+  rsnapshot_level_runs: 
+    alpha: ['alpha']
+    beta: ['beta','alpha']
+    gamma: ['gamma','beta','alpha']
+  rsnapshot_levels_map:
+    daily: alpha
+    weekly: beta
+    monthly: gamma
   schedules:
     daily: 50 2 * * 1,2,3,4,5
     weekly: 50 2 * * 6

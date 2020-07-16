@@ -47,7 +47,7 @@ def home_version(data,vsn):
   return os.path.join(os.path.sep,data['home'],os.path.basename(data['home']) + '-' + vsn)
 
 def home_backup(data,vsn):
-  return data['home'] + '-backup'
+  return data['home'] + '-snapshot'
 
 def home_backup_version(data,vsn):
   return os.path.join(home_backup(data,vsn),os.path.basename(data['home']) + '-' + vsn)

@@ -9,7 +9,7 @@
 
 - name: Restore files
   command: "rsync -az --delete --recursive {{ backup_restore[item]['rsync-src'] }} {{ backup_restore[item]['rsync-target'] }}"
-  when: backup_restore[item]['home_tar'] is defined
+  when: backup_restore[item]['home_tar'] is defined or backup_roles[item]['incremental'] == True
   with_items: '{{ backup_restore }}'
 
 - name: Delete folders

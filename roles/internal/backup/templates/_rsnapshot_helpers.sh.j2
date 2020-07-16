@@ -1,0 +1,15 @@
+case $3 in
+{% for schdl in backup['schedules_default'] %}
+{%   if backup['rsnapshot_levels_map'][schdl] is defined %}
+  "{{ schdl }}") rsnapshot_level={{ backup['rsnapshot_levels_map'][schdl] }};; 
+{%   else %}
+  "{{ schdl }}") rsnapshot_level=alpha;; 
+{%   endif %}
+{% endfor %}
+esac
+
+case $rsnapshot_level in
+{% for lvl in backup['rsnapshot_level_runs'] %}
+  "{{ lvl }}") rsnapshot_level_runs=({{ backup['rsnapshot_level_runs'][lvl]|join(' ') }});; 
+{% endfor %}
+esac

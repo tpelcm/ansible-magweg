@@ -5,9 +5,10 @@
     src: model.rb.j2
   with_items: '{{ backup_roles_node }}'
 
-- name: Ater and before hook
+- name: Before and after hook
   template:
-    dest: '/etc/backup/scripts/{{ item }}_hooks.sh'
+    dest: '/etc/backup/hooks/{{ item }}.sh'
     src: model.sh.j2
     mode: 755
   with_items: '{{ backup_roles_node }}'
+

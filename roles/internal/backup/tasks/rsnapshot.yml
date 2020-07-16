@@ -1,5 +1,5 @@
 ---
-- name: Rsnapshot configs  
+- name: Rsnapshot config files  
   template:
     dest: '/etc/backup/rsnapshot/{{ item }}.conf'
     src: rsnapshot.conf.j2

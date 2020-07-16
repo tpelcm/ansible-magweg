@@ -6,4 +6,4 @@ vpass
 *.deb
 *.vdi
 *.tar
-
+*.pyc

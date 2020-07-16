@@ -2,18 +2,22 @@
 - name: Restore facts
   restore_info:
     backup_archives: '{{ backup_archives }}'
+    backup_snapshots: '{{ backup_snapshots }}'
     role: '{{ item }}'
     path_pattern: '{{ backup_restore[item]["path_pattern"] }}'
     force: '{{ backup_restore[item]["force"] }}'
     database: "{{ vars[item+'_database_name'] is defined }}"
     home: "{{ vars[item + '_home'] }}"
-    home_version: "{{ vars[item+'_home_version'] if vars[item+'_home_version'] is defined  }}"
+    home_version: "{{ vars[item+'_home_version']|default(omit) }}"
+    home_backup_version: "{{ vars[item+'_home_backup_version']|default(omit) }}"
+    incremental: "{{ vars['backup_roles'][item]['incremental']|default(false) }}"
     tmp: "{{ backup_tmp }}/{{ inventory_hostname }}-{{ item }}"
     folder: '{{ backup_restore[item]["folder"] }}'   
-    remove_folder: '{{ backup_restore[item]["remove_folder"] | default(omit, true) }}'   
+    remove_folder: '{{ backup_restore[item]["remove_folder"] | default(omit, true) }}'
+    backup_rsnapshot_id_file: '{{ backup_rsnapshot_id_file }}'
+    backup_rsnapshot_backup_db_folder: '{{ backup_rsnapshot_backup_db_folder }}'
+    backup_name_underscored: '{{ item|backup_name_underscored(vars) }}' # no schedule
   with_items: '{{ backup_restore }}'
-  # TODO conditional vars not supported 
-  # all if is defined, do not work
   
 - name: backup_restore
   debug:
@@ -59,7 +63,7 @@
 - name: Mark restore performed
   lineinfile:
     dest: "{{ backup_restore[item]['restored-file'] }}"
-    line: "{{ backup_restore[item]['sha256sum'] }}"
+    line: "{{ backup_restore[item]['backup-id'] }}"
   when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 

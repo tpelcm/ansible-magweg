@@ -19,6 +19,7 @@
     - /etc/backup/models
     - /etc/backup/scripts
     - /etc/backup/rsnapshot
+    - /etc/backup/hooks    
 
 - name: Generate example config file
   command: /opt/backup/bin/backup generate:config --config-file=/etc/backup/config-example.rb

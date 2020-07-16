@@ -9,7 +9,7 @@
 
 {% for schdl in backup['schedules_default'] %}
 
-GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('.','_') | replace('-','_') }}, '{{ item }} - {{ inventory_hostname }}') do
+GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} - {{ inventory_hostname }}') do
     
   split_into_chunks_of {{ backup_split_into_chunks_of }}
   compress_with Gzip
@@ -18,7 +18,7 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
 
   before do
     File.delete(logfile) if File.exists?(logfile)
-    `/etc/backup/scripts/{{ item }}_hooks.sh before #{logfile} {{ schdl }}`
+    `/etc/backup/hooks/{{ item }}.sh before #{logfile} {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-before"
@@ -62,9 +62,9 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
   # Storing db backup in home for incremental backup
   store_with RSync do |rs|
 {%    if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
-    rs.path = '{{ vars[item + '_home_backup_version'] }}/db'
+    rs.path = '{{ vars[item + '_home_backup_version'] }}/{{ backup_rsnapshot_backup_db_folder }}'
 {%    else %}
-    rs.path = '{{ vars[item + '_home_version'] }}/db'
+    rs.path = '{{ vars[item + '_home_version'] }}/{{ backup_rsnapshot_backup_db_folder }}'
 {%  endif %}
   end
 {%  else %}
@@ -75,13 +75,11 @@ GenericBackup.new(:{{ item }}_{{ schdl }}_{{ vars[item + '_version'] | replace('
 {%  endif %}
 
   after do 
-    `/etc/backup/scripts/{{ item }}_hooks.sh after #{logfile} {{ schdl }}`
+    `/etc/backup/hooks/{{ item }}.sh after #{logfile} {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-after"
     end
   end
-
 end
-
 {% endfor %}
