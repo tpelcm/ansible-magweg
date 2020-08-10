@@ -55,6 +55,7 @@ c2_alias:
     confluence: 
       logs: 
         - "/opt/confluence/confluence/app/logs/*.log"
+        - "/opt/confluence/confluence/app/logs/catalina.out"
       configs:
         - /opt/confluence/confluence/app/confluence/WEB-INF/classes/confluence-init.properties
         - /etc/systemd/system/confluence.service
@@ -76,6 +77,7 @@ c2_alias:
     jira:
       logs:
         - "{{ jira_home|default(omit) }}/jira/home/log/*.log"
+        - "/opt/jira/jira/app/logs/catalina.out"
       configs:
         - "{{ jira_home|default(omit) }}/jira/app/atlassian-jira/WEB-INF/classes/jira-application.properties"
         - "{{ jira_home|default(omit) }}/jira/home/dbconfig.xml"
