@@ -18,6 +18,15 @@ monit_mailserver: localhost
 monit_mounts: []
 monit_log: /var/log/monit.log # syslog
 
+monit_roles_supported: ['confluence']
+monit_roles:
+  confluence:
+    logs: # match log messages using POSIX regular expressions
+      synchrony:
+        path: "/opt/confluence/confluence/home/logs/atlassian-synchrony.log"
+        match: "^.*?java.lang.UnsatisfiedLinkError:.*?failed to map segment from shared object.*?$" # 
+        # https://confluence.atlassian.com/confkb/editor-fails-to-load-in-confluence-6-x-due-to-could-not-initialize-class-org-xerial-snappy-snappy-error-859462192.html
+
 # monit_rpm_url: https://exampe.com/rpm/monit-5.26.0-1.el7.x86_64.rpm
 
 # Monitor smtp

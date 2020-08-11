@@ -1,6 +1,18 @@
 # Ansible Role: Monit
 
-An Ansible Role the provides simple monitoring using Monit. Currently this role performs simple disk space monitoring of data and system volumes
+An Ansible Role the provides simple monitoring using Monit. This is used to perform simple disk space monitoring of data and system volumes.
+
+This role can also be used to monitor log files for specific messages using POSIX regular expressions. The example below shows how we to monitor for [Editor fails to load in Confluence 6.x and later due to 'Could not initialize class org.xerial.snappy.Snappy' error](https://confluence.atlassian.com/confkb/editor-fails-to-load-in-confluence-6-x-due-to-could-not-initialize-class-org-xerial-snappy-snappy-error-859462192.html)
+
+    monit_roles_supported: ['confluence']
+
+    monit_roles:
+      confluence:
+        logs:
+          synchrony:
+            path: "/opt/confluence/confluence/home/logs/atlassian-synchrony.log"
+            match: "^.*?java.lang.UnsatisfiedLinkError:.*?failed to map segment from shared object.*?$" # 
+
 
 ## Role Variables
 

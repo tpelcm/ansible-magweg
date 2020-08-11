@@ -24,6 +24,6 @@
     path: "{{ lvm_roles[item]['path'] }}"
     src: '/dev/mapper/{{ lvm_vg }}-{{ item }}'
     fstype: "{{ lvm_fstype }}"
-    #opts: ro,noauto
+    opts: "{{ lvm_roles[item]['opts']|default(omit)}}"
     state: mounted
   with_items: "{{ lvm_roles_node }}"

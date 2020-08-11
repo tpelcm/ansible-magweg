@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% if monit_roles_node is defined and monit_roles_node|length>0 %}
+{%   for rl in monit_roles_node %}
+{%     for f in monit_roles[rl]['logs'] %}
+check file {{ rl }}-{{ f }} with path {{ monit_roles[rl]['logs'][f]['path'] }}
+  if match "{{ monit_roles[rl]['logs'][f]['match'] }}" then alert
+{%     endfor %}
+{%   endfor %}
+{% endif %}

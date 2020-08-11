@@ -41,3 +41,12 @@
     src: system.j2
   when: monit_system_monitoring is defined
   notify: reload monit
+
+- name: Get nodes monit roles
+  set_fact: monit_roles_node="{{ monit_roles_supported | intersect(ansible_role_names_cleaned) }}"
+
+- name: Logs
+  template:
+    dest: /etc/monit.d/log
+    src: log.j2
+  notify: reload monit
