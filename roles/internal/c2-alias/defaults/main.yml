@@ -2,7 +2,7 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
-c2_alias_roles: ['myapp','proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira']
+c2_alias_roles: ['myapp','proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira', 'jenkins']
 
 c2_alias:
   roles:
@@ -77,7 +77,7 @@ c2_alias:
     jira:
       logs:
         - "{{ jira_home|default(omit) }}/jira/home/log/*.log"
-        - "/opt/jira/jira/app/logs/catalina.out"
+        - /opt/jira/jira/app/logs/catalina.out
       configs:
         - "{{ jira_home|default(omit) }}/jira/app/atlassian-jira/WEB-INF/classes/jira-application.properties"
         - "{{ jira_home|default(omit) }}/jira/home/dbconfig.xml"
@@ -85,3 +85,8 @@ c2_alias:
         - "{{ jira_home|default(omit) }}/jira/home/jira-config.properties"
         - "{{ jira_home|default(omit) }}/jira/app/bin/setenv.sh"
         - /etc/systemd/system/jira.service
+    jenkins:
+      logs:
+        - /var/lib/jenkins/jenkins.log
+      configs:
+        - /etc/init.d/jenkins
