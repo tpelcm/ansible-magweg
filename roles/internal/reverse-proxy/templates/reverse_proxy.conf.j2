@@ -12,6 +12,12 @@ SSLRandomSeed startup file://dev/urandom 256
 SSLRandomSeed connect builtin
 SSLCryptoDevice builtin
 
+<VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=302,L,QSA] 
+</VirtualHost>
+
 {% for hst in reverse_proxy_vhosts %}
 <VirtualHost *:{{ reverse_proxy_vhosts[hst].port }}>
     ServerAdmin admin@{{ reverse_proxy_server_admin }}
