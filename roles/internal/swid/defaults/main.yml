@@ -28,7 +28,7 @@ swid:
     regid: tpe@example.com
     role: tagCreator Aggregator
   links:
-    component: "swid:{{ swid_tagid }}.postgresql"
+    # component: "swid:{{ swid_tagid }}.postgresql" # TODO
     component: "swid:{{ swid_tagid }}.sonarqube"
 
 swid_roles:
