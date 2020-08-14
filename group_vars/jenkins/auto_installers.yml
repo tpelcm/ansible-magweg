@@ -17,3 +17,8 @@ jenkins_auto_installers:
       - url: https://d29vzk4ow07wi7.cloudfront.net/49fb14b98f9fed1744781e4383cf8bff76440032f58eb5fabdc9e67a5daa8742?response-content-disposition=attachment%3Bfilename%3D%22apache-groovy-binary-2.5.8.zip%22&Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHAqOi8vZDI5dnprNG93MDd3aTcuY2xvdWRmcm9udC5uZXQvNDlmYjE0Yjk4ZjlmZWQxNzQ0NzgxZTQzODNjZjhiZmY3NjQ0MDAzMmY1OGViNWZhYmRjOWU2N2E1ZGFhODc0Mj9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWF0dGFjaG1lbnQlM0JmaWxlbmFtZSUzRCUyMmFwYWNoZS1ncm9vdnktYmluYXJ5LTIuNS44LnppcCUyMiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU3OTg4MDcxM30sIklwQWRkcmVzcyI6eyJBV1M6U291cmNlSXAiOiIwLjAuMC4wLzAifX19XX0_&Signature=ZQ0A5MkxMd94pLvDV7HSai6ZRfmupLfYKptPwgqlDR8Bx18doICBNoe6FFsrcTBjNj2mtqii1vVAeAH-W9gdpXYS8GW6x9KNqpj0THWatZlUbkHj7Zcrzpor3sy~aGZFaEn2rKoo8BVWszlLTCvDQUzn7819OSnaqTEASzx7jVplh9gQyctVis-psdTMyfa3kbLWh6Y0NDBXDpxteoIOkPMmS1ePZxBbWK7VyIXGGbDl36TkRvH3enkAE8kEYLUrkqw7yGSDi4kI8PEmrOrMdec-fYdO4pP90GlKieTFZ0z90jFvy9oNXpuQ92Y1TCErM0HuKUHalUcaw4SrULDIKg__&Key-Pair-Id=APKAIFKFWOMXM2UMTSFA
         label: 
         subdirectory: groovy-2.5.8
+jenkins_maven_installations:
+  - name: maven-3.3.9
+    version: "3.3.9"
+  - name: maven-3.6.3
+    version: "3.6.3"

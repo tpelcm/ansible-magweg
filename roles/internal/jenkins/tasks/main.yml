@@ -11,10 +11,14 @@
   register: script_result
   changed_when: "'changed' in script_result.output"
 
-- name: JDK auto-installers init script
+- name: Init scripts
   template:
-    dest: "/var/lib/jenkins/init.groovy.d/auto_installer_jdk.groovy"
+    dest: "/var/lib/jenkins/init.groovy.d/{{ item }}"
     owner: "jenkins"
     group: "jenkins"
-    src: "auto_installer_jdk.groovy.j2"
+    src: "{{ item }}.j2"
   notify: restart jenkins
+  with_items: 
+    - configuration.groovy
+    - auto_installer_jdk.groovy
+    - auto_installer_mvn.groovy

@@ -7,12 +7,6 @@ import java.security.*
 def inst = Jenkins.getInstance()
 def desc = inst.getDescriptor("hudson.model.JDK")
 
-/*
-jdks = [:]
-jdks['NPLCM-jdk8u242-b08'] = []
-jdks['NPLCM-jdk8u242-b08'] << ['label':'linux','url':'https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u242b08.tar.gz','subdirectory':'jdk8u242-b08']
-jdks['NPLCM-jdk8u242-b08'] << ['label':'windows','url':'https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u242-b08/OpenJDK8U-jdk_x86-32_windows_hotspot_8u242b08.zip','subdirectory':'jdk8u242-b08']
-*/
 jdks = [:]
 {% for j in jenkins_auto_installers['jdk-tool'] %}
 jdks['{{ j }}'] = []
@@ -37,4 +31,3 @@ for (j in jdks) {
 
 desc.setInstallations(installers.toArray(new hudson.model.JDK[0]))
 desc.save()
-
