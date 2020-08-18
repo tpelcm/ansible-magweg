@@ -2,6 +2,23 @@
 
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
+<!-- MarkdownTOC -->
+
+- Products
+- Getting Started
+    - Ansible
+    - Vagrant
+    - VirtualBox
+    - Setup project directory
+    - Provision proxy node
+    - Provision
+    - LDAP
+- License
+
+<!-- /MarkdownTOC -->
+
+## Products
+
 | Product   | Level | Link |Description | 
 |----------|:-----:|---|---|
 | [SonarQube](roles/internal/sonarqube)| III | [https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/) | default `admin` with pw `admin` or `akaufman` |
