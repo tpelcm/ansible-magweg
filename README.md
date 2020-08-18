@@ -103,9 +103,7 @@ You can also manually disable the proxy server by editing `/etc/environment`.
 
 ### Provision
 
-After creating the links you can start provisioning nodes. At a minimum you will need the `proxy` and `postgresql` node. 
-
-proxy reverse-proxy nfs opendj mailrelay env
+After the __group_vars__ and __host_vars__ links have been created, you can start provisioning nodes. At a minimum you will need the `proxy` and `postgresql` node. 
 
 | Node | Service(s)   | Link      | Accounts|
 |----------|-------------|-------------|-------------|
@@ -113,7 +111,7 @@ proxy reverse-proxy nfs opendj mailrelay env
 | __postgresql__ | PostgreSQL server | | |
 | __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
-| __sites__ | Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+| __sites__ | Static "dimension" site |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
 | __jenkins__ | Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
 | __confluence__ | Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
 | __jira__ | Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
@@ -140,7 +138,7 @@ To provision a node use standard Vagrant commands see `vagrant --help` for examp
     vagrant up sonarqube
 ```
 
-After __proxy__ and __postgresql__ are up and running you can provision other nodes using `vagrant up <node>`.
+After __proxy__ and __postgresql__ are up and running you can provision other nodes using `vagrant up <node>`. To run the Ansible provisioner after nodes have been created using `vagrant up` you use `vagrant provision <node>`. See `vagrant --help` for more information.
 
 
 ### LDAP
