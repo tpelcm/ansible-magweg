@@ -17,9 +17,10 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 <sup><sub>1. AWX doesn't support changing web context - it needs to run from root.</sub></sup>  
 <sup><sub>2. Jira and Confluence setup cannot be automated. You have to use the wizard to setup the database, admin account etc.</sub></sup>
 
-Capability Levels
+_Capability Levels_
+
 | Level   | Description | 
-|----------|-------|
+|----------|-----|
 |I - Basic Install|Automated application provisioning and configuration management|
 |II - Full Lifecycle|Upgrade,rollback, rollforward, backup, restore|
 |III - Insights|Basic monitoring, JMX, etc|
@@ -74,7 +75,7 @@ Git clone this repository for example to `~/ansible`. Create a file `~/ansible/v
 
 Cd into the __vagrant__ directory and provision the proxy node
 
-    vagrant up proxy 
+    vagrant up proxy
 
 Vagrant up will fail at some point because the __group_vars__ directory is not found by Vagrant. Vagrant uses a dynamic inventory file `.vagrant/provisioners/ansible/inventory` and Ansible searches the location of this file for the __group_vars__ and __host_vars__.
 
@@ -82,56 +83,65 @@ Create two links for __group_vars__ and __host_vars__ directory in the directory
 
     rake vagrant:group_host_vars 
 
-Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
+### Provision proxy node
+
+Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. 
+
+Now that links __group_vars__ and __host_vars__ are accesible to Ansible, provision and reload the proxy.
+
+    vagrant provision proxy
+    vagrant reload proxy
+
+If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
 
     ---
     proxy_port: 3128
     proxy_host: '1.1.1.3'
     proxy_no_proxy: 'nip.io' # comma separated list
 
+You can also manually disable the proxy server by editing `/etc/environment`.
 
 ### Provision
 
-After creating the links you can start provisioning one ore more services:
+After creating the links you can start provisioning nodes. At a minimum you will need the `proxy` and `postgresql` node. 
 
-| Service   | Link      | Accounts|
-|----------|-------------|-------------|
-| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
-| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
-| Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
-| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
-| Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
-| Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
-| Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+proxy reverse-proxy nfs opendj mailrelay env
 
-LDAP accounts
+| Node | Service(s)   | Link      | Accounts|
+|----------|-------------|-------------|-------------|
+| __proxy__ | Forward and reverse proxy, NFS server, OpenDJ server, Mailrelay | | |
+| __postgresql__ | PostgreSQL server | | |
+| __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
+| __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
+| __sites__ | Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+| __jenkins__ | Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
+| __confluence__ | Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
+| __jira__ | Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
+| __bitbucket__ | Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+| __awx__ | AWX | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)| |
+| __bastion__ | Guacamole | [https://sh.1.1.1.3.nip.io/desktop/](https://sh.1.1.1.3.nip.io/desktop/)|  |
+
+_LDAP accounts_
+
 | Account   | Password | Role |
 |----------|-------------|-------------|
 | `akaufman`   | `secrets` | admin |
 
-Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
+Accounts en groups are in [group_vars/env.yml](group_vars/env.yml).
 
-#### Proxy
+To provision a node use standard Vagrant commands see `vagrant --help` for example to provision _SonarQube_ for a first time: 
 
-    vagrant up proxy
+```bash
+    vagrant up proxy # fails 
+    rake vagrant:group_host_vars # create symbolic links  
+    vagrant provision proxy
+    vagrant reload proxy
+    vagrant provision postgresql
+    vagrant up sonarqube
+```
 
-The proxy plays include some test plays opendj and env.
+After __proxy__ and __postgresql__ are up and running you can provision other nodes using `vagrant up <node>`.
 
-#### SonarQube ( optional )
-
-    vagrant provision postgresql sonarqube
-
-#### Nexus ( optional )
-
-    vagrant provision nexus
-
-#### Jenkins ( optional )
-
-    vagrant provision jenkins
-
-#### Bitbucket ( optional )
-
-    vagrant provision bitbucket
 
 ### LDAP
 
