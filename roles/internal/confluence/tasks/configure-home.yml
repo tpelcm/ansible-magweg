@@ -36,3 +36,10 @@
   when: confluence_cfg_xml.stat.exists
   with_items: "{{ confluence_database_hibernate[confluence_database_type]['remove'] }}"
   notify: confluence-systemctl-restart
+
+- name: Change temp dir location CONFSERVER-59613
+  lineinfile:
+    path: "{{ confluence_home_version_home }}/synchrony-args.properties"
+    regexp: '^java.io.tmpdir='
+    line: "java.io.tmpdir={{ confluence_home_version_home }}/temp"
+  notify: confluence-systemctl-restart

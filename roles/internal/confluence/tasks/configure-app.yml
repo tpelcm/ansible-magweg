@@ -27,13 +27,6 @@
       replace: '-XX:ReservedCodeCacheSize={{ confluence_jvm_reserved_code_cache_size }} '
   notify: confluence-systemctl-restart
 
-- name: Change temp dir location CONFSERVER-59613
-  lineinfile:
-    path: "{{ confluence_home_version_app }}/bin/setenv.sh"
-    regexp: '^export CATALINA_TMPDIR='
-    line: "export CATALINA_TMPDIR={{ confluence_home_version_app }}/temp"
-  notify: confluence-systemctl-restart
-
 - name: Extra libaries
   get_url:
     checksum: "{{ item.checksum }}"
