@@ -42,4 +42,5 @@
     path: "{{ confluence_home_version_home }}/synchrony-args.properties"
     regexp: '^java.io.tmpdir='
     line: "java.io.tmpdir={{ confluence_home_version_home }}/temp"
+  when: confluence_cfg_xml.stat.exists
   notify: confluence-systemctl-restart
