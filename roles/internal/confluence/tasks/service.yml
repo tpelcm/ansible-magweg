@@ -9,7 +9,7 @@
   when: "ansible_service_mgr == 'systemd'" 
   notify: 
     - confluence-systemctl-daemon-reload
-    - restart confluence
+    - confluence-systemctl-restart
 
 - name: ensure service running and set to start on boot
   service: name=confluence state=started enabled=yes
