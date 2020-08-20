@@ -10,6 +10,9 @@ desktop_volumes:
 
 desktop_containers:
   akaufman-desktop:
+    desktop_version: 0.1.5
+    desktop_image: "onknows/desktop"
+    command: /tini -- /usr/local/bin/vncserver-docker-desktop
     hosts: 
       db: 1.1.1.2
     volumes:
@@ -20,3 +23,6 @@ desktop_containers:
       db: 1.1.1.2
     volumes:
       - "tclifton-desktop:/home/vagrant"
+
+desktop_version: 0.1.4
+desktop_image: onknows/desktop

@@ -26,12 +26,12 @@
 
 - docker_container:
     name: "{{ item }}"
-    image: "{{ desktop_image }}:{{ desktop_version }}"
+    image: "{{ desktop_containers[item]['desktop_image']|default(desktop_image) }}:{{ desktop_containers[item]['desktop_version']|default(desktop_version) }}"
     networks:
       - name: "{{ desktop_network }}"
     volumes: "{{ desktop_containers[item]['volumes']|default(omit) }}"
     env: "{{ desktop_env }}"
-    command: "/usr/local/bin/vncserver-docker-desktop"
+    command: "{{ desktop_containers[item]['command']|default('/usr/local/bin/vncserver-docker-desktop') }}"
     etc_hosts: "{{ desktop_containers[item].hosts|default(omit) }}"
     #ports:
     # - "5901:5901"
