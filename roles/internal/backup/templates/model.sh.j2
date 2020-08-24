@@ -74,7 +74,7 @@ then
   fi
   try lvcreate -prw -L{{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }} -s -n {{ item }}-snapshot /dev/mapper/{{ lvm_vg }}-{{ item }} >> $BACKUP_LOGFILE 2>&1
   try mkdir -p {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-  try mount -t {{ backup_lvm_fstype }} /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
+  try mount {{ backup_mount_options }} /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
 {% endif %}
 {% if vars[item + '_database_host'] is defined %}
 {%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
