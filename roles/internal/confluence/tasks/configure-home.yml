@@ -1,21 +1,32 @@
 ---
-- name: Check confluence.properties exists
-  stat:
+# Confluence setup has been done if confluence.cfg.xml exists
+# and if this file contains <setupStep>complete</setupStep>
+# To determine if this is the case we use lineinfile module to
+# check ( check_mode: yes ) if file would change if we put this
+# text in ourselves. 
+
+- name: "Check setup status"
+  lineinfile:
     path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
-  register: confluence_cfg_xml
+    regexp: "^.*?<setupStep>.*?</setupStep>$"
+    line: "  <setupStep>complete</setupStep>"
+    state: present
+    create: yes
+  check_mode: yes # don't actually replace
+  register: complete_replace
 
 - name: Confluence setup
   debug:
     msg: "Confluence has not been setup yet. Use a browser to navigate to http://localhost:{{ confluence_web_port }}  and complete Confluence setup"
   changed_when: true
-  when: not confluence_cfg_xml.stat.exists
+  when: complete_replace is changed
 
 - name: confluence.cfg.xml
   xml:
     path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
     xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
     value: "{{ confluence_database_hibernate.generic[item] }}"
-  when: confluence_cfg_xml.stat.exists
+  when: not complete_replace is changed
   with_items: "{{ confluence_database_hibernate.generic }}"
   notify: confluence-systemctl-restart
 
@@ -24,7 +35,7 @@
     path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
     xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
     value: "{{ confluence_database_hibernate[confluence_database_type]['set'][item] }}"
-  when: confluence_cfg_xml.stat.exists
+  when: not complete_replace is changed
   with_items: "{{ confluence_database_hibernate[confluence_database_type]['set'] }}"
   notify: confluence-systemctl-restart
 
@@ -33,7 +44,7 @@
     path: "{{ confluence_home_version_home }}/confluence.cfg.xml"
     xpath: "/confluence-configuration/properties/property[@name='{{ item }}']"
     state: absent
-  when: confluence_cfg_xml.stat.exists
+  when: not complete_replace is changed
   with_items: "{{ confluence_database_hibernate[confluence_database_type]['remove'] }}"
   notify: confluence-systemctl-restart
 
@@ -42,5 +53,5 @@
     path: "{{ confluence_home_version_home }}/synchrony-args.properties"
     regexp: '^java.io.tmpdir='
     line: "java.io.tmpdir={{ confluence_home_version_home }}/temp"
-  when: confluence_cfg_xml.stat.exists
+  when: not complete_replace is changed
   notify: confluence-systemctl-restart
