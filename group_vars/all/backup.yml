@@ -1,2 +1,3 @@
 ---
 backup_cron_jobs: false
+backup_script_before: 'export PATH=/sbin:$PATH'

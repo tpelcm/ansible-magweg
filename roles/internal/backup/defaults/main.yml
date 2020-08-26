@@ -13,6 +13,7 @@ backup_lvm_snapshot_size: 1G
 backup_rsnapshot_id_file: .backup-id
 backup_rsnapshot_backup_db_folder: db-rsnapshot-backup
 backup_mount_options: ''
+#backup_script_before: ''
 
 backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence', 'guacamole']
 
