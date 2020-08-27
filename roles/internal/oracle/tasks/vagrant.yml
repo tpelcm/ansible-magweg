@@ -1,0 +1,6 @@
+---
+- name: Vagrant environment
+  copy:
+    content: |
+      export TNS_ADMIN=/home/vagrant
+    dest: /etc/profile.d/oracle_vagrant.sh

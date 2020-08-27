@@ -1,0 +1,56 @@
+---
+- name: Oracle owner
+  user:
+    name: "{{ oracle_owner }}"
+    shell: /bin/bash
+    system: true
+
+- name: Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    group: "{{ oracle_owner }}"
+    owner: "{{ oracle_owner }}"
+  with_items:
+    - "{{ oracle_home }}"
+    - "{{ oracle_data_dir }}"
+
+- pip:
+    name: docker-compose
+    version: 1.9.0
+    state: present
+    extra_args: --upgrade pip
+
+- name: Log into docker.io
+  docker_login:
+    registry: docker.io
+    username: "{{ oracle_docker_login.user_name }}"
+    password: "{{ oracle_docker_login.password }}"
+    reauthorize: yes
+
+- docker_volume:
+    name: "{{ oracle_volume }}"
+
+- docker_image:
+    name: "{{ oracle_image }}"
+    source: pull
+
+- docker_container:
+    name: "oracle"
+    image: "{{ oracle_image }}"
+    #volumes: "{{ oracle_volume_binds }}"
+    #env: "{{ }}"
+    #command: "{{ }}"
+    #etc_hosts: "{{ }}"
+    ports:
+     - "1521:1521"
+     - "5500:5500" # XML DB
+    restart_policy: unless-stopped
+
+- stat:
+    path: "/home/vagrant"
+  register: vagrant_home
+
+- include: vagrant.yml 
+  when: vagrant_home.stat.exists
+
