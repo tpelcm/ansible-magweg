@@ -1,12 +1,16 @@
 ---
 oracle_client_rpms:
   basic:
+    name: oracle-instantclient19.8-basic
     url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm
   basiclite:
+    name: oracle-instantclient19.8-basiclite
     url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-basiclite-19.8.0.0.0-1.x86_64.rpm
   sqlplus:
+    name: oracle-instantclient19.8-sqlplus
     url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-sqlplus-19.8.0.0.0-1.x86_64.rpm
   tools:
+    name: oracle-instantclient19.8-tools 
     url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-tools-19.8.0.0.0-1.x86_64.rpm
 
 oracle_client_bin_path: /usr/lib/oracle/19.8/client64/bin

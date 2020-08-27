@@ -1,4 +1,8 @@
 ---
+- name: "Get installed packages"
+  package_facts:
+    manager: "auto"
+
 - name: Download RPMs
   get_url:
     url: "{{ oracle_client_rpms[item]['url'] }}"
@@ -9,11 +13,13 @@
       oraclelicense: accept-securebackup-cookie
   register: get_url_result
   until: get_url_result is succeeded
+  when: oracle_client_rpms[item]['name'] not in ansible_facts.packages
   with_items: "{{ oracle_client_installs }}"
 
 - name: Install packages
   package:
     name: "/tmp/{{ oracle_client_rpms[item]['url']|basename }}"
+  when: oracle_client_rpms[item]['name'] not in ansible_facts.packages
   with_items: "{{ oracle_client_installs }}"
 
 - name: Add Oracle to PATH
