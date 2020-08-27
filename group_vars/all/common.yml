@@ -8,7 +8,7 @@ common_packages:
 #,'python-psycopg2'
 
 common_etc_environment: >
-  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin 
+  PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
 nfs_server: nfs
 nfs_mounts:
