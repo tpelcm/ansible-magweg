@@ -22,8 +22,11 @@
   when: oracle_client_rpms[item]['name'] not in ansible_facts.packages
   with_items: "{{ oracle_client_installs }}"
 
-- name: Add Oracle to PATH
+- name: Oracle environment PATH, LD_LIBRARY_PATH, NLS_LANG
   copy:
-    content: "export PATH=$PATH:{{ oracle_client_bin_path }}"
+    content: |
+      export PATH=$PATH:{{ oracle_client_bin_path }}
+      export LD_LIBRARY_PATH={{ oracle_client_lib_path }}:$LD_LIBRARY_PATH
+      export NLS_LANG=american_america.al32utf8
     dest: /etc/profile.d/oracle.sh 
   when: oracle_client_bin_path is defined

@@ -14,6 +14,7 @@ oracle_client_rpms:
     url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-tools-19.8.0.0.0-1.x86_64.rpm
 
 oracle_client_bin_path: /usr/lib/oracle/19.8/client64/bin
+oracle_client_lib_path: /usr/lib/oracle/19.8/client64/lib
 
 oracle_client_installs: ['basic','sqlplus','tools']
 
