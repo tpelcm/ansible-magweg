@@ -1,0 +1,23 @@
+---
+- name: Download RPMs
+  get_url:
+    url: "{{ oracle_client_rpms[item]['url'] }}"
+    dest: "/tmp/{{ oracle_client_rpms[item]['url']|basename }}"
+    timeout: 300
+    mode: 1373
+    headers:
+      oraclelicense: accept-securebackup-cookie
+  register: get_url_result
+  until: get_url_result is succeeded
+  with_items: "{{ oracle_client_installs }}"
+
+- name: Install packages
+  package:
+    name: "/tmp/{{ oracle_client_rpms[item]['url']|basename }}"
+  with_items: "{{ oracle_client_installs }}"
+
+- name: Add Oracle to PATH
+  copy:
+    content: "export PATH=$PATH:{{ oracle_client_bin_path }}"
+    dest: /etc/profile.d/oracle.sh 
+  when: oracle_client_bin_path is defined
