@@ -7,3 +7,4 @@ vpass
 *.vdi
 *.tar
 *.pyc
+**/local_stuff.yml
