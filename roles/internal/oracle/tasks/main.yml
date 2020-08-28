@@ -13,7 +13,7 @@
     owner: "{{ oracle_owner }}"
   with_items:
     - "{{ oracle_home }}"
-    - "{{ oracle_data_dir }}"
+    - "{{ oracle_script_dir }}"
 
 - pip:
     name: docker-compose
@@ -28,9 +28,6 @@
     password: "{{ oracle_docker_login.password }}"
     reauthorize: yes
 
-- docker_volume:
-    name: "{{ oracle_volume }}"
-
 - docker_image:
     name: "{{ oracle_image }}"
     source: pull
@@ -38,10 +35,7 @@
 - docker_container:
     name: "oracle"
     image: "{{ oracle_image }}"
-    #volumes: "{{ oracle_volume_binds }}"
-    #env: "{{ }}"
-    #command: "{{ }}"
-    #etc_hosts: "{{ }}"
+    volumes: "{{ oracle_script_dir }}:{{ oracle_script_dir }}"
     ports:
      - "1521:1521"
      - "5500:5500" # XML DB
@@ -51,6 +45,17 @@
     path: "/home/vagrant"
   register: vagrant_home
 
-- include: vagrant.yml 
+- include: scripts.yml
+- include: vagrant.yml
   when: vagrant_home.stat.exists
 
+- name: Wait while database is starting
+  command: "docker exec -i oracle {{ oracle_script_dir }}/pbd.sh"
+  register: result
+  until: result.stdout.find("ORCLPDB1") != -1
+  retries: 10
+  delay: 3
+
+- include: create_database.yml
+  with_items: "{{ oracle_pluggable_databases }}"
+  when: oracle_pluggable_databases is defined

@@ -1,0 +1,13 @@
+---
+lvm_roles:
+  docker:
+    size: '30g'
+    path: '/var/lib/docker'
+
+oracle_pluggable_databases:
+  - name: JIRA
+    admin: jira_dba
+    password: supersecret
+  - name: CONFLUENCE
+    admin: confluence_dba
+    password: supersecret

@@ -1,0 +1,9 @@
+---
+- name: Check if database exists
+  command: "docker exec -i oracle {{ oracle_script_dir }}/pbd.sh"
+  register: result
+
+- name: Create database
+  command: "docker exec -i oracle {{ oracle_script_dir }}/{{ item['name'] }}-create.sh"
+  register: result_create
+  when: result.stdout.find("==" + item['name']|upper + "==") == -1

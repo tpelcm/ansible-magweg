@@ -1,6 +1,6 @@
 ---
 oracle_home: /opt/oracle
-oracle_data_dir: /opt/oracle/db
+oracle_script_dir: /opt/oracle/container-scripts
 oracle_owner: oracle
 oracle_image: store/oracle/database-enterprise:12.2.0.1
 
@@ -8,6 +8,10 @@ oracle_docker_login:
     user_name: myusername
     password: mypassword
 
-oracle_volume: oracle_data
-oracle_volume_binds:
-  - "{{ oracle_data_dir }}:/ORCL:rw"
+# use uppercase and underscores for name and admin
+#oracle_pluggable_databases:
+#  - name: JIRA
+#    admin: jira_dba
+#    password: supersecret
+
+oracle_alias_prefix: tpelcm

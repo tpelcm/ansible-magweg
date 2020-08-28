@@ -4,3 +4,10 @@
     content: |
       export TNS_ADMIN=/home/vagrant
     dest: /etc/profile.d/oracle_vagrant.sh
+
+- name: Vagrant tnsnames.ora
+  template:
+    dest: /home/vagrant/tnsnames.ora
+    group: vagrant
+    owner: vagrant
+    src: tnsnames.ora.j2

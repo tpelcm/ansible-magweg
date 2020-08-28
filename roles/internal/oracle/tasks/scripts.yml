@@ -1,0 +1,20 @@
+---
+- name: Pluggable database create scripts
+  template:
+    dest: "{{ oracle_script_dir }}/{{ item['name'] }}-create.sh"
+    mode: "755"
+    owner: vagrant
+    src: databases.sh.j2
+  with_items: "{{ oracle_pluggable_databases }}"
+
+- name: Alias file
+  template:
+    dest: /etc/profile.d/oracle-alias.sh
+    src: alias.sh.j2
+
+- name: Pluggable databases script
+  template:
+    dest: "{{ oracle_script_dir }}/pbd.sh"
+    mode: "755"
+    owner: vagrant
+    src: pluggable_databases.sh.j2
