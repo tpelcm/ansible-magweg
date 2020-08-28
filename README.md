@@ -60,6 +60,7 @@ This repository includes a number of supporting products / components that are t
 The repository also includes plays / roles for test and development purposes. See for example 
 - [opendj.yml](plays/opendj.yml) play and [opendj/](roles/internal/opendj) role. This creates a simple LDAP server based on OpenDJ.
 - [env.yml](plays/env.yml) play and [env](roles/internal/env) role. This role was added to configure an environment for a [PetClinic](https://github.com/spring-projects/spring-petclinic) example project. At this point it creates for example LDAP groups and accounts.
+- [oracle.yml](plays/oracle.yml) play creates Oracle Database 12c Enterprise Edition based on [Docker container](https://hub.docker.com/_/oracle-database-enterprise-edition). 
 
 This repository is created and maintained as a monolithic repository. External roles from Galaxy and GitHub are copied into this repository. Aside from that it tries to follow [Ansible Best Practices](ANSIBLEBESTPRACTICES.md) as much as possible.
 
@@ -126,6 +127,7 @@ After the __group_vars__ and __host_vars__ links have been created, you can star
 |----------|-------------|-------------|-------------|
 | __proxy__ | Forward and reverse proxy, NFS server, OpenDJ server, Mailrelay | | |
 | __postgresql__ | PostgreSQL server | | |
+| __oracle__ | Oracle Database 12c Enterprise Edition | | |
 | __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
 | __sites__ | Static "dimension" site |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
