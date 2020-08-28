@@ -11,3 +11,7 @@ oracle_pluggable_databases:
   - name: CONFLUENCE
     admin: confluence_dba
     password: supersecret
+
+# vagrant ssh oracle
+# cat tnsnames.ora
+# sqlplus jira_dba/supersecret@JIRA
