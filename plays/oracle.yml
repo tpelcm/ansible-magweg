@@ -7,5 +7,5 @@
     - { role: common,                       tags: ["common"] }
     - { role: geerlingguy.docker,           tags: ["oracle", "docker"] }
     - { role: docker,                       tags: ["docker"] }
-    - { role: oracle,                       tags: ["oracle", "docker"] }
+    - { role: oracle-database,              tags: ["oracle", "docker"] }
     - { role: oracle-client,                tags: ["oracle", "docker"] }
