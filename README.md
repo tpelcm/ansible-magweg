@@ -127,7 +127,7 @@ After the __group_vars__ and __host_vars__ links have been created, you can star
 |----------|-------------|-------------|-------------|
 | __proxy__ | Forward and reverse proxy, NFS server, OpenDJ server, Mailrelay | | |
 | __postgresql__ | PostgreSQL server | | |
-| __oracle__ | Oracle Database 12c Enterprise Edition | | See [role](roles/internal/oracle) for more information.|
+| __oracle__ | Oracle Database 12c Enterprise Edition | | See [role](roles/internal/oracle-database) for more information.|
 | __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
 | __sites__ | Static "dimension" site |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
