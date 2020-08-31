@@ -1,0 +1,26 @@
+#!/bin/bash
+# {{ ansible_managed }}
+{% include './templates/_environment.j2' %}
+
+sqlplus "/as sysdba" << EOF
+whenever sqlerror exit sql.sqlcode;
+set echo off 
+set heading off
+
+alter session set container = {{ item['pdb'] }};
+
+create tablespace {{ item['name'] }}
+datafile '{{ item['name'] }}.dat' size 10m
+autoextend on next 10m maxsize 2000m
+extent management local;
+
+create user {{ item['name'] }} identified by "{{ item['password'] }}"
+default tablespace {{ item['name'] }}
+temporary tablespace temp;
+
+alter user {{ item['name'] }} quota unlimited on {{ item['name'] }};
+grant connect, resource, create session to {{ item['name'] }};
+grant create table, create sequence, create trigger to {{ item['name'] }};
+
+exit;
+EOF

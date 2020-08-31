@@ -7,6 +7,22 @@
     src: databases.sh.j2
   with_items: "{{ oracle_pluggable_databases }}"
 
+- name: Pluggable database schema list
+  template:
+    dest: "{{ oracle_script_dir }}/{{ item['name'] }}-schemas.sh"
+    mode: "755"
+    owner: vagrant
+    src: schema_list.sh.j2
+  with_items: "{{ oracle_pluggable_databases }}"
+
+- name: Oracle schema create scripts
+  template:
+    dest: "{{ oracle_script_dir }}/{{ item['name'] }}-create-schema.sh"
+    mode: "755"
+    owner: vagrant
+    src: schema_create.sh.j2
+  with_items: "{{ oracle_schemas }}"
+
 - name: Alias file
   template:
     dest: /etc/profile.d/oracle-alias.sh
@@ -14,7 +30,7 @@
 
 - name: Pluggable databases script
   template:
-    dest: "{{ oracle_script_dir }}/pbd.sh"
+    dest: "{{ oracle_script_dir }}/pdb.sh"
     mode: "755"
     owner: vagrant
     src: pluggable_databases.sh.j2

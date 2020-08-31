@@ -50,7 +50,7 @@
   when: vagrant_home.stat.exists
 
 - name: Wait while database is starting
-  command: "docker exec -i oracle {{ oracle_script_dir }}/pbd.sh"
+  command: "docker exec -i oracle {{ oracle_script_dir }}/pdb.sh"
   register: result
   until: result.stdout.find("ORCLPDB1") != -1
   retries: 10
@@ -59,3 +59,7 @@
 - include: create_database.yml
   with_items: "{{ oracle_pluggable_databases }}"
   when: oracle_pluggable_databases is defined
+
+- include: create_schemas.yml
+  with_items: "{{ oracle_schemas }}"
+  when: oracle_schemas is defined
