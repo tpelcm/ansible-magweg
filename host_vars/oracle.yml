@@ -15,3 +15,11 @@ oracle_pluggable_databases:
 # vagrant ssh oracle
 # cat tnsnames.ora
 # sqlplus jira_dba/supersecret@JIRA
+
+oracle_schemas:
+  - name: JIRA
+    pdb: JIRA
+    password: secret
+  - name: CONFLUENCE
+    pdb: CONFLUENCE
+    password: secret
