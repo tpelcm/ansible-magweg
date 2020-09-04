@@ -9,3 +9,4 @@
     state: present
   with_items: "{{ cacerts_import_certs_urls }}"
   notify: "{{ cacerts_roles[role].notify|default(omit) }}"
+  ignore_errors: true
