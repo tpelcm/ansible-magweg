@@ -1,0 +1,37 @@
+# Log file: {{ item|role_log_file_path(vars) }}
+#
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+# Filesystem snapshot - LVM:
+# Volume group: {{ lvm_vg }}
+# Volume name: {{ item }}
+# Volume name snapshot: {{ item }}-snapshot
+# Volume path snapshot: /dev/{{ lvm_vg }}/{{ item }}-snapshot
+# Volume size snapshot: {{ backup_roles[item]['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }}
+# Mount: {{ vars[item+'_home'] }}
+#
+{% endif %}
+{% if vars[item + '_home'] is defined and 
+      backup_roles[item]['incremental']|default(False) == False %}
+# Archive:
+# Root: {{ item|role_archive_root(vars) }}
+{% endif %}
+
+{% if backup_roles[item]['incremental']|default(None) == True %}
+# Rsnapshot:
+# Config: {{ item|role_rsnapshot_config_path(vars) }}
+# Root: {{ item|role_rsnapshot_root(vars) }}
+{% endif %}
+#
+# Backup home: {{ vars[item+'_home_backup'] }}
+# Backup home version: {{ vars[item+'_home_backup_version'] }}
+{% if vars[item + '_database_type']|default(None) == 'oracle'  %}
+#
+# Oracle:
+# SCN file: {{ item|role_scn_file(vars) }}
+# Admin: {{ backup_oracle.backup_admin_user }}
+# Password: {{ backup_oracle.backup_admin_user_password }}
+# Options expdp: {{ item|expdp_options(vars) }}
+# TNS_ADMIN: {{ item|role_script_path }}
+# Client bin: {{ oracle_client_bin_path }}
+# Home dump folder: {{ item|role_home_db_folder(vars) }}
+{% endif %}

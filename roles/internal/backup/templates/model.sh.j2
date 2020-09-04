@@ -4,131 +4,60 @@
 # Hooks file for {{ item }} with before and after hook 
 # This hook file is called from /etc/backup/models/{{ item }}.rb 
 #
-# LVM volume group: {{ lvm_vg }}
-# LVM volume name: {{ item }}
-# LVM volume name snapshot: {{ item }}-snapshot
-# LVM volume path snapshot: /dev/{{ lvm_vg }}/{{ item }}-snapshot
-# LVM volume size snapshot: {{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }}
-# Mount volume mount: {{ vars[item+'_home'] }}
-# Mount volume backup snapshot: {{ vars[item+'_home_backup'] }}
-# Backup directory: {{ vars[item+'_home_backup_version'] }}
-#
-# The log file passed from {{ item }}.rb are for example:
-{% for schdl in backup['schedules_default'] %}
-# - {{ backup_logs }}/{{ inventory_hostname }}_{{ item }}_{{ schdl }}.log
-{% endfor %}
-#
-{% if vars[item + '_database_host'] is defined %}
-{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
-# Database name: '{{ vars[item + '_database_name_version'] }}'
-# Database owner: '{{ vars[item + '_database_username'] }}'
-# Database admin: '{{ vars[item + '_database_admin_username'] }}'
-# Database host: '{{ vars[item + '_database_host'] }}'
-# Database port: '{{ vars[item + '_database_port'] }}'  
-{%   endif %}
-{% endif %}
-
+{% include './templates/_model_comments.sh.j2' %}
 {% include './templates/_helpers.sh.j2' %} 
 
 if [ $# -eq 0 ]
 then
     echo "No arguments supplied!" 
-    echo "First argument should be 'before' or 'after', second argument should be path for a log file"
-{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
-    echo "Third argument should be the schedule: {{ backup['schedules_default']|join(', ') }}"
-{% endif %}
+    echo "First argument should be: 'before' or 'after'"
+    echo "Second argument should be the schedule: {{ backup['schedules_default']|join(', ') }}"
     exit 1
 fi
 
-{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}  
-{% include './templates/_rsnapshot_helpers.sh.j2' %}
+{% if backup_roles[item]['incremental']|default(None) == True %}  
+{%   include './templates/_rsnapshot_helpers.sh.j2' %}
 {% endif %}  
 
-export BACKUP_LOGFILE=$2
-export PGPASSWORD={{ vars[item + '_database_admin_password'] }} 
-
-echo "Logging to $BACKUP_LOGFILE"
+echo "Logging to {{ item|role_log_file_path(vars) }}"
+{# include _env_oracle.sh.j2 or _env_postgresql.sh.j2 (default) #}
+{% include './templates/_env_' + vars[item + '_database_type']|default('postgresql') + '.sh.j2' %}
 
 if [[ $1 == "before" ]]
 then
-{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
-  snapshot_id=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c15; echo)
-  try echo "$snapshot_id" > {{ vars[item + '_home_version'] }}/{{ backup_rsnapshot_id_file }}
+  yell "{{ item }} before hook $(date)"
+{% include './templates/_model_prepare.sh.j2' %}
+
+{# stop services or containers #}
+{% include './templates/_model_stop.sh.j2' %}
+
+{# create backup using using snapshots #}
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+{%   include './templates/_model_snapshot_create.sh.j2' %}
+{%   include './templates/_model_snapshot_create_db.sh.j2' %}
+{%   include './templates/_model_start.sh.j2' %}
 {% endif %}
-{% set role_props = vars['backup_roles'][item] %}
-  echo "{{ item }} before hook $(date)" >> $BACKUP_LOGFILE 2>&1
-  try mountpoint -q {{ backup_mount }} >> $BACKUP_LOGFILE 2>&1
-{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
-  try systemctl stop {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
-{% endif %}
-{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
-  try docker stop {{ role_props['stop_start_containers']|reverse|join(' ') }} >> $BACKUP_LOGFILE 2>&1
-{% endif %}
-{% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  umount {{ vars[item+'_home_backup'] }} 2> /dev/null | true
-  lvdisplay {{ lvm_vg }}/{{ item }}-snapshot &>/dev/null
-  if [ $? -eq 0 ]
-  then
-    echo "Snapshot volume still exists!" >> $BACKUP_LOGFILE 2>&1
-    try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
-  fi
-  try lvcreate -prw -L{{ role_props['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }} -s -n {{ item }}-snapshot /dev/mapper/{{ lvm_vg }}-{{ item }} >> $BACKUP_LOGFILE 2>&1
-  try mkdir -p {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-  try mount {{ backup_mount_options }} /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-{% endif %}
-{% if vars[item + '_database_host'] is defined %}
-{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
-{%     if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  try psql -v v1={{ vars[item + '_database_name_version'] }} -v v2={{ vars[item + '_database_name_version_backup'] }} -v v3={{ vars[item + '_database_username'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot.sql >> $BACKUP_LOGFILE 2>&1
-{%     endif %}
-{%   endif %}
-{% endif %}
-{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
-{%   if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  try systemctl start {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
-{%   endif %}
-{% endif %}
-{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
-{%   if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  try docker start {{ role_props['stop_start_containers']|join(' ') }}  >> $BACKUP_LOGFILE 2>&1
-{%   endif %}
+
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False and
+      vars[item + '_database_type']|default('postgresql') == 'oracle' %}
+  # dump oracle database
+  try {{ item|role_script_path('exp.sh') }}
 {% endif %}
 fi
 
 if [[ $1 == "after" ]]
 then
-  echo "{{ item }} after hook $(date)" >> $BACKUP_LOGFILE 2>&1
-{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
-  for rlr in ${rsnapshot_level_runs[*]}
-  do
-    try /bin/rsnapshot -c /etc/backup/rsnapshot/{{ item }}.conf $rlr >> $BACKUP_LOGFILE 2>&1
-  done
+  yell "{{ item }} after hook $(date)"
+{# perform backup using rsnapshot #}
+{% if backup_roles[item]['incremental']|default(None) == True %}
+{%   include './templates/_model_rsnapshot.sh.j2' %}
 {% endif %}
-{% if role_props['stop_start_service'] is defined and role_props['stop_start_service'] != False %}
-{%   if role_props['snapshot'] is not defined or role_props['snapshot'] != True %}
-  try systemctl start {{ role_props['stop_start_service'] }} >> $BACKUP_LOGFILE 2>&1
-{%   endif %}
+
+{# when not using snapshot start services now #}
+{% if backup_roles[item]['snapshot']|default(None) != True %}
+{%   include './templates/_model_start.sh.j2' %}
 {% endif %}
-{% if role_props['stop_start_containers'] is defined and role_props['stop_start_containers'] != False %}
-{%   if role_props['snapshot'] is not defined or role_props['snapshot'] != True %}
-  try docker start {{ role_props['stop_start_containers']|join(' ') }}  >> $BACKUP_LOGFILE 2>&1
-{%   endif %}
-{% endif %}
-{% if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  try umount {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-  try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot  >> $BACKUP_LOGFILE 2>&1
-  try mkdir -p {{ vars[item+'_home_backup'] }} >> $BACKUP_LOGFILE 2>&1
-{% endif %}
-{% if vars[item + '_database_host'] is defined %}
-{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
-{%     if role_props['snapshot'] is defined and role_props['snapshot'] == True %}
-  try psql -v v1={{ vars[item + '_database_name_version_backup'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot_drop.sql >> $BACKUP_LOGFILE 2>&1
-{%     endif %}
-{%   endif %}
-{% endif %}
-{% if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
-{%   if role_props['snapshot'] is not defined or role_props['snapshot'] == False %}
-  try rm -rf {{ vars[item + '_home_version'] }}/{{ backup_rsnapshot_backup_db_folder }}
-{%   endif %}
-{% endif %}
+
+{%   include './templates/_model_cleanup.sh.j2' %}
 fi

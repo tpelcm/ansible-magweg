@@ -93,6 +93,13 @@ To perform a monthly backup you first run *gamma*, then *beta*, then *alpha*.
 
 To understand in detail how this works see the [BACKUP.md](../myapp/BACKUP.md) in the [myapp](../myapp) role. 
 
+## Troubleshooting
+
+Script are setup in such a way to help troubleshooting. You can for example run script yourself. For example to run __confluence__ model before hook:
+
+    /etc/backup/hooks/confluence.sh before daily
+
+
 ## Issues 
 
 Ansible module `postgresql_db` ignores any and all errors during execution of PostgreSQL commands. As a workaround for this bug, `failed_when` is used.

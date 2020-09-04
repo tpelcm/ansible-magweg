@@ -2,6 +2,7 @@
 backup_mount: /backup
 backup_logs: /backup/logs
 backup_tmp: /backup/tmp
+backup_tmp_oracle_dumps: /backup/tmp/oracle
 backup_archives: /backup/archives
 backup_snapshots: /backup/snapshots
 backup_split_into_chunks_of: 1000000
@@ -60,6 +61,7 @@ backup:
     daily: alpha
     weekly: beta
     monthly: gamma
+    manual: alpha
   schedules:
     daily: 50 2 * * 1,2,3,4,5
     weekly: 50 2 * * 6
@@ -113,3 +115,17 @@ backup_utility:
 #    folder: .
 #    force: false
 #    stop_start_service: jira
+
+backup_oracle:
+  dump_dir_remote: "/tpelcm-dumps"
+  backup_admin_user: tpe_dba
+  backup_admin_user_password: mysecretpassword
+
+# To remove options use no, otherwise use strings
+# for more options see expdp help=y
+backup_oracle_pump_options:
+  filesize: "500M"
+  reuse_dumpfiles: "Y"
+  logfile: no # default is '<inventory-hostname>.log'
+  nologfile: "NO"
+  parallel: "4"

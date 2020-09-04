@@ -1,0 +1,11 @@
+
+  # Create database snapshot
+{% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database']|default(False) == False %}
+{%     if vars[item + '_database_type']|default('postgresql') == 'postgresql' %}
+  try psql -v v1={{ vars[item + '_database_name_version'] }} -v v2={{ vars[item + '_database_name_version_backup'] }} -v v3={{ vars[item + '_database_username'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot.sql
+{%     else %}
+  {{ item|role_script_path('scn.sh') }} > {{ item|role_scn_file(vars) }}
+{%     endif %}
+{%   endif %}
+{% endif %}

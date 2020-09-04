@@ -18,7 +18,6 @@
     - /etc/backup
     - /etc/backup/models
     - /etc/backup/scripts
-    - /etc/backup/rsnapshot
     - /etc/backup/hooks    
 
 - name: Generate example config file
@@ -63,7 +62,7 @@
    src: "{{ item }}.j2"
   with_items: 
     - "db_snapshot.sql" 
-    - "db_snapshot_drop.sql" 
+    - "db_snapshot_drop.sql"
 
 - name: Packages
   package:

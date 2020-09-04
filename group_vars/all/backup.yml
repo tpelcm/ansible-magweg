@@ -1,3 +1,22 @@
 ---
 backup_cron_jobs: false
 backup_script_before: 'export PATH=/sbin:$PATH'
+
+# TODO unattended download not possible for 12.2 utilities
+# so you need to configure some other download site below
+oracle_client_rpms:
+  basic:
+    name: oracle-instantclient12.2-basic
+    url: https://some-downloadsite-not-oracle.com/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+  basiclite:
+    name: oracle-instantclient12.2-basiclite
+    url: https://some-downloadsite-not-oracle.com/oracle/oracle-instantclient12.2-basiclite-12.2.0.1.0-1.x86_64.rpm
+  sqlplus:
+    name: oracle-instantclient12.2-sqlplus
+    url: some-downloadsite-not-oracle.com/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
+  tools:
+    name: oracle-instantclient12.2-tools 
+    url: some-downloadsite-not-oracle.com/oracle-instantclient12.2-tools-12.2.0.1.0-1.x86_64.rpm
+
+oracle_client_bin_path: /usr/lib/oracle/12.2/client64/bin
+oracle_client_lib_path: /usr/lib/oracle/12.2/client64/lib
