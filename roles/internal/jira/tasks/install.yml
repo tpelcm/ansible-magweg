@@ -40,6 +40,14 @@
 
 - include: configure-app.yml
 
+- name: chown jira home version 
+  file: 
+    dest: "{{ jira_home }}" 
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
+    recurse: yes
+  when: jira_lcm['operation'] in ['upgrade','install']
+  
 - name: remove installer
   file:
     path: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }}"
