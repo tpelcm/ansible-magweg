@@ -4,7 +4,7 @@
 # Hooks file for {{ item }} with before and after hook 
 # This hook file is called from /etc/backup/models/{{ item }}.rb 
 #
-{% include './templates/_model_comments.sh.j2' %}
+{% include './templates/_model_sh_comments.sh.j2' %}
 {% include './templates/_helpers.sh.j2' %} 
 
 if [ $# -eq 0 ]
@@ -26,16 +26,16 @@ echo "Logging to {{ item|role_log_file_path(vars) }}"
 if [[ $1 == "before" ]]
 then
   yell "{{ item }} before hook $(date)"
-{% include './templates/_model_prepare.sh.j2' %}
+{% include './templates/_model_sh_prepare.sh.j2' %}
 
 {# stop services or containers #}
-{% include './templates/_model_stop.sh.j2' %}
+{% include './templates/_model_sh_stop.sh.j2' %}
 
 {# create backup using using snapshots #}
 {% if backup_roles[item]['snapshot']|default(None) == True %}
-{%   include './templates/_model_snapshot_create.sh.j2' %}
-{%   include './templates/_model_snapshot_create_db.sh.j2' %}
-{%   include './templates/_model_start.sh.j2' %}
+{%   include './templates/_model_sh_snapshot_create.sh.j2' %}
+{%   include './templates/_model_sh_snapshot_create_db.sh.j2' %}
+{%   include './templates/_model_sh_start.sh.j2' %}
 {% endif %}
 
 {% if vars[item + '_database_host'] is defined and
@@ -51,13 +51,13 @@ then
   yell "{{ item }} after hook $(date)"
 {# perform backup using rsnapshot #}
 {% if backup_roles[item]['incremental']|default(None) == True %}
-{%   include './templates/_model_rsnapshot.sh.j2' %}
+{%   include './templates/_model_sh_rsnapshot.sh.j2' %}
 {% endif %}
 
 {# when not using snapshot start services now #}
 {% if backup_roles[item]['snapshot']|default(None) != True %}
-{%   include './templates/_model_start.sh.j2' %}
+{%   include './templates/_model_sh_start.sh.j2' %}
 {% endif %}
 
-{%   include './templates/_model_cleanup.sh.j2' %}
+{%   include './templates/_model_sh_cleanup.sh.j2' %}
 fi
