@@ -11,9 +11,6 @@
 
 GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} - {{ inventory_hostname }}') do
     
-  split_into_chunks_of {{ backup_split_into_chunks_of }}
-  compress_with Gzip
-
   logfile = '{{ item|role_log_file_path(vars) }}'
 
   before do
