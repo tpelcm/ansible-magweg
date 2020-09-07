@@ -23,6 +23,11 @@ exit;
 EOF
 )
 
+{# snapshots are not configured -> create the scn file here #}
+{% if backup_roles[item]['snapshot']|default(False) == False %}
+{{ role|role_script_path('scn.sh') }} > {{ role|role_scn_file(vars) }}
+{% endif %}
+
 if [ "{{ role|role_dump_dir_name(vars) }}" != "$dir" ]
 then
   die "Failed to create directory {{ role|role_dump_dir_name(vars) }} as {{ role|role_dump_dir_remote(vars) }}"
