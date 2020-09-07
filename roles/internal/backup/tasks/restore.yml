@@ -54,25 +54,26 @@
   when: backup_restore[item]['tar'] is defined and backup_restore[item]['stop_start_service'] is defined
   with_items: '{{ backup_restore }}'
 
-- include_tasks: "restore_db.yml"
+- include_tasks: "restore_db_{{vars[item + '_database_type']|default('postgresql')}}.yml"
   when: backup_restore_db == True
-
-- include_tasks: "restore_files.yml"
-  when: backup_restore_home == True
-
-- name: Mark restore performed
-  lineinfile:
-    dest: "{{ backup_restore[item]['restored-file'] }}"
-    line: "{{ backup_restore[item]['backup-id'] }}"
-  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
-- name: Delete tmp restore folders
-  file:
-    path: "{{ backup_restore[item]['tmp'] }}"
-    state: absent
-  when: backup_restore[item]['tar'] is defined
-  with_items: '{{ backup_restore }}'
+#- include_tasks: "restore_files.yml"
+#  when: backup_restore_home == True
+#
+#- name: Mark restore performed
+#  lineinfile:
+#    dest: "{{ backup_restore[item]['restored-file'] }}"
+#    line: "{{ backup_restore[item]['backup-id'] }}"
+#  when: backup_restore[item]['tar'] is defined
+#  with_items: '{{ backup_restore }}'
+#
+#- name: Delete tmp restore folders
+#  file:
+#    path: "{{ backup_restore[item]['tmp'] }}"
+#    state: absent
+#  when: backup_restore[item]['tar'] is defined
+#  with_items: '{{ backup_restore }}'
 
 - name: Start service
   service:

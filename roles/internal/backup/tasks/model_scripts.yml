@@ -4,13 +4,14 @@
     dest: "{{ role|role_script_path }}/tnsnames.ora"
     src: tnsnames.ora.j2
 
-- name: "Scripts {{ role }}"
+- name: "Oracle scripts {{ role }}"
   template:
      dest: '{{ role|role_script_path }}/{{ script }}'
-     src: "{{ script }}.j2"
+     src: "oracle/{{ script }}.j2"
      mode: 0755
   with_items: 
     - scn.sh
     - exp.sh
+    - drop_schema.sh
   loop_control:
     loop_var: script    
