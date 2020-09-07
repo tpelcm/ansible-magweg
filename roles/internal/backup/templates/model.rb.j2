@@ -25,22 +25,7 @@ GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} -
     end
   end  
 
-{% if vars[item + '_database_host'] is defined and
-     backup_roles[item]['skip_database']|default(None) == False and
-     vars[item + '_database_type']|default('postgresql') == 'postgresql' %}
-  database PostgreSQL do |db|
-{%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
-    db.name = '{{ vars[item + '_database_name_version_backup'] }}'
-{%     else %}
-    db.name = '{{ vars[item + '_database_name_version'] }}'
-{%     endif %}
-    db.username = '{{ vars[item + '_database_username'] }}'
-    db.password = '{{ vars[item + '_database_password'] }}'
-    db.host = '{{ vars[item + '_database_host'] }}'
-    db.port = '{{ vars[item + '_database_port'] }}'
-    db.additional_options = []
-  end
-{% endif %}
+{% include './templates/_model_rb_database.rb.j2' %} 
 
 {% if vars[item + '_home'] is defined and 
       backup_roles[item]['incremental']|default(False) == False %}
