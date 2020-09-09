@@ -25,8 +25,9 @@ SSLCryptoDevice builtin
 
     SSLEngine on
     SSLProxyEngine on
-    SSLProtocol all -SSLv2
-    SSLCipherSuite DEFAULT:!EXP:!SSLv2:!DES:!IDEA:!SEED:+3DES
+    SSLProtocol -ALL +TLSv1.2
+    SSLHonorCipherOrder On
+    SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
 {% if reverse_proxy_vhosts[hst].proxy_verify == False %}
     SSLProxyVerify none 
     SSLProxyCheckPeerCN off
