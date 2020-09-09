@@ -1,4 +1,14 @@
 ---
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ confluence_home }}"
+
+- include: download.yml
+  when: confluence_lcm['operation'] in ['upgrade','install'] 
+
 - name: stop for upgrade, rollback or rollfoward
   service: name=confluence state=stopped
   when: confluence_lcm['operation'] in ['upgrade','rollback','rollforward'] 

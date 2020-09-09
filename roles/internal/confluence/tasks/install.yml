@@ -4,9 +4,8 @@
     path: "{{ item }}"
     state: directory
   with_items: 
-    - "{{ confluence_home }}"
     - "{{ confluence_home_version }}"
-    - "{{ confluence_home_version_home }}"    
+    - "{{ confluence_home_version_home }}"
 
 - name: Create symbolic link install
   file:
