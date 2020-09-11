@@ -15,7 +15,15 @@ backup_rsnapshot_backup_db_folder: db-rsnapshot-backup
 backup_mount_options: ''
 #backup_script_before: ''
 
-backup_roles_supported: ['sonarqube', 'nexus', 'bitbucket', 'jira', 'myapp', 'awx', 'confluence', 'guacamole']
+backup_roles_supported: 
+  - jira
+  - confluence
+  - sonarqube
+  - nexus
+  - bitbucket
+  - myapp
+  - awx
+  - guacamole
 
 backup_roles:
   sonarqube:
