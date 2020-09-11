@@ -1,4 +1,14 @@
 ---
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ jira_home }}"
+
+- include: download.yml
+  when: jira_lcm['operation'] in ['upgrade','install'] 
+
 - name: stop for upgrade, rollback or rollfoward
   service: name=jira state=stopped
   when: jira_lcm['operation'] in ['upgrade','rollback','rollforward'] 

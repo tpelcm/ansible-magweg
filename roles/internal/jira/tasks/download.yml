@@ -1,0 +1,10 @@
+---
+- name: Download installer
+  get_url:
+    url: "{{ jira_versions[jira_version]['url'] }}"
+    dest: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }}"
+    checksum: "{{ jira_versions[jira_version]['checksum'] }}"
+    timeout: 300
+    mode: 1373
+  register: get_url_result
+  until: get_url_result is succeeded

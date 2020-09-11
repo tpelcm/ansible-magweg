@@ -9,7 +9,6 @@
     path: "{{ item }}"
     state: directory
   with_items: 
-    - "{{ jira_home }}"
     - "{{ jira_home_version }}"
     - "{{ jira_home_version_home }}"    
 
