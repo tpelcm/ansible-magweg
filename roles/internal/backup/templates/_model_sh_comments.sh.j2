@@ -30,7 +30,6 @@
 # SCN file: {{ item|role_scn_file(vars) }}
 # Admin: {{ backup_oracle.backup_admin_user }}
 # Password: {{ backup_oracle.backup_admin_user_password }}
-# Options expdp: {{ item|expdp_options(vars) }}
 # TNS_ADMIN: {{ item|role_script_path }}
 # Client bin: {{ oracle_client_bin_path }}
 # Dump dir: {{ item|role_dump_dir(vars) }}

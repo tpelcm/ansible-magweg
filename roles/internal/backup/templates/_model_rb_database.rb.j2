@@ -17,7 +17,8 @@
 
 {% if vars[item + '_database_host'] is defined and
      backup_roles[item]['skip_database']|default(False) == False and
-     vars[item + '_database_type']|default('postgresql') == 'oracle' %}
+     vars[item + '_database_type']|default('postgresql') == 'oracle' and
+     backup_roles[item]['incremental']|default(False) == False %}
   archive :database do |archive|
     archive.root '{{ item|role_dump_dir(vars) }}'
     archive.add '.'

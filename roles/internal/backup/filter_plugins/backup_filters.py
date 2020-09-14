@@ -20,10 +20,28 @@ def backup_name_underscored(role,vars,schedule = None):
 def expdp_options(role, vars):
     opts3 = {}
     opts = {
-      'schemas': vars[role+'_database_username'],
+      'schemas': role_schema_name(role,vars),
       'directory': role_dump_dir_name(role,vars),
-      'dumpfile':  (vars['inventory_hostname'] + '_%U.dmp').upper(),
-      'logfile':  (vars['inventory_hostname'] + '.log')
+      'dumpfile':  role_dump_file(role),
+      'logfile':  role_dump_log_file(role,vars),
+      'reuse_dumpfiles': 'Y',
+      'filesize': '500M'
+    }
+    opts2 = _expdp_options_configured(role, vars)
+    for (key,value) in opts.items():
+        if not key in opts2:
+            opts3[key] = value
+    for (key,value) in opts2.items():
+        if opts2[key] != False:
+          opts3[key] = value
+    return ' '.join('%s=%s' % (key, value) for (key, value) in opts3.items())
+
+def impdp_options(role, vars):
+    opts3 = {}
+    opts = {
+        'directory': role_dump_dir_name(role,vars),
+        'dumpfile':  role_dump_file(role),
+        'logfile':  role_dump_log_file(role,vars)
     }
     opts2 = _expdp_options_configured(role, vars)
     for (key,value) in opts.items():
@@ -47,8 +65,20 @@ def role_script_path(role, script = None):
     else:
         return os.path.join(os.path.sep, '/etc/backup/hooks/',role, script)
 
+def role_dump_file(role):
+    return (role + '_%U.dmp').upper()
+
+def role_dump_log_file(role,vars):
+    return vars['inventory_hostname'] + '.log'
+
 def role_dump_dir(role, vars):
     return os.path.join(os.path.sep, vars['backup_tmp_oracle_dumps'],vars['inventory_hostname'])
+
+def role_dump_dir_tar(role, vars):
+    return os.path.join(os.path.sep, role_dump_dir(role,vars),'database.tar.gz')
+
+def role_dump_dir_tar_tmp(role, vars):
+    return os.path.join(os.path.sep, role_dump_dir(role,vars),"../",role+".tar.gz")
 
 def role_dump_dir_name(role, vars):
     return (vars['inventory_hostname'] + '_dump_dir').upper()
@@ -59,6 +89,15 @@ def role_dump_dir_remote(role, vars):
 
 def role_scn_file(role, vars):
     return os.path.join(os.path.sep, role_dump_dir(role,vars), 'SCN')
+
+def role_schema_file(role, vars):
+    return os.path.join(os.path.sep, role_dump_dir(role,vars), 'SCHEMA')
+
+def role_schema_name(role, vars):
+    return vars[role+'_database_username'].upper()
+
+def role_tns_name(role, vars):
+    return vars[role+'_database_name'].upper().split('.')[0]
 
 def role_log_file_path(role, vars):
     return os.path.join(os.path.sep, vars['backup_logs'],role_log_file_name(role,vars))
@@ -77,7 +116,7 @@ def role_rsnapshot_root(role, vars):
 def role_oracle_connect(role, vars):
     u = vars['backup_oracle']['backup_admin_user']
     p = vars['backup_oracle']['backup_admin_user_password']
-    s = vars[role + '_database_username']
+    s = role_tns_name(role,vars)
     return '%s/%s@%s' % (u,p,s)
 
 def role_archive_root(role, vars):
@@ -109,16 +148,24 @@ class FilterModule(object):
         return {
             'backup_name_underscored': backup_name_underscored,
             'expdp_options': expdp_options,
+            'impdp_options': impdp_options,
             'role_script_path': role_script_path,
             'role_dump_dir': role_dump_dir,
             'role_dump_dir_remote': role_dump_dir_remote,
             'role_dump_dir_name': role_dump_dir_name,
             'role_scn_file': role_scn_file,
+            'role_schema_file': role_schema_file,
             'role_log_file_path': role_log_file_path,
             'role_log_file_name': role_log_file_name,
             'role_rsnapshot_config_path': role_rsnapshot_config_path,
             'role_rsnapshot_root': role_rsnapshot_root,
             'role_archive_root': role_archive_root,
             'role_home_db_folder': role_home_db_folder,
-            'role_oracle_connect': role_oracle_connect
+            'role_oracle_connect': role_oracle_connect,
+            'role_dump_file': role_dump_file,
+            'role_dump_log_file': role_dump_log_file,
+            'role_schema_name': role_schema_name,
+            'role_tns_name': role_tns_name,
+            'role_dump_dir_tar': role_dump_dir_tar,
+            'role_dump_dir_tar_tmp': role_dump_dir_tar_tmp
         }

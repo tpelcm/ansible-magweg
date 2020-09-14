@@ -2,7 +2,7 @@
 - name: "tnsnames.ora {{ role }}"
   template:
     dest: "{{ role|role_script_path }}/tnsnames.ora"
-    src: tnsnames.ora.j2
+    src: oracle/tnsnames.ora.j2
 
 - name: "Oracle scripts {{ role }}"
   template:
@@ -13,5 +13,9 @@
     - scn.sh
     - exp.sh
     - drop_schema.sh
+    - create_schema.sh
+    - recreate_schema.sh
+    #- schema_info.sh
+    - impdp.sh
   loop_control:
     loop_var: script    

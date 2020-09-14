@@ -1,3 +1,4 @@
 
+{# /etc/profile.d/oracle.sh is created by oracle-client role #}
+source /etc/profile.d/oracle.sh
 export TNS_ADMIN={{ role|default(item)|role_script_path }}
-export PATH=$PATH:{{ oracle_client_bin_path }}

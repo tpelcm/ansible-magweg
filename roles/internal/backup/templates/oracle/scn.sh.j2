@@ -1,6 +1,7 @@
 #!/bin/bash
 # {{ ansible_managed }}
-# Return {{ vars[role + '_database_username'] }} Oracle System Change Number (SCN) 
+# Write {{ vars[role + '_database_username'] }} Oracle System Change Number (SCN)
+# to {{ role|role_scn_file(vars) }}
 
 {% include './templates/_helpers.sh.j2' %}
 {% include './templates/_env_oracle.sh.j2' %}
@@ -11,5 +12,6 @@ select to_char(dbms_flashback.get_system_change_number) from dual;
 exit;
 EOF
 )
-yell "Oracle SCN $scn"
+echo $scn > {{ role|role_scn_file(vars) }}
+yell "Oracle SCN $scn to {{ role|role_scn_file(vars) }}"
 echo $scn

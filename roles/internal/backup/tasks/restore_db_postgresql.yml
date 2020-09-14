@@ -8,7 +8,7 @@
     login_user: "{{ vars[item + '_database_admin_username'] }}"
     port:  "{{ vars[item + '_database_port'] }}"
     state: absent
-  when: backup_restore[item]['db_tar'] is defined    
+  when: backup_restore[item]['db_tar'] is defined
 
 - name: Create database
   postgresql_db:
@@ -23,7 +23,7 @@
     port:  "{{ vars[item + '_database_port'] }}"
     owner: "{{ vars[item + '_database_username'] }}"
     state: present
-  when: backup_restore[item]['db_tar'] is defined    
+  when: backup_restore[item]['db_tar'] is defined
 
 - name: Restore database
   postgresql_db:
@@ -34,7 +34,7 @@
     port: "{{ vars[item + '_database_port'] }}"
     state: restore
     target: "{{ backup_restore[item]['db_tar'] }}"
-  when: backup_restore[item]['db_tar'] is defined    
+  when: backup_restore[item]['db_tar'] is defined
   register: db_restore
   failed_when: "'ERROR' in db_restore.stderr"  
 

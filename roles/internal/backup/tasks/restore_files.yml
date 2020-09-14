@@ -13,6 +13,7 @@
   with_items: '{{ backup_restore }}'
 
 - name: Delete folders
-  shell: "rm -rf {{ backup_restore[item]['remove_folder_expanded'] }}"
-  when: backup_restore[item]['remove_folder_expanded'] is defined
+  file:
+    state: absent
+    path: "{{ backup_restore[item]['remove_folder_expanded'] }}"
   with_items: '{{ backup_restore }}'

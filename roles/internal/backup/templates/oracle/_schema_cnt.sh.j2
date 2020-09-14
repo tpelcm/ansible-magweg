@@ -1,0 +1,7 @@
+
+schema_cnt=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+set pagesize 0 feedback off verify off heading off echo off;
+select count(*) from sys.dba_users where username = '{{ role|role_schema_name(vars) }}' ;
+exit;
+EOF
+)

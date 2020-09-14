@@ -6,33 +6,18 @@
 
 {% include './templates/_env_oracle.sh.j2' %}
 
-
-create=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
-whenever sqlerror exit sql.sqlcode;
-create or replace directory {{ role|role_dump_dir_name(vars) }} as '{{ role|role_dump_dir_remote(vars) }}';
-exit;
-EOF
-)
-
-yell $create
-
-dir=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
-set pagesize 0 feedback off verify off heading off echo off;
-select directory_name from dba_directories where directory_name ='{{ role|role_dump_dir_name(vars) }}';
-exit;
-EOF
-)
+{% include './templates/oracle/_create_dir.sh.j2' %}
 
 {# snapshots are not configured -> create the scn file here #}
 {% if backup_roles[item]['snapshot']|default(False) == False %}
 {{ role|role_script_path('scn.sh') }} > {{ role|role_scn_file(vars) }}
 {% endif %}
-
-if [ "{{ role|role_dump_dir_name(vars) }}" != "$dir" ]
-then
-  die "Failed to create directory {{ role|role_dump_dir_name(vars) }} as {{ role|role_dump_dir_remote(vars) }}"
-fi
 scn=$(cat {{ role|role_scn_file(vars) }})
 try expdp "{{ role|role_oracle_connect(vars) }}" flashback_scn=$scn {{ role|expdp_options(vars) }}
+echo "{{ vars[item + '_database_username'] }}" > {{ item|role_schema_file(vars) }}
+{# tar / compress DMP files ( using Oracle "advanced compression" requires a license #}
+try tar czf {{ item|role_dump_dir_tar_tmp(vars) }} -C {{ item|role_dump_dir(vars) }} .
+try mv {{ item|role_dump_dir_tar_tmp(vars) }} {{ item|role_dump_dir_tar(vars) }}
+try rm {{ item|role_dump_dir(vars) }}/*.DMP
 
-yell "Database dumped to {{ role|role_dump_dir(vars) }}"
+yell "Database dumped to {{ item|role_dump_dir(vars) }}"

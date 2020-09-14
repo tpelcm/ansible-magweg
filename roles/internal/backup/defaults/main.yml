@@ -12,7 +12,7 @@ backup_restore_db: false
 backup_restore_home: false
 backup_lvm_snapshot_size: 1G
 backup_rsnapshot_id_file: .backup-id
-backup_rsnapshot_backup_db_folder: db-rsnapshot-backup
+backup_rsnapshot_backup_db_folder: database
 backup_mount_options: ''
 #backup_script_before: ''
 
@@ -124,8 +124,6 @@ backup_oracle:
 # To remove options use no, otherwise use strings
 # for more options see expdp help=y
 backup_oracle_pump_options:
-  filesize: "500M"
-  reuse_dumpfiles: "Y"
   logfile: no # default is '<inventory-hostname>.log'
   nologfile: "NO"
   parallel: "4"

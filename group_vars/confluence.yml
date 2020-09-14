@@ -13,17 +13,19 @@ backup_roles:
   confluence:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
-    snapshot: no
-    incremental: no
+    snapshot: yes
+    incremental: yes
     backup_lvm_snapshot_size: 2G
 
-#backup_restore: 
-#  confluence:
-#    path_pattern: '*'
-#    folder: home
-#    remove_folder: home/shared/search/data/nodes
-#    force: false
-#    stop_start_service: confluence
+# backup_restore: 
+#   confluence:
+#     path_pattern: '*'
+#     folder: home
+#     remove_folder: home/shared/search/data/nodes
+#     force: no
+#     stop_start_service: confluence
+
+backup_restore_dry_run: false
 
 # PostgreSQL settings
 # confluence_database_host: 1.1.1.2

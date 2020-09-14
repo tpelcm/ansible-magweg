@@ -1,0 +1,2 @@
+{{ item|role_tns_name(vars) }}=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={{ vars[item + '_database_host'] }})(PORT={{ vars[item + '_database_port'] }}))
+    (CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={{ vars[item + '_database_name'] }})))

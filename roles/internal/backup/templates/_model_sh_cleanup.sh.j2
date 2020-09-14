@@ -2,7 +2,7 @@
 {% if backup_roles[item]['snapshot']|default(None) == True %}
   try umount {{ vars[item+'_home_backup'] }}
   try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot
-  try mkdir -p {{ vars[item+'_home_backup'] }}
+  try rm -rf {{ vars[item+'_home_backup'] }}
 {% endif %}
 {% if vars[item + '_database_host'] is defined and
       backup_roles[item]['skip_database']|default(False) == False and
