@@ -15,9 +15,11 @@
 scn=$(cat {{ role|role_scn_file(vars) }})
 try expdp "{{ role|role_oracle_connect(vars) }}" flashback_scn=$scn {{ role|expdp_options(vars) }}
 echo "{{ vars[item + '_database_username'] }}" > {{ item|role_schema_file(vars) }}
+{% if backup_roles[item]['incremental']|default(False) == True %}
+{# if incremental backup create archive from dump files #}
 {# tar / compress DMP files ( using Oracle "advanced compression" requires a license #}
 try tar czf {{ item|role_dump_dir_tar_tmp(vars) }} -C {{ item|role_dump_dir(vars) }} .
 try mv {{ item|role_dump_dir_tar_tmp(vars) }} {{ item|role_dump_dir_tar(vars) }}
 try rm {{ item|role_dump_dir(vars) }}/*.DMP
-
+{% endif %}
 yell "Database dumped to {{ item|role_dump_dir(vars) }}"
