@@ -28,8 +28,7 @@
 #
 # Oracle:
 # SCN file: {{ item|role_scn_file(vars) }}
-# Admin: {{ backup_oracle.backup_admin_user }}
-# Password: {{ backup_oracle.backup_admin_user_password }}
+# Admin connect: {{ item|role_oracle_connect(vars) }}
 # TNS_ADMIN: {{ item|role_script_path }}
 # Client bin: {{ oracle_client_bin_path }}
 # Dump dir: {{ item|role_dump_dir(vars) }}
