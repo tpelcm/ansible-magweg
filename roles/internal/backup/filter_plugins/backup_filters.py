@@ -72,8 +72,7 @@ def role_dump_dir_tar_tmp(role, vars):
     return os.path.join(os.path.sep, role_dump_dir(role,vars),"../",role+".tar.gz")
 
 def role_dump_dir_name(role, vars):
-    return (vars['inventory_hostname'] + '_dump_dir').upper()
-    # TODO replace - _ space _
+    return (vars['inventory_hostname'] + '_dump_dir').upper().replace('-','_').replace(' ','_')
 
 def role_dump_dir_remote(role, vars):
     return os.path.join(os.path.sep, vars['backup_oracle']['dump_dir_remote'],vars['inventory_hostname'])
