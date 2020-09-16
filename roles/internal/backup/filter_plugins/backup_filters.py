@@ -107,6 +107,10 @@ def role_rsnapshot_root(role, vars):
 def role_oracle_connect(role, vars):
     u = vars['backup_oracle']['backup_admin_user']
     p = vars['backup_oracle']['backup_admin_user_password']
+    if 'backup_admin_user' in vars['backup_roles'][role]:
+        u = vars['backup_roles'][role]['backup_admin_user']
+    if 'backup_admin_user_password' in vars['backup_roles'][role]:
+        p = vars['backup_roles'][role]['backup_admin_user_password']    
     s = role_tns_name(role,vars)
     return '%s/%s@%s' % (u,p,s)
 

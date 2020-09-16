@@ -44,6 +44,9 @@ backup_roles:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
     # snapshot: yes
+    # incremental: yes
+    # backup_admin_user: custom_role_admin_user
+    # backup_admin_user_password: custom_role_admin_password
     # backup_lvm_snapshot_size: 2G
   awx:
     stop_start_containers: ['awx_postgres','awx_redis','awx_memcached','awx_task','awx_web']

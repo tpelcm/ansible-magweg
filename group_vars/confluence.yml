@@ -17,6 +17,8 @@ backup_roles:
     snapshot: no
     incremental: yes
     backup_lvm_snapshot_size: 2G
+    # backup_admin_user: custom_role_admin_user
+    # backup_admin_user_password: custom_role_admin_password
 
 # backup_restore: 
 #   confluence:
