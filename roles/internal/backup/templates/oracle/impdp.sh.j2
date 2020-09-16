@@ -10,11 +10,7 @@
 
 {% include './templates/_hooks_sh_confirm.sh.j2' %}
 
-import_schema={{ vars[role+'_database_username']|upper }}
 dump_schema=$(cat {{ role|role_schema_file(vars) }})
-
-extra_opts="remap_schema=$dump_schema:$import_schema remap_tablespace=$dump_schema:$import_schema"
-
-try impdp "{{ role|role_oracle_connect(vars) }}" {{ role|impdp_options(vars) }} $extra_opts schemas=$dump_schema
+try impdp "{{ role|role_oracle_connect(vars) }}" {{ role|impdp_options(vars) }}
 
 yell "Database imported to {{ vars[role + '_database_username'] }}"

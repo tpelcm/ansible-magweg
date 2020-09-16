@@ -18,7 +18,6 @@ def backup_name_underscored(role,vars,schedule = None):
 # https://stackoverflow.com/questions/63682683/transform-python-dict-to-line
 # .join(f'{key}={value}' for (key, value) in opts.items()) # python3
 def expdp_options(role, vars):
-    opts3 = {}
     opts = {
       'schemas': role_schema_name(role,vars),
       'directory': role_dump_dir_name(role,vars),
@@ -27,23 +26,22 @@ def expdp_options(role, vars):
       'reuse_dumpfiles': 'Y',
       'filesize': '500M'
     }
-    opts2 = _expdp_options_configured(role, vars)
-    for (key,value) in opts.items():
-        if not key in opts2:
-            opts3[key] = value
-    for (key,value) in opts2.items():
-        if opts2[key] != False:
-          opts3[key] = value
-    return ' '.join('%s=%s' % (key, value) for (key, value) in opts3.items())
+    return pump_options(role,vars,opts)
 
 def impdp_options(role, vars):
-    opts3 = {}
     opts = {
         'directory': role_dump_dir_name(role,vars),
         'dumpfile':  role_dump_file(role),
-        'logfile':  role_dump_log_file(role,vars)
+        'logfile':  role_dump_log_file(role,vars),
+        'remap_schema': '$dump_schema:' + role_schema_name(role,vars),
+        'remap_tablespace': '$dump_schema:' + role_schema_name(role,vars),
+        'schemas': '$dump_schema'         
     }
-    opts2 = _expdp_options_configured(role, vars)
+    return pump_options(role,vars,opts, 'import')
+
+def pump_options(role,vars,opts,imp_exp = 'export'):
+    opts3 = {}
+    opts2 = vars['backup_oracle_pump_options_' + imp_exp]
     for (key,value) in opts.items():
         if not key in opts2:
             opts3[key] = value
@@ -51,13 +49,6 @@ def impdp_options(role, vars):
         if opts2[key] != False:
           opts3[key] = value
     return ' '.join('%s=%s' % (key, value) for (key, value) in opts3.items())
-
-def _expdp_options_configured(role,vars):
-    opts = {}
-    for (key, value) in vars['backup_oracle_pump_options'].items():
-        if value != False:
-          opts[key] = value
-    return opts
 
 def role_script_path(role, script = None):
     if script == None:

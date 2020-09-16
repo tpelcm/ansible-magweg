@@ -13,17 +13,17 @@ backup_roles:
   confluence:
     stop_start_service: confluence
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
-    snapshot: yes
+    snapshot: no
     incremental: yes
     backup_lvm_snapshot_size: 2G
 
 # backup_restore: 
 #   confluence:
-#     path_pattern: '*'
-#     folder: home
-#     remove_folder: home/shared/search/data/nodes
-#     force: no
-#     stop_start_service: confluence
+#      path_pattern: '*'
+#      folder: home
+#      remove_folder: home/shared/search/data/nodes
+#      force: no
+#      stop_start_service: confluence
 
 backup_restore_dry_run: false
 
@@ -37,4 +37,4 @@ confluence_database_username: CONFLUENCE
 confluence_database_password: secret
 confluence_database_name: CONFLUENCE.localdomain
 confluence_database_type: oracle
-#confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
+# confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar

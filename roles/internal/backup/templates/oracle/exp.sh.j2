@@ -10,7 +10,7 @@
 
 {# snapshots are not configured -> create the scn file here #}
 {% if backup_roles[item]['snapshot']|default(False) == False %}
-{{ role|role_script_path('scn.sh') }} > {{ role|role_scn_file(vars) }}
+{{ role|role_script_path('scn.sh') }}
 {% endif %}
 scn=$(cat {{ role|role_scn_file(vars) }})
 try expdp "{{ role|role_oracle_connect(vars) }}" flashback_scn=$scn {{ role|expdp_options(vars) }}
