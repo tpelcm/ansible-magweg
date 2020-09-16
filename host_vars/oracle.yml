@@ -1,17 +1,29 @@
 ---
 lvm_roles:
   docker:
-    size: '30g'
+    size: '50g'
     path: '/var/lib/docker'
 
 oracle_pluggable_databases:
   - name: JIRA
-    admin: jira_dba
+    admin: tpe_dba
     password: supersecret
   - name: CONFLUENCE
-    admin: confluence_dba
+    admin: tpe_dba
     password: supersecret
 
 # vagrant ssh oracle
 # cat tnsnames.ora
 # sqlplus jira_dba/supersecret@JIRA
+
+oracle_schemas:
+  - name: JIRA
+    pdb: JIRA
+    password: secret
+  - name: CONFLUENCE
+    pdb: CONFLUENCE
+    password: secret
+
+nfs_mounts:
+  - { path: /tpelcm-dumps, src: '{{ nfs_server }}:/nfs/backup/tmp/oracle', opts: rw, fstype: nfs, state: mounted }
+

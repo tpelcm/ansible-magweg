@@ -14,4 +14,9 @@ oracle_docker_login:
 #    admin: jira_dba
 #    password: supersecret
 
+# TODO oracle_schemas:
+#  - name: JIRA
+#    pdb: JIRA
+#    password: supersecret
+
 oracle_alias_prefix: tpelcm

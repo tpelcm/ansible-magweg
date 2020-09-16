@@ -27,7 +27,7 @@ def tar_sha256sum_file(tar):
 # e.g. /backup/snapshots/myapp/myapp-0.1.0/alpha.0/.backup-id
 # this file is created by the hooks file e.g. /etc/backup/hooks/myapp.sh 
 def snapshot_id_file(ss, data):
-  return os.path.join(os.path.sep,ss,data['backup_rsnapshot_id_file'])
+  return os.path.join(os.path.sep,ss,'home',data['backup_rsnapshot_id_file'])
 
 # Sort tars descending creation
 def sorted_tars(trs):
@@ -43,9 +43,16 @@ def sorted_snapshots(sns):
 def home_tar(tmp,tar):
   return os.path.join(os.path.sep,tar_extracted(tmp,tar),'archives','home.tar.gz')
 
-# e.g. /backup/tmp/myapp-myapp/myapp_daily/databases/PostgreSQL.sql.gz
-def db_tar(tmp,tar):
-  return os.path.join(os.path.sep,tar_extracted(tmp,tar),'databases','PostgreSQL.sql.gz')
+# e.g. /backup/tmp/myapp-myapp/myapp_daily/databases/PostgreSQL.sql.gz or
+# /backup/tmp/myapp-myapp/myapp_daily/archives/database.sql.gz for oracle
+def db_tar(tmp,tar,db_type,snapshot=False):
+  if db_type == 'postgresql': # default
+      return os.path.join(os.path.sep,tar_extracted(tmp,tar),'databases','PostgreSQL.sql.gz')
+  else: # oracle
+      if snapshot == False:
+          return os.path.join(os.path.sep,tar_extracted(tmp,tar),'archives','database.tar.gz')
+      else:
+          return tar
 
 # e.g. /backup/tmp/myapp-myapp/myapp_daily
 def tar_extracted(tmp, tar):
@@ -152,6 +159,7 @@ def get_restore_info(data):
   else:
     return get_restore_info_tar(data)
 
+# Restore facts for snapshots
 def restore_facts_snapshots(data, restore_info, ptrn):
   fcts = { 'backup_restore': 
           {data['role']: {
@@ -163,28 +171,30 @@ def restore_facts_snapshots(data, restore_info, ptrn):
             "restored-file": restored_file(data)
           }}}
   if data['home_version']:
-    fcts['backup_restore_home'] = True
-    fcts['backup_restore'][data['role']]['rsync-target'] = data['home_version'] + '/'
-    fcts['backup_restore'][data['role']]['rsync-src'] = restore_info[0]['path'] + '/'
-    if data['folder']:
-      fcts['backup_restore'][data['role']]['rsync-target'] =  os.path.join(os.path.sep, data['home_version'], data['folder']) + '/'
-      fcts['backup_restore'][data['role']]['rsync-src'] =  os.path.join(os.path.sep, restore_info[0]['path'], data['folder']) + '/'
+      fcts['backup_restore_home'] = True
+      fcts['backup_restore'][data['role']]['rsync-target'] = data['home_version'] + '/'
+      fcts['backup_restore'][data['role']]['rsync-src'] = restore_info[0]['path'] + '/home/'
+      if data['folder']:
+          fcts['backup_restore'][data['role']]['rsync-target'] =  os.path.join(os.path.sep, data['home_version'], data['folder']) + '/'
+          fcts['backup_restore'][data['role']]['rsync-src'] =  os.path.join(os.path.sep, restore_info[0]['path'], data['folder']) + '/home/'
   if data['database']:
-    ptrn = os.path.join(restore_info[0]['path'],data['backup_rsnapshot_backup_db_folder'],'*.tar')
-    # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/db-rsnapshot-backup/*.tar
-    fcts['backup_restore'][data['role']]['snapshot-tar-pattern'] = ptrn
-   
-    trs = glob.glob(ptrn)
-    if trs:
-      tr = trs[0]
-      fcts['backup_restore'][data['role']]['tar'] = tr
-      # e.g. tr is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/db-rsnapshot-backup/myapp_weekly_0_1_0.tar
-      fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], tr)
-      fcts['backup_restore_db'] = True
-    else:
-      fcts['backup_restore_db'] = False
+      if data['database_type'] == 'postgresql':
+          ptrn = os.path.join(restore_info[0]['path'],data['backup_rsnapshot_backup_db_folder'],'*.tar')
+          # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/*.tar
+      else:
+          ptrn = os.path.join(restore_info[0]['path'],data['backup_rsnapshot_backup_db_folder'],'*.tar.gz')
+          # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/*.tar.gz
+      fcts['backup_restore'][data['role']]['snapshot-tar-pattern'] = ptrn
+      trs = glob.glob(ptrn)
+      if trs:
+          tr = trs[0]
+          # e.g. tr is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/myapp_weekly_0_1_0.tar
+          fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], tr, data['database_type'], True)
+          fcts['backup_restore_db'] = True
+      else:
+          fcts['backup_restore_db'] = False
   if data['remove_folder']:
-    fcts['backup_restore'][data['role']]['remove_folder_expanded'] = get_remove_folder(data)
+      fcts['backup_restore'][data['role']]['remove_folder_expanded'] = get_remove_folder(data)
   return fcts
 
 # Restore facts for tar files
@@ -212,7 +222,7 @@ def restore_facts(data, restore_info, ptrn):
   if data['home_version']:
     fcts['backup_restore'][data['role']]['home_tar'] = home_tar(data['tmp'], restore_info[0]['path'])
   if data['database']:
-    fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], restore_info[0]['path'])
+    fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], restore_info[0]['path'], data['database_type'])
     fcts['backup_restore_db'] = True
   if data['remove_folder']:
     fcts['backup_restore'][data['role']]['remove_folder_expanded'] = get_remove_folder(data)
@@ -232,6 +242,7 @@ def main():
     "folder": { "required": False, "type": "str"},
     "remove_folder": { "required": False, "type": "str"},
     "database": { "required": True, "type": "bool"},
+    "database_type": { "required": True, "type": "str"},
     "home_version": { "required": True, "type": "str"},
     "home_backup_version": { "required": True, "type": "str"},   
     "incremental": { "required": False, "type": "bool"},   

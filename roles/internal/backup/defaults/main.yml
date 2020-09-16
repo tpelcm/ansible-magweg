@@ -2,6 +2,7 @@
 backup_mount: /backup
 backup_logs: /backup/logs
 backup_tmp: /backup/tmp
+backup_tmp_oracle_dumps: /backup/tmp/oracle
 backup_archives: /backup/archives
 backup_snapshots: /backup/snapshots
 backup_split_into_chunks_of: 1000000
@@ -11,7 +12,7 @@ backup_restore_db: false
 backup_restore_home: false
 backup_lvm_snapshot_size: 1G
 backup_rsnapshot_id_file: .backup-id
-backup_rsnapshot_backup_db_folder: db-rsnapshot-backup
+backup_rsnapshot_backup_db_folder: database
 backup_mount_options: ''
 #backup_script_before: ''
 
@@ -68,6 +69,7 @@ backup:
     daily: alpha
     weekly: beta
     monthly: gamma
+    manual: alpha
   schedules:
     daily: 50 2 * * 1,2,3,4,5
     weekly: 50 2 * * 6
@@ -121,3 +123,27 @@ backup_utility:
 #    folder: .
 #    force: false
 #    stop_start_service: jira
+
+backup_oracle:
+  dump_dir_remote: "/tpelcm-dumps"
+  backup_admin_user: tpe_dba
+  backup_admin_user_password: mysecretpassword
+
+# Oracle Data Pump ( expdp / impdp ) options 
+# To remove options use no, otherwise use strings
+# for more options see expdp help=y
+backup_oracle_pump_options_import:
+  logfile: no # default is '<inventory-hostname>.log'
+  nologfile: "NO"
+  parallel: "4"
+  #remap_tablespace: "FROMTS:TOTS"
+  #remap_schema: "FROMSCHEMA:TOSCHEMA"
+  #dumpfile: "CUSTOMDUMP_%U.DMP"
+  #schemas: "FROMSCHEMA"
+  #directory: "SOMECUSTOMDIR"
+
+backup_oracle_pump_options_export:
+  logfile: no # default is '<inventory-hostname>.log'
+  nologfile: "NO"
+  parallel: "4"
+  # schemas: CUSTOMSCHEMA

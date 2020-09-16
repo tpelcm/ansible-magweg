@@ -1,6 +1,6 @@
 ---
 - name: Check if database exists
-  command: "docker exec -i oracle {{ oracle_script_dir }}/pbd.sh"
+  command: "docker exec -i oracle {{ oracle_script_dir }}/pdb.sh"
   register: result
 
 - name: Create database

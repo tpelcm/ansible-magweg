@@ -44,5 +44,4 @@
       - "{{ item }}_home_link_app: {{ vars[item + '_home_link_app']|default('not defined') }}"
       - "{{ item }}_home_backup: {{ vars[item + '_home_backup']|default('not defined') }}"      
       - "{{ item }}_home_backup_version: {{ vars[item + '_home_backup_version']|default('not defined') }}"      
-
   with_items: '{{ lcm_roles_node }}'

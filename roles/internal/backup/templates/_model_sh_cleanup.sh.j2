@@ -1,0 +1,17 @@
+
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+  try umount {{ vars[item+'_home_backup'] }}
+  try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot
+  try rm -rf {{ vars[item+'_home_backup'] }}
+{% endif %}
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False and
+      backup_roles[item]['snapshot']|default(None) == True %}
+{%   if vars[item + '_database_type']|default('postgresql') == 'oracle' %}
+  try rm -rf {{ item|role_dump_dir(vars) }}
+{%   else %}
+  # TODO postgresql dump naar /backup?
+  try rm -rf {{ item|role_home_db_folder(vars) }}
+  try psql -v v1={{ vars[item + '_database_name_version_backup'] }} -h {{ vars[item + '_database_host'] }} -p {{ vars[item + '_database_port'] }} -U ansible postgres < /etc/backup/scripts/db_snapshot_drop.sql
+{%   endif %}
+{% endif %}

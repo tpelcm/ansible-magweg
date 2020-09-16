@@ -1,0 +1,25 @@
+#!/bin/bash
+# {{ ansible_managed }}
+# {{ vars[role + '_database_username'] }} Oracle Data Pump export script 
+
+{% include './templates/_helpers.sh.j2' %}
+
+{% include './templates/_env_oracle.sh.j2' %}
+
+{% include './templates/oracle/_create_dir.sh.j2' %}
+
+{# snapshots are not configured -> create the scn file here #}
+{% if backup_roles[item]['snapshot']|default(False) == False %}
+{{ role|role_script_path('scn.sh') }}
+{% endif %}
+scn=$(cat {{ role|role_scn_file(vars) }})
+try expdp "{{ role|role_oracle_connect(vars) }}" flashback_scn=$scn {{ role|expdp_options(vars) }}
+echo "{{ vars[item + '_database_username'] }}" > {{ item|role_schema_file(vars) }}
+{% if backup_roles[item]['incremental']|default(False) == True %}
+{# if incremental backup create archive from dump files #}
+{# tar / compress DMP files ( using Oracle "advanced compression" requires a license #}
+try tar czf {{ item|role_dump_dir_tar_tmp(vars) }} -C {{ item|role_dump_dir(vars) }} .
+try mv {{ item|role_dump_dir_tar_tmp(vars) }} {{ item|role_dump_dir_tar(vars) }}
+try rm {{ item|role_dump_dir(vars) }}/*.DMP
+{% endif %}
+yell "Database dumped to {{ item|role_dump_dir(vars) }}"

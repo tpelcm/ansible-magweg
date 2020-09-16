@@ -1,0 +1,5 @@
+
+  for rlr in ${rsnapshot_level_runs[*]}
+  do
+    try /bin/rsnapshot -c {{ item|role_rsnapshot_config_path(vars) }} $rlr
+  done

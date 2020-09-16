@@ -7,3 +7,7 @@ monit_smtp:
      expect_helo: "^220.*"
 
 proxy_skip: true
+
+nfs_exports:
+  - '/nfs/backup *(rw,sync,no_root_squash)'
+  - '/nfs/backup/tmp/oracle oracle(rw,sync,no_root_squash)'

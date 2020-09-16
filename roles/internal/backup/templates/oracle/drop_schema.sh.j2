@@ -1,0 +1,28 @@
+#!/bin/bash
+# {{ ansible_managed }}
+# {{ vars[role + '_database_username'] }} Oracle Data Pump export script 
+
+{% include './templates/_helpers.sh.j2' %}
+
+{% include './templates/_env_oracle.sh.j2' %}
+
+
+{% include './templates/_hooks_sh_confirm.sh.j2' %}
+
+{% include './templates/oracle/_kill_sessions.sh.j2' %}
+
+{# schema_cnt #}
+{% include './templates/oracle/_schema_cnt.sh.j2' %}
+
+
+if [[ $schema_cnt == *"1"* ]]
+then
+  yell "Dropping schema {{ role|role_schema_name(vars) }}"
+sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+drop user {{ role|role_schema_name(vars) }} cascade;
+exit;
+EOF
+else
+  yell "Schema {{ role|role_schema_name(vars) }} does not exist."
+fi
+

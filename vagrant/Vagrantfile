@@ -26,8 +26,7 @@ ansible_groups = {
   # 'backup' => %w(sonarqube nexus), # TODO
   'all:vars' => { 'sudo_include_sudoersd' => 'yes' },
   'postgresql:vars' => { 'hostvar' => 'abc' },
-  'sonarqube:vars' => { 'sonarqube_database_host' => '1.1.1.2' },
-  'nfs:vars' => { 'nfs_exports' => ['/nfs/backup *(rw,sync,no_root_squash)'] }
+  'sonarqube:vars' => { 'sonarqube_database_host' => '1.1.1.2' }
 }
 # ansible_host_vars = { 'postgresql' => { 'xyz' => 80 } }
 

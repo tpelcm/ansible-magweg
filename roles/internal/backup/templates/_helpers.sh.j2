@@ -1,3 +1,4 @@
-yell() { echo "$(date +%H:%M:%S) $0: $*" >> $BACKUP_LOGFILE 2>&1; }
+
+yell() { echo "$(date +%H:%M:%S) $0: $*" >> {{ item|role_log_file_path(vars) }} 2>&1; }
 die() { yell "$*"; exit 111; }
 try() { yell "$*"; "$@" || die "cannot $*"; }

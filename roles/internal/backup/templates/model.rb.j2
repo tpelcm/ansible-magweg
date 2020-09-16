@@ -11,71 +11,49 @@
 
 GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} - {{ inventory_hostname }}') do
     
-  split_into_chunks_of {{ backup_split_into_chunks_of }}
-  compress_with Gzip
-
-  logfile = File.join('{{ backup_logs }}',"{{ inventory_hostname }}_{{ item }}_{{ schdl }}.log")
+  logfile = '{{ item|role_log_file_path(vars) }}'
 
   before do
     File.delete(logfile) if File.exists?(logfile)
-    `/etc/backup/hooks/{{ item }}.sh before #{logfile} {{ schdl }}`
+    `/etc/backup/hooks/{{ item }}.sh before {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-before"
     end
   end  
 
-{% if vars[item + '_database_host'] is defined %}
-{%   if backup_roles[item]['skip_database'] is not defined or backup_roles[item]['skip_database'] == False %}
-  database PostgreSQL do |db|
-{%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
-    db.name = '{{ vars[item + '_database_name_version_backup'] }}'
-{%     else %}
-    db.name = '{{ vars[item + '_database_name_version'] }}'
-{%     endif %}
-    db.username = '{{ vars[item + '_database_username'] }}'
-    db.password = '{{ vars[item + '_database_password'] }}'
-    db.host = '{{ vars[item + '_database_host'] }}'
-    db.port = '{{ vars[item + '_database_port'] }}'
-    db.additional_options = []
-  end
-{%    endif %}
-{% endif %}
+{% include './templates/_model_rb_database.rb.j2' %} 
 
-{% if vars[item + '_home'] is defined %}
-{%   if backup_roles[item]['incremental'] is not defined or backup_roles[item]['incremental'] == False %}
+{% if vars[item + '_home'] is defined and 
+      backup_roles[item]['incremental']|default(False) == False %}
   archive :home do |archive|
-{%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
-    archive.root '{{ vars[item + '_home_backup_version'] }}'
-{%     else %}
-    archive.root '{{ vars[item + '_home_version'] }}'
-{%     endif %}
+    archive.root '{{ item|role_archive_root(vars) }}'
     archive.add '.'
 {%     if backup_roles[item]['tar_options'] is defined %}
     archive.tar_options '{{ backup_roles[item]['tar_options'] }}'
 {%     endif %}
   end
-{%   endif %}
 {% endif %}
 
-{%  if backup_roles[item]['incremental'] is defined and backup_roles[item]['incremental'] == True %}
+{% if vars[item + '_database_host'] is defined and
+     backup_roles[item]['skip_database']|default(None) == False and
+     vars[item + '_database_type']|default('postgresql') == 'postgresql' and
+     backup_roles[item]['incremental']|default(False) == True %}
   # Storing db backup in home for incremental backup
   store_with RSync do |rs|
-{%    if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
-    rs.path = '{{ vars[item + '_home_backup_version'] }}/{{ backup_rsnapshot_backup_db_folder }}'
-{%    else %}
-    rs.path = '{{ vars[item + '_home_version'] }}/{{ backup_rsnapshot_backup_db_folder }}'
-{%  endif %}
+    rs.path = '{{ item|role_home_db_folder(vars) }}'
   end
-{%  else %}
+{%  endif %}
+
+{% if backup_roles[item]['incremental']|default(False) != True %}
   store_with Local do |local|
     local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
     local.keep = {{ backup_roles[item]['keep'][schdl] }}
   end
-{%  endif %}
+{% endif %}
 
   after do 
-    `/etc/backup/hooks/{{ item }}.sh after #{logfile} {{ schdl }}`
+    `/etc/backup/hooks/{{ item }}.sh after {{ schdl }}`
     if $? != 0
       Logger.error File.read(logfile) if File.exists?(logfile)
       raise "Error in #{self.trigger}-after"

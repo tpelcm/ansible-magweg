@@ -1,34 +1,9 @@
 ---
-- name: Restore facts
-  restore_info:
-    backup_archives: '{{ backup_archives }}'
-    backup_snapshots: '{{ backup_snapshots }}'
-    role: '{{ item }}'
-    path_pattern: '{{ backup_restore[item]["path_pattern"] }}'
-    force: '{{ backup_restore[item]["force"] }}'
-    database: "{{ vars[item+'_database_name'] is defined }}"
-    home: "{{ vars[item + '_home'] }}"
-    home_version: "{{ vars[item+'_home_version']|default(omit) }}"
-    home_backup_version: "{{ vars[item+'_home_backup_version']|default(omit) }}"
-    incremental: "{{ vars['backup_roles'][item]['incremental']|default(false) }}"
-    tmp: "{{ backup_tmp }}/{{ inventory_hostname }}-{{ item }}"
-    folder: '{{ backup_restore[item]["folder"] }}'   
-    remove_folder: '{{ backup_restore[item]["remove_folder"] | default(omit, true) }}'
-    backup_rsnapshot_id_file: '{{ backup_rsnapshot_id_file }}'
-    backup_rsnapshot_backup_db_folder: '{{ backup_rsnapshot_backup_db_folder }}'
-    backup_name_underscored: '{{ item|backup_name_underscored(vars) }}' # no schedule
-  with_items: '{{ backup_restore }}'
-  
-- name: backup_restore
-  debug:
-    var: backup_restore
-
 - name: Tmp restore folders
   file:
     path: "{{ backup_restore[item]['tmp'] }}"
     state: directory
     mode: 0700
-  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
 - name: Tmp restore home folders
@@ -51,32 +26,35 @@
   service:
     name: "{{ backup_restore[item]['stop_start_service'] }}"
     state: stopped
-  when: backup_restore[item]['tar'] is defined and backup_restore[item]['stop_start_service'] is defined
+  when: 
+    backup_restore[item]['stop_start_service'] is defined
   with_items: '{{ backup_restore }}'
 
-- include_tasks: "restore_db.yml"
-  when: backup_restore_db == True
+- include_tasks: "restore_db_{{vars[item + '_database_type']|default('postgresql')}}.yml"
+  when: 
+    backup_restore_db == True
+  with_items: '{{ backup_restore }}'
 
 - include_tasks: "restore_files.yml"
-  when: backup_restore_home == True
+  when: 
+    backup_restore_home == True
 
 - name: Mark restore performed
   lineinfile:
     dest: "{{ backup_restore[item]['restored-file'] }}"
     line: "{{ backup_restore[item]['backup-id'] }}"
-  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
 - name: Delete tmp restore folders
   file:
     path: "{{ backup_restore[item]['tmp'] }}"
     state: absent
-  when: backup_restore[item]['tar'] is defined
   with_items: '{{ backup_restore }}'
 
 - name: Start service
   service:
     name: "{{ backup_restore[item]['stop_start_service'] }}"
     state: started
-  when: backup_restore[item]['tar'] is defined and backup_restore[item]['stop_start_service'] is defined
+  when: 
+    backup_restore[item]['stop_start_service'] is defined 
   with_items: '{{ backup_restore }}'
