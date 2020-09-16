@@ -28,13 +28,13 @@ backup_roles:
 backup_restore_dry_run: false
 
 # PostgreSQL settings
-# confluence_database_host: 1.1.1.2
+confluence_database_host: 1.1.1.2
 
 # Oracle settings
-confluence_database_host: 1.1.1.15
-confluence_database_port: "1521"
-confluence_database_username: CONFLUENCE
-confluence_database_password: secret
-confluence_database_name: CONFLUENCE.localdomain
-confluence_database_type: oracle
+#confluence_database_host: 1.1.1.15
+#confluence_database_port: "1521"
+#confluence_database_username: CONFLUENCE
+#confluence_database_password: secret
+#confluence_database_name: CONFLUENCE.localdomain
+#confluence_database_type: oracle
 # confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
