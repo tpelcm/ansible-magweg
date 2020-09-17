@@ -180,7 +180,8 @@ def restore_facts_snapshots(data, restore_info, ptrn):
   if data['database']:
       if data['database_type'] == 'postgresql':
           ptrn = os.path.join(restore_info[0]['path'],data['backup_rsnapshot_backup_db_folder'],'*.tar')
-          # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/*.tar
+          # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/*.tar 
+          # tar is for example confluence_6_14_3_daily.tar
       else:
           ptrn = os.path.join(restore_info[0]['path'],data['backup_rsnapshot_backup_db_folder'],'*.tar.gz')
           # e.g. ptrn is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/*.tar.gz
@@ -189,6 +190,7 @@ def restore_facts_snapshots(data, restore_info, ptrn):
       if trs:
           tr = trs[0]
           # e.g. tr is /backup/snapshots/myapp/myapp-0.1.0/alpha.0/database/myapp_weekly_0_1_0.tar
+          fcts['backup_restore'][data['role']]['tar'] = tr
           fcts['backup_restore'][data['role']]['db_tar'] = db_tar(data['tmp'], tr, data['database_type'], True)
           fcts['backup_restore_db'] = True
       else:

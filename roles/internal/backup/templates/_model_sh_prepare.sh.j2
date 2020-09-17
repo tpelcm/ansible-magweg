@@ -19,7 +19,8 @@
 
 {% if vars[item + '_database_host'] is defined and
       backup_roles[item]['skip_database']|default(False) == False and
-      vars[item + '_database_type']|default('postgresql') == 'oracle' %}
+      ( vars[item + '_database_type']|default('postgresql') == 'oracle' or 
+       backup_roles[item]['incremental']|default(None) == True ) %}
   # Create a dump directory
   if [ -d "{{ item|role_dump_dir(vars) }}" ]; then
     yell "Removing old dump directory"

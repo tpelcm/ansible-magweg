@@ -63,7 +63,16 @@ def role_dump_log_file(role,vars):
     return vars['inventory_hostname'] + '.log'
 
 def role_dump_dir(role, vars):
-    return os.path.join(os.path.sep, vars['backup_tmp_oracle_dumps'],vars['inventory_hostname'])
+    return os.path.join(os.path.sep,
+        vars['backup_tmp'],
+        role_database_type(role, vars),
+        vars['inventory_hostname'])
+
+def role_database_type(role, vars):
+    try:
+        return vars[role + '_database_type']
+    except KeyError:
+        return 'postgresql'
 
 def role_dump_dir_tar(role, vars):
     return os.path.join(os.path.sep, role_dump_dir(role,vars),'database.tar.gz')

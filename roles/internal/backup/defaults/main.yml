@@ -2,7 +2,6 @@
 backup_mount: /backup
 backup_logs: /backup/logs
 backup_tmp: /backup/tmp
-backup_tmp_oracle_dumps: /backup/tmp/oracle
 backup_archives: /backup/archives
 backup_snapshots: /backup/snapshots
 backup_split_into_chunks_of: 1000000

@@ -20,11 +20,7 @@ backup	{{ vars[item + '_home_version'] }}	home
 {% endif %}
 {% if vars[item + '_database_host'] is defined %}
 {%   if backup_roles[item]['skip_database']|default(False) == False %}
-{%     if vars[item + '_database_type']|default('postgresql') == 'postgresql' %}
-backup	{{ vars[item + '_home_version'] }}	database
-{%     else %}
 backup	{{ item|role_dump_dir(vars) }}	database
-{%     endif %}
 {%   endif %}
 {% endif %}
 rsync_long_args	--delete --numeric-ids --delete-excluded

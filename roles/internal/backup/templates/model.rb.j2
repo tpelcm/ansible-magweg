@@ -36,16 +36,16 @@ GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} -
 {% endif %}
 
 {% if vars[item + '_database_host'] is defined and
-     backup_roles[item]['skip_database']|default(None) == False and
+     backup_roles[item]['skip_database']|default(False) == False and
      vars[item + '_database_type']|default('postgresql') == 'postgresql' and
      backup_roles[item]['incremental']|default(False) == True %}
   # Storing db backup in home for incremental backup
   store_with RSync do |rs|
-    rs.path = '{{ item|role_home_db_folder(vars) }}'
+    rs.path = '{{ item|role_dump_dir(vars) }}'
   end
 {%  endif %}
 
-{% if backup_roles[item]['incremental']|default(False) != True %}
+{% if backup_roles[item]['incremental']|default(False) == False %}
   store_with Local do |local|
     local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
     local.keep = {{ backup_roles[item]['keep'][schdl] }}
