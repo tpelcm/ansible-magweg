@@ -1,5 +1,5 @@
 {% if vars[item + '_database_host'] is defined and
-     backup_roles[item]['skip_database']|default(None) == False and
+     backup_roles[item]['skip_database']|default(False) == False and
      vars[item + '_database_type']|default('postgresql') == 'postgresql' %}
   database PostgreSQL do |db|
 {%     if backup_roles[item]['snapshot'] is defined and backup_roles[item]['snapshot'] == True %}
