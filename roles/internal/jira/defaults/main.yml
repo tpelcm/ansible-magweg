@@ -24,7 +24,8 @@ jira_database_name: jira
 jira_database_admin_username: ansible
 jira_database_admin_password: supersecure
 jira_database_template: template0
-jira_database_type: postgres72
+jira_database_type_config: postgres72
+jira_database_type: postgresql
 jira_database_driver_class: org.postgresql.Driver
 jira_database_validation_query: select 1
 jira_database_schema: public

@@ -3,7 +3,7 @@
 <jira-database-config>
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
-  <database-type>{{ jira_database_type }}</database-type>
+  <database-type>{{ jira_database_type_config }}</database-type>
 {% if jira_database_schema != 'nil' %}
   <schema-name>{{ jira_database_schema }}</schema-name>
 {% endif %}
