@@ -19,5 +19,6 @@ This file is used to list changes made in each version of the Ansible TPELCM rep
 ### Bug
 
 - jira bug jira_database_type "TemplateNotFound: ./templates/_env_postgres72.sh.j2" - renamed jira_database_type to jira_database_type_config
+- jira bug "Destination directory /etc/backup/hooks/jira does not exist"
 
 ### Improvement

@@ -18,7 +18,6 @@
     state: directory
     mode: 0700
     recurse: yes
-  when: vars[item + '_database_type'] == 'oracle'
   with_items: '{{ backup_roles_node }}'
 
 - name: Scripts folder 
@@ -26,7 +25,6 @@
     path: "{{ item|role_script_path }}"
     state: directory
     mode: 0700
-  when: vars[item + '_database_type'] == 'oracle'
   with_items: '{{ backup_roles_node }}'
 
 - include_tasks: "model_scripts.yml"
