@@ -17,9 +17,7 @@
     - jira-systemctl-restart
 
 - include: ../../postgresql/tasks/database.yml 
-  vars:
-      lcm_role_upgrade: "jira"
-  when: jira_database_custom == False
+  when: jira_database_type == 'postgresql'
 
 - include: install.yml
 - include: jmx.yml
