@@ -1,4 +1,11 @@
 ---
+# Terminate and block sessions to the database on restore
+# A database cannot be dropped with active sessions
+- include: ../../postgresql/tasks/terminate-block-sessions.yml
+  vars:
+    terminate_database: "{{ vars[item + '_database_name_version']  }}"
+  when: backup_restore[item]['db_tar'] is defined
+
 - name: Drop database
   postgresql_db:
     name: "{{ vars[item + '_database_name_version']  }}"
@@ -23,6 +30,11 @@
     port:  "{{ vars[item + '_database_port'] }}"
     owner: "{{ vars[item + '_database_username'] }}"
     state: present
+  when: backup_restore[item]['db_tar'] is defined
+
+- include: ../../postgresql/tasks/allow-sessions.yml 
+  vars:
+    allow_database: "{{ vars[item + '_database_name_version']  }}"
   when: backup_restore[item]['db_tar'] is defined
 
 - name: Restore database

@@ -19,7 +19,9 @@
 
 # Terminate and block sessions to the template database on upgrade
 # A database cannot be copied with active sessions
-- include: ../../postgresql/tasks/terminate-block-sessions.yml 
+- include: ../../postgresql/tasks/terminate-block-sessions.yml
+  vars:
+    terminate_database: "{{ vars[lcm_role_upgrade + '_database_template' ] }}"
   when: vars[lcm_role_upgrade + '_lcm_operation'] == 'upgrade'
 
 - name: create database schema 
@@ -39,4 +41,6 @@
     ansible_ssh_pipelining: true
 
 - include: ../../postgresql/tasks/allow-sessions.yml 
+  vars:
+    allow_database: "{{ vars[lcm_role_upgrade + '_database_template' ] }}"
   when: vars[lcm_role_upgrade + '_lcm_operation'] == 'upgrade'

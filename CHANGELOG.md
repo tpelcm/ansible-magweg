@@ -22,3 +22,5 @@ This file is used to list changes made in each version of the Ansible TPELCM rep
 - jira bug "Destination directory /etc/backup/hooks/jira does not exist"
 
 ### Improvement
+
+- backup - block and terminate sessions before restore

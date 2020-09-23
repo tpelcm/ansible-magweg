@@ -8,7 +8,7 @@
     port: "{{ vars[ lcm_role_upgrade + '_database_port' ] }}"
     query: update pg_database SET datallowconn = 'false' WHERE datname = %s
     positional_args:
-      - "{{ vars[lcm_role_upgrade + '_database_template' ] }}"
+      - "{{ terminate_database }}"
 
 - name: Terminate sessions
   postgresql_query:
@@ -19,4 +19,4 @@
     port: "{{ vars[ lcm_role_upgrade + '_database_port' ] }}"
     query: select pg_terminate_backend(pid) from pg_stat_activity where datname = %s
     positional_args:
-      - "{{ vars[lcm_role_upgrade + '_database_template' ] }}"
+      - "{{ terminate_database }}"
