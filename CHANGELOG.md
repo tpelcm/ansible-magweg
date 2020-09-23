@@ -14,7 +14,7 @@ This file is used to list changes made in each version of the Ansible TPELCM rep
 - confluence 6.14.3 - added oracle support
 - backup & restore - incremental and snapshot backup restore tested with confluence 6.14.3 - Oracle and PostgreSQL 
 
-## 0.1.1 (YYYY-MM-DD)
+## 0.1.1 (2020-09-23)
 
 ### Bug
 
@@ -23,4 +23,5 @@ This file is used to list changes made in each version of the Ansible TPELCM rep
 
 ### Improvement
 
-- backup - block and terminate sessions before restore
+- backup - block and terminate sessions before restore ( postgresql )
+- jira with Oracle backup / restore
