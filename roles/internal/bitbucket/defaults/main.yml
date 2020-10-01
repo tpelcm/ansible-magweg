@@ -9,6 +9,7 @@ bitbucket_jvm_maximum_memory: 1g
 bitbucket_web_port: 7990
 bitbucket_web_context: '/bitbucket'
 
+
 bitbucket_database_username: bitbucket
 bitbucket_database_password: supersecure
 
