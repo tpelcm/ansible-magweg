@@ -1,7 +1,7 @@
 ---
 bitbucket_database_host: 1.1.1.2
-# bitbucket_version: 5.10.1
-bitbucket_version: 7.0.1
+bitbucket_version: 5.10.1
+# bitbucket_version: 7.0.1
 
 # bitbucket_database_jdbc_custom_config: []
 
