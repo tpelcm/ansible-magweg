@@ -6,6 +6,8 @@ bitbucket_version: 5.10.1
 
 # bitbucket_database_jdbc_custom_config: []
 
+# IMPORTANT! Bitbucket 5.10.1 requires Oracle JDK 8 
+# so you have to do configure your own local jdk-8u192
 adoptopenjdk:
   # version: jdk11_0411_oj9
   version: jdk-8u192
