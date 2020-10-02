@@ -11,6 +11,9 @@ oracle_pluggable_databases:
   - name: CONFLUENCE
     admin: tpe_dba
     password: supersecret
+  - name: BITBUCKET
+    admin: tpe_dba
+    password: supersecret
 
 # vagrant ssh oracle
 # cat tnsnames.ora
@@ -22,6 +25,9 @@ oracle_schemas:
     password: secret
   - name: CONFLUENCE
     pdb: CONFLUENCE
+    password: secret
+  - name: BITBUCKET
+    pdb: BITBUCKET
     password: secret
 
 nfs_mounts:
