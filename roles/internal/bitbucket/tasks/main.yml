@@ -8,6 +8,7 @@
 
 #- include: debug.yml
 - include: database.yml
+  when: bitbucket_database_type == 'postgresql'
 - include: install.yml
 - include: configuration.yml
 - include: jmx.yml

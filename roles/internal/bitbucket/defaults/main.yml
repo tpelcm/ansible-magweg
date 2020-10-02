@@ -21,6 +21,11 @@ bitbucket_database_admin_password: supersecure
 bitbucket_database_template: template0
 bitbucket_database_type: postgresql # oracle
 
+# oracle example config
+# bitbucket_database_name: BITBUCKET.localdomain
+# bitbucket_database_type: oracle
+# bitbucket_database_port: 1521
+
 #bitbucket_database_jdbc_custom_config:
 #  - jdbc.driver=org.postgresql.Driver
 #  - jdbc...

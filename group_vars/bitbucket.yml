@@ -4,7 +4,13 @@ bitbucket_version: 5.10.1
 
 # bitbucket_version: 7.0.1
 
-# bitbucket_database_jdbc_custom_config: []
+# Oracle settings
+#bitbucket_database_host: oracle
+#bitbucket_database_name: BITBUCKET.localdomain
+#bitbucket_database_type: oracle
+#bitbucket_database_port: 1521
+#bitbucket_database_host: oracle
+#bitbucket_database_username: BITBUCKET
 
 # IMPORTANT! Bitbucket 5.10.1 requires Oracle JDK 8 
 # so you have to do configure your own local jdk-8u192
