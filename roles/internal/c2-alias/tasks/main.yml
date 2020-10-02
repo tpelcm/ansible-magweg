@@ -4,14 +4,8 @@
 - name: Alias file
   template:
     src: c2.sh.j2
-    dest: "/etc/profile.d/{{ item }}.sh"
+    dest: "/etc/profile.d/alias-{{ item }}.sh"
     owner: root
     group: root
     mode: 0644
   with_items: "{{ c2_alias_roles_node }}"
-
-# TODO remove
-- name: Remove c2.sh
-  file:
-   path: /etc/profile.d/c2.sh
-   state: absent
