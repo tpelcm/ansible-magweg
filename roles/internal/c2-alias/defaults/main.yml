@@ -2,7 +2,21 @@
 c2_alias_prefix: tpelcm
 c2_alias_editor: nano
 
-c2_alias_roles: ['myapp','proxy', 'opendj', 'nexus', 'bitbucket','postfix', 'nfs', 'reverse-proxy', 'postgresql', 'monit', 'sonarqube', 'confluence', 'jira', 'jenkins']
+c2_alias_roles: 
+  - myapp
+  - proxy
+  - opendj
+  - nexus
+  - postfix
+  - nfs
+  - reverse-proxy
+  - postgresql
+  - monit
+  - sonarqube
+  - confluence
+  - jira
+  - jenkins
+  - bitbucket
 
 c2_alias:
   roles:
@@ -31,10 +45,11 @@ c2_alias:
         - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus-default.properties"
         - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus.properties"
     bitbucket:
-      logs: ["/opt/bitbucket/bitbucket/home/log/*.log"]
+      logs: 
+        - "{{ bitbucket_home_link_home|default(omit)}}/log/*.log "
       configs: 
         - /etc/systemd/system/bitbucket.service
-        - /opt/bitbucket/bitbucket/home/shared/bitbucket.properties
+        - "{{ bitbucket_home_link_home|default(omit)}}/shared/bitbucket.properties"
     postfix:
       logs: ['/var/log/maillog']
       configs:
