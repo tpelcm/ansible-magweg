@@ -12,20 +12,6 @@ bitbucket_version: 5.10.1
 #bitbucket_database_host: oracle
 #bitbucket_database_username: BITBUCKET
 
-# IMPORTANT! Bitbucket 5.10.1 requires Oracle JDK 8 
-# so you have to do configure your own local jdk-8u192
-adoptopenjdk:
-  # version: jdk11_0411_oj9
-  version: jdk-8u192
-  #version: "jdk8_222b10_oj9" # jdk11_0411_oj9
-  #version: "jdk11_0411_oj9" 
-bitbucket_versions: 
-  5.10.1:
-    jdk: "{{ adoptopenjdk_java_home }}" # BUG in 5.10.1 installer does not work with pre-installed Java
-  7.0.1:
-    jdk: "{{ adoptopenjdk_java_home }}"      
-adoptopenjdk_java_home_etc_environment: no
-
 #backup_restore: 
 #  bitbucket:
 #    path_pattern: '*'
