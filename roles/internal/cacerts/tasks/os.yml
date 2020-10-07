@@ -3,8 +3,8 @@
   get_url:
     url: '{{ item }}'
     dest: '/usr/share/pki/ca-trust-source/anchors/{{ item|basename }}'
-  when: common_corporate_ca_pem_urls is defined
-  with_items: "{{ common_corporate_ca_pem_urls }}"
+  when: cacerts_os_ca_pem_urls is defined
+  with_items: "{{ cacerts_os_ca_pem_urls }}"
   register: cadownload
 
 - name: execute update-ca-trust
@@ -13,5 +13,4 @@
   when: 
     - cadownload.results is defined
     - item.changed == True
-    - common_corporate_ca_pem_urls is defined
- 
+    - cacerts_os_ca_pem_urls is defined

@@ -16,7 +16,8 @@ cacerts_roles:
 
 cacerts_trusted_sites: []
 #cacerts_trusted_sites:
-#  - url: google.com
+#  - name: google-keystore-alias 
+#    url: google.com
 #    port: 443
 
 cacerts_import_certs_urls: []

@@ -31,3 +31,4 @@ swid_enable: false
 cacerts_trusted_sites:
   - url: sh.1.1.1.3.nip.io
     port: 443
+    name: nipio

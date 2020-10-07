@@ -1,0 +1,25 @@
+---
+- name: "Import downloaded certs / bundles for role"
+  java_cert:
+    cert_alias: "{{ item['name'] }}"
+    cert_path: "/tmp/{{ item['url']|basename }}" 
+    keystore_path: "{{ cacerts_roles[role].keystore_path }}"
+    keystore_pass: "{{ cacerts_roles[role].keystore_pass }}"
+    executable: "{{ cacerts_roles[role].executable|default(omit) }}"
+    state: present
+  with_items: "{{ cacerts_import_certs_urls }}"
+  notify: "{{ cacerts_roles[role].notify|default(omit) }}"
+  ignore_errors: true
+
+- name: "Import trusted sites SSL cert in keystore for {{ role }}"
+  java_cert:
+    cert_alias: "{{ item['name'] }}"    
+    cert_url: "{{ item['url'] }}"
+    cert_port: "{{ item['port'] }}"
+    keystore_path: "{{ cacerts_roles[role].keystore_path }}"
+    keystore_pass: "{{ cacerts_roles[role].keystore_pass }}"
+    executable: "{{ cacerts_roles[role].executable|default(omit) }}"
+    state: present
+  with_items: "{{ cacerts_trusted_sites }}"
+  notify: "{{ cacerts_roles[role].notify|default(omit) }}"
+  ignore_errors: true

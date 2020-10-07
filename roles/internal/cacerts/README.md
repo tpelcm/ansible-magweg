@@ -1,6 +1,8 @@
 # Ansible Role: cacerts
 
-An Ansible Role that manages Java keystores using [java_cert](https://docs.ansible.com/ansible/latest/modules/java_cert_module.html) module. 
+An Ansible Role that manages Java keystores using [java_cert](https://docs.ansible.com/ansible/latest/modules/java_cert_module.html) module.
+
+This role can also be used to manage OS keystore.
 
 ## Add roles
 
@@ -30,7 +32,15 @@ Configure certificates, CA bundles to import using `cacerts_import_certs_urls` f
 
 Configure sites that should be trusted using `cacerts_trusted_sites` for example
 
+Note: this does not seem to work. Bug in `java_cert` module.
+
     cacerts_trusted_sites:
       - url: google.com
         port: 443
 
+## Add OS certs
+
+Configure array of URLS to download into OS keystore:
+
+    cacerts_os_ca_pem_urls:
+      - https://example.com/SectigoRSADVBundle.crt
