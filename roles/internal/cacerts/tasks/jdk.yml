@@ -22,6 +22,7 @@
   with_items: "{{ cacerts_import_certs_urls }}"
   # notify: "{{ cacerts_roles[role].notify|default(omit) }}" # TODO
   when: keystore_stat.stat.exists
+  ignore_errors: yes
 
 # Does not seem to work currently!
 - name: "Import trusted sites in JDK cacert"
@@ -37,6 +38,6 @@
   # notify: "{{ cacerts_roles[role].notify|default(omit) }}"
   when: keystore_stat.stat.exists
   register: jdk_trusted_sites # cmd, msg, rc
-
+  ignore_errors: yes
 #- debug:
 #    msg: "jdk_trusted_sites: {{ jdk_trusted_sites }}"
