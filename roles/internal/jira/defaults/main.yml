@@ -57,8 +57,11 @@ jira_versions:
   8.5.5:
     url: https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-8.5.5-x64.bin
     checksum: sha256:07a95b111703c6a316a29b993387aff7dcf3d86de1251d06030ddce4eb10c62a
+  8.13.0:
+    url: https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-8.13.0-x64.bin
+    checksum: sha256:dc6d5ce0d9718adf1c3b0bbe5b0a744eeb46c072da2b775fdd5e7737f4b832b7
 
-jira_versions_sequence: ['7.12.1','7.13.14','8.5.5']
+jira_versions_sequence: ['7.12.1','7.13.14','8.5.5','8.13.0']
 
 # Atlassian Support recommended JVM arguments.
 jira_jvm_support_recommended_args: >-
