@@ -1,4 +1,14 @@
 ---
+- name: Restore file
+  stat:
+    path: "/tmp/RESTORE"
+  register: restore_file
+
+- name: Fail restore without confirmation
+  fail:
+    msg: To perform the restore confirm it with touch /tmp/RESTORE
+  when: backup_restore_confirm == True and not restore_file.stat.exists
+
 - name: Tmp restore folders
   file:
     path: "{{ backup_restore[item]['tmp'] }}"
@@ -44,6 +54,11 @@
     dest: "{{ backup_restore[item]['restored-file'] }}"
     line: "{{ backup_restore[item]['backup-id'] }}"
   with_items: '{{ backup_restore }}'
+
+- name: Delete restore file
+  file:
+    path: "/tmp/RESTORE"
+    state: absent
 
 - name: Delete tmp restore folders
   file:

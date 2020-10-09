@@ -20,3 +20,6 @@ oracle_client_rpms:
 
 oracle_client_bin_path: /usr/lib/oracle/12.2/client64/bin
 oracle_client_lib_path: /usr/lib/oracle/12.2/client64/lib
+
+# In development don't require restore confirmation file /tmp/RESTORE
+# backup_restore_confirm: false

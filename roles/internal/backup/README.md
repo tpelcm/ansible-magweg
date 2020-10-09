@@ -48,6 +48,13 @@ To support restore a `backup_restore` fact should be configured for example as f
         folder: data
         force: false  
 
+Additionally, you need to __confirm__ the restore by creating a file `/tmp/RESTORE` on the target node. If you don't create this file the restore will fail
+
+    TASK [backup : Fail restore without confirmation] ******************************
+    fatal: [bitbucket]: FAILED! => {"changed": false, "msg": "To perform the restore confirm it with touch /tmp/RESTORE"}
+
+You can skip this confirmation requirement with `backup_restore_confirm: false`
+
 A custom ansible module __restore_info.py__ is used to gather restore facts to enable subsequent tasks to perform the restore.
 
 - `myapp` is the Ansible role selected for restore.

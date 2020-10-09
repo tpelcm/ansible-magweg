@@ -4,6 +4,7 @@
 - include: ../../postgresql/tasks/terminate-block-sessions.yml
   vars:
     terminate_database: "{{ vars[item + '_database_name_version']  }}"
+    lcm_role_upgrade: "{{ item }}"
   when: backup_restore[item]['db_tar'] is defined
 
 - name: Drop database
@@ -35,6 +36,7 @@
 - include: ../../postgresql/tasks/allow-sessions.yml 
   vars:
     allow_database: "{{ vars[item + '_database_name_version']  }}"
+    lcm_role_upgrade: "{{ item }}"    
   when: backup_restore[item]['db_tar'] is defined
 
 - name: Restore database
