@@ -17,3 +17,4 @@
     state: absent
     path: "{{ backup_restore[item]['remove_folder_expanded'] }}"
   with_items: '{{ backup_restore }}'
+  when: backup_restore[item]['remove_folder_expanded'] is defined
