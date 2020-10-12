@@ -28,19 +28,18 @@
     password: "{{ oracle_docker_login.password }}"
     reauthorize: yes
 
-# TODO does not work because of a bug in Ansible, docker-py or Docker
-#- name: NFS volume mount
-#  docker_volume:
-#    driver: "local"
-#    driver_options:
-#      type: "nfs"
-#      o: addr=1.1.1.13,rw
-#      device: "/nfs/backup/tmp/oracle"
-#    volume_name: oracle-dumps
+- name: NFS volume mount
+  docker_volume:
+    driver: local
+    driver_options:
+      type: nfs
+      o: addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600
+      device: :/nfs/backup/tmp/oracle
+    volume_name: oracle-dumps
 
-- name: Create dump volume
-  command:
-    cmd: "docker volume create --driver local --opt type=nfs4 --opt o=addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600 --opt device=:/nfs/backup/tmp/oracle oracle-dumps"
+#- name: Create dump volume
+#  command:
+#    cmd: "docker volume create --driver local --opt type=nfs4 --opt o=addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600 --opt device=:/nfs/backup/tmp/oracle oracle-dumps"
 
 - docker_image:
     name: "{{ oracle_image }}"
