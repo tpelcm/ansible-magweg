@@ -44,6 +44,7 @@
     user: '{{ common_ansible_user }}'
     state: present
     key: '{{ common_ansible_authorized_keys }}'
+    validate_certs: '{{ common_authorized_key_validate_certs }}'
   when: common_ansible_authorized_keys is defined    
 
 - name: Custom prompt

@@ -15,3 +15,5 @@ common_ansible_user_expires: -1
 #common_terminal_prompt: "\e[01;31m[\u@{{ inventory_hostname }}\h \w]\\$\e[m "
 
 proxy_skip: false
+
+common_authorized_key_validate_certs: no
