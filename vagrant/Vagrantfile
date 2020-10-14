@@ -93,3 +93,7 @@ def add_disk(vb_provider, port = 2, size = 120 * 1024, filename = nil, controlle
   end
   vb_provider.customize ['storageattach', :id, '--storagectl', controller, '--port', port, '--device', 0, '--type', 'hdd', '--medium', disk]
 end
+
+def vm_exists?(vm_name='default', provider='virtualbox')
+  File.exists?(File.join(File.dirname(__FILE__),".vagrant/machines/#{vm_name}/#{provider}"))
+end
