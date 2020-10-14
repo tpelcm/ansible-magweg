@@ -25,7 +25,7 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
 
 smtpd_banner = $myhostname {{ postfix_mail_name }} ($mail_version)
-mynetworks = {{ postfix_mynetworks }}
+mynetworks = {{ postfix_mynetworks|join(',') }}
 relayhost = {{ postfix_relayhost }}
 relay_domains = {{ postfix_relay_domains }}
 
