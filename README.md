@@ -110,7 +110,7 @@ Now that links __group_vars__ and __host_vars__ are accesible to Ansible, provis
     vagrant provision proxy
     vagrant reload proxy
 
-Note: many plays are executed on the proxy node. To speed up provision you can limit provision to a single play e.g. to limit plays to *reverse-proxy* play using `PLAY` environment variable as follows
+Note: many plays are executed on the __proxy__ node. To speed up provision you can limit provision to a single play e.g. to limit plays to __reverse-proxy__ play using `PLAY` environment variable as follows
 
     PLAY=reverse-proxy vagrant provision proxy
 
