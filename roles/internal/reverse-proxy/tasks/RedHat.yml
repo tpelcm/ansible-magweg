@@ -3,19 +3,19 @@
   template:
     src: ports.conf.j2
     dest: /etc/httpd/conf.d/ports.conf
-  notify: restart apache
+  notify: reload-apache
 
 - name: Configure Httpd
   template:
     src: reverse_proxy.conf.j2
     dest: "/etc/httpd/conf.d/reverse_proxy.conf"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Delete obsolete config
   file:
    path: "/etc/httpd/conf.d/{{ item }}"
    state: absent
-  notify: restart apache
+  notify: reload-apache
   with_items:
      - autoindex.conf
      - ssl.conf
