@@ -66,10 +66,9 @@
     state: absent
   with_items: '{{ backup_restore }}'
 
-- name: Start service
-  service:
-    name: "{{ backup_restore[item]['stop_start_service'] }}"
-    state: started
-  when: 
-    backup_restore[item]['stop_start_service'] is defined 
+- name: Provision role after restore
+  include_role:
+    name: "{{ restore_role }}"
   with_items: '{{ backup_restore }}'
+  loop_control:
+    loop_var: restore_role
