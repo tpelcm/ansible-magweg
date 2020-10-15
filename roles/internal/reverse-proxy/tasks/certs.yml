@@ -4,7 +4,7 @@
     path: "{{ reverse_proxy_etc_ssl_private[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}-pk.pem"
   when: reverse_proxy_vhosts[item].ssl_pk_url is not defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Generate CSR
   openssl_csr:
@@ -13,7 +13,7 @@
     common_name: "{{ reverse_proxy_vhosts[item].server_name }}"
   when: reverse_proxy_vhosts[item].ssl_cert_url is not defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Generate certificate.
   openssl_certificate:
@@ -23,7 +23,7 @@
     provider: selfsigned
   when: reverse_proxy_vhosts[item].ssl_cert_url is not defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Download key
   get_url:
@@ -31,7 +31,7 @@
     dest: "{{ reverse_proxy_etc_ssl_private[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}-pk.pem"
   when: reverse_proxy_vhosts[item].ssl_pk_url is defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Download certificate
   get_url:
@@ -39,7 +39,7 @@
     dest: "{{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}.pem"
   when: reverse_proxy_vhosts[item].ssl_cert_url is defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
 
 - name: Download bundle
   get_url:
@@ -47,4 +47,4 @@
     dest: "{{ reverse_proxy_etc_ssl_certs[ansible_os_family] }}{{ reverse_proxy_vhosts[item].server_name }}-bundle.pem"
   when: reverse_proxy_vhosts[item].ssl_bundle_url is defined
   with_items: "{{ reverse_proxy_vhosts }}"
-  notify: restart apache
+  notify: reload-apache
