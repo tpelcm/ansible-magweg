@@ -1,4 +1,9 @@
 ---
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+  with_items: "{{ bitbucket_packages[ansible_distribution] }}"
+  
 - name: add bitbucket owner
   user:
     name: "{{ bitbucket_owner }}"
