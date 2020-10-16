@@ -104,7 +104,7 @@ bitbucket_versions:
     installer_user: bitbucket
 
 bitbucket_packages:
-  Redhat: ['fontconfig']
+  RedHat: ['fontconfig']
   CentOS: ['dejavu-sans-fonts','fontconfig']
 
 bitbucket_versions_sequence: ['5.10.1','7.0.1','7.6.0']
