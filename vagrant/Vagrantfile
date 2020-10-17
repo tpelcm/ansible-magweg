@@ -95,5 +95,5 @@ def add_disk(vb_provider, port = 2, size = 120 * 1024, filename = nil, controlle
 end
 
 def vm_exists?(vm_name='default', provider='virtualbox')
-  File.exists?(File.join(File.dirname(__FILE__),".vagrant/machines/#{vm_name}/#{provider}"))
+  File.exists?(File.join(File.dirname(__FILE__),".vagrant/machines/#{vm_name}/#{provider}/vagrant_cwd"))
 end
