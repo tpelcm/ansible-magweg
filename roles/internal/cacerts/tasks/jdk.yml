@@ -39,5 +39,7 @@
   when: keystore_stat.stat.exists
   register: jdk_trusted_sites # cmd, msg, rc
   ignore_errors: yes
+  environment:
+    https_proxy: "{{ cacerts_java_cert_proxy|default(omit) }}"
 #- debug:
 #    msg: "jdk_trusted_sites: {{ jdk_trusted_sites }}"

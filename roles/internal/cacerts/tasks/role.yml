@@ -28,3 +28,6 @@
   with_items: "{{ cacerts_trusted_sites }}"
   notify: "{{ cacerts_roles[role].notify|default(omit) }}"
   when: role_keystore_stat.stat.exists
+  environment:
+    https_proxy: "{{ cacerts_java_cert_proxy|default(omit) }}"
+   
