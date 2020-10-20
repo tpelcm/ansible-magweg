@@ -32,7 +32,7 @@
   docker_volume:
     driver: local
     driver_options:
-      type: nfs
+      type: nfs4
       o: addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600
       device: :/nfs/backup/tmp/oracle
     volume_name: oracle-dumps
