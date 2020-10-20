@@ -13,4 +13,13 @@
 dump_schema=$(cat {{ role|role_schema_file(vars) }})
 try impdp "{{ role|role_oracle_connect(vars) }}" {{ role|impdp_options(vars) }}
 
-yell "Database imported to {{ vars[role + '_database_username'] }}"
+yell "Change {{ role|role_schema_name(vars) }} password after impdp"
+sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+whenever sqlerror exit sql.sqlcode;
+set echo off 
+set heading off
+alter user {{ role|role_schema_name(vars) }} identified by "{{ vars[role + '_database_password'] }}" ;
+exit;
+EOF
+
+yell "Database imported to {{ role|role_schema_name(vars) }}"
