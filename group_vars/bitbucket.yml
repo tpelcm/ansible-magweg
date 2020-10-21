@@ -4,12 +4,12 @@ bitbucket_version: 5.10.1
 # bitbucket_version: 7.6.0
 
 # Oracle settings
-bitbucket_database_host: oracle
-bitbucket_database_name: BITBUCKET.localdomain
-bitbucket_database_type: oracle
-bitbucket_database_port: 1521
-bitbucket_database_host: oracle
-bitbucket_database_username: BITBUCKET
+# bitbucket_database_host: oracle
+# bitbucket_database_name: BITBUCKET.localdomain
+# bitbucket_database_type: oracle
+# bitbucket_database_port: 1521
+# bitbucket_database_host: oracle
+# bitbucket_database_username: BITBUCKET
 
 #backup_restore: 
 #  bitbucket:
