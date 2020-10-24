@@ -6,8 +6,8 @@ jira_version: 7.12.1
 
 backup_roles:
   jira:
-    stop_start_service: jira
     keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+    stop_start_service: jira
     snapshot: no
     incremental: no
     # backup_lvm_snapshot_size: 2G
@@ -25,19 +25,19 @@ backup_roles:
 # PostgreSQL settings
 # jira_database_host: 1.1.1.2
 
-# Example Oracle settings
-jira_database_url: jdbc:oracle:thin:@//oracle:1521/JIRA.localdomain
-#jira_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
-jira_database_driver_class: oracle.jdbc.OracleDriver
-jira_database_validation_query: select 1 from dual
-jira_database_type_config: oracle10g
-jira_database_type: oracle
-jira_database_name: JIRA.localdomain
-jira_database_username: JIRA
-jira_database_password: secret
-jira_database_schema: nil
-jira_database_host: oracle
-jira_database_port: 1521
+## Example Oracle settings
+#jira_database_url: jdbc:oracle:thin:@//oracle:1521/JIRA.localdomain
+##jira_database_ojdbc_jar_url: https://example.com/ojdbc8.jar
+#jira_database_driver_class: oracle.jdbc.OracleDriver
+#jira_database_validation_query: select 1 from dual
+#jira_database_type_config: oracle10g
+#jira_database_type: oracle
+#jira_database_name: JIRA.localdomain
+#jira_database_username: JIRA
+#jira_database_password: secret
+#jira_database_schema: nil
+#jira_database_host: oracle
+#jira_database_port: 1521
 
 # Atlassian Support recommended JVM arguments and proxy config
 jira_jvm_support_recommended_args: >-

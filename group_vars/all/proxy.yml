@@ -1,7 +1,7 @@
 ---
 proxy_port: 3128
 proxy_host: '1.1.1.3'
-proxy_no_proxy: 'localhost,127.0.0.0/8,nip.io,docker-registry.somecorporation.com'
+proxy_no_proxy: 'localhost,127.0.0.0/8,nip.io,docker-registry.somecorporation.com,1.1.1.0/26'
 
 docker_proxy_http: "http://{{ proxy_host }}:{{ proxy_port }}"
 docker_proxy_https: "http://{{ proxy_host }}:{{ proxy_port }}"
