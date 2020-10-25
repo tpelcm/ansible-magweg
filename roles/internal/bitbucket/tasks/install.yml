@@ -80,3 +80,16 @@
    src: "{{ bitbucket_home_version }}"
    dest: "{{ bitbucket_home_link }}"
    state: link
+
+- name: Cron Job installation
+  template:
+    dest: '/etc/cron.d/reposize.sh'
+    src: bitbucket.reposize.sh.j2
+    mode: 755
+
+- name: Cron Job scheduling
+  cron:
+    name: "Displaying top 10 bitbucket reposize usage"
+    minute: "0"
+    hour: "5"
+    job: /etc/cron.d/reposize.sh

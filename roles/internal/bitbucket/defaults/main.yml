@@ -9,7 +9,6 @@ bitbucket_jvm_maximum_memory: 1g
 bitbucket_web_port: 7990
 bitbucket_web_context: '/bitbucket'
 
-
 bitbucket_database_username: bitbucket
 bitbucket_database_password: supersecure
 
@@ -106,6 +105,7 @@ bitbucket_versions:
 bitbucket_packages:
   RedHat: ['fontconfig']
   CentOS: ['dejavu-sans-fonts','fontconfig']
+  
 
 bitbucket_versions_sequence: ['5.10.1','7.0.1','7.6.0']
 
