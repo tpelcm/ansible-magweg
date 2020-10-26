@@ -21,7 +21,7 @@ def operation(data, vsn_file_current, vsn_file):
         operation = 'update'
         descr = 'Current ' + cv + ' is same as requested'
     else:
-      if version_higher(data, vsn_file_current, vsn_file):
+      if version_lower(data, vsn_file_current, vsn_file):
         if installed(data,data['version']):
           operation = 'rollback'
           descr = 'Rollback ' + cv + ' to ' + data['version'] 
