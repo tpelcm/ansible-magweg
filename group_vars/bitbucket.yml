@@ -1,15 +1,18 @@
 ---
-# bitbucket_database_host: 1.1.1.2
-# bitbucket_version: 5.10.1
-# bitbucket_version_prepare: 7.6.0
+bitbucket_database_host: 1.1.1.2
 bitbucket_version: 7.6.0
+# bitbucket_version_prepare: 7.6.0
 
 # Oracle settings
-bitbucket_database_host: oracle
-bitbucket_database_name: BITBUCKET.localdomain
-bitbucket_database_type: oracle
-bitbucket_database_port: 1521
-bitbucket_database_username: BITBUCKET
+# bitbucket_database_host: oracle
+# bitbucket_database_name: BITBUCKET.localdomain
+# bitbucket_database_type: oracle
+# bitbucket_database_port: 1521
+# bitbucket_database_username: BITBUCKET
+
+bitbucket_libraries:
+  - url: https://github.com/javamelody/jira-confluence-javamelody/releases/download/1.83.0/jira-confluence-javamelody-1.83.0.jar
+    checksum: sha256:2007bf47db63690f61a919cc828332d1d852c283c48137e07db608dd3c82e65e
 
 #backup_restore: 
 #  bitbucket:

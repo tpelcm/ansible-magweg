@@ -1,7 +1,7 @@
 ---
 common_packages: 
   Debian: ['nfs-common', 'nano' ] 
-  RedHat: ['nfs-utils', 'nano' ]
+  RedHat: ['nfs-utils', 'nano', 'tree' ]
 
 #'libffi-dev','libpq-dev'
 #'libffi-devel'
