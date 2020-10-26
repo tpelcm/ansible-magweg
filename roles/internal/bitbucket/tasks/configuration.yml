@@ -21,8 +21,4 @@
     url: "{{ item.url }}"
   with_items: "{{ bitbucket_libraries }}" 
   notify: bitbucket-systemctl-restart
-
-- debug: 
-    msg: "{{ bitbucket_home_version_home }}/shared/plugins/installed-plugins/{{ item.url|basename }}" 
-  with_items: "{{ bitbucket_libraries }}" 
-  
+  ignore_errors: yes
