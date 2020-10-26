@@ -2,13 +2,13 @@
 bitbucket_home: /opt/bitbucket
 
 bitbucket_version: 5.10.1
+# bitbucket_version_prepare: 7.6.0
 
 bitbucket_jvm_minimum_memory: 512m
 bitbucket_jvm_maximum_memory: 1g
 
 bitbucket_web_port: 7990
 bitbucket_web_context: '/bitbucket'
-
 
 bitbucket_database_username: bitbucket
 bitbucket_database_password: supersecure

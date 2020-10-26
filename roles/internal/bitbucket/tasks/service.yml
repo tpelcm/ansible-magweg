@@ -6,9 +6,9 @@
     owner: root
     group: root
     mode: 0755
-  notify: restart bitbucket  
-  when: "ansible_service_mgr == 'systemd'" 
-  notify: bitbucket-systemctl-daemon-reload
+  notify: 
+    - bitbucket-systemctl-daemon-reload
+    - bitbucket-systemctl-restart  
 
 - name: ensure service running and set to start on boot
   service: name=bitbucket state=started enabled=yes

@@ -13,6 +13,7 @@ This role will create Ansible facts for the type of operation that is requested.
 | upgrade           | The desired version is a higher version than the current version.      |   
 | rollback          | The desired and current version are installed and the desired version is lower.      |
 | rollforward       | The desired and current version are installed and the desired version is higher.      |
+| prepare-upgrade       | The desired and current version are equal and we are preparing for upgrade to `bitbucket_version_prepare` |
 
 In Ansible console logging you should see LCM info for roles that use / support this role. The example below shows LCM info for a Jira upgrade.
 

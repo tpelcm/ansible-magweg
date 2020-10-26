@@ -4,26 +4,31 @@ from ansible.module_utils.basic import *
 import glob, os, hashlib
 
 # Determine operation: install, update, upgrade, 
-#   rollback of rollforward
+#   rollback of rollforward or prepare upgrade
 def operation(data, vsn_file_current, vsn_file):
-  cv = None
-  if os.path.isfile(vsn_file_current):
-    cv = open(vsn_file_current, 'r').read().rstrip()
-    if cv == data['version']:
-      operation = 'update'
-      descr = 'Current ' + cv + ' is same as requested'
+  cv = current_version(vsn_file_current)
+  if cv:
+    seq = data['versions_sequence']
+    if version_equal(data, vsn_file_current, vsn_file):
+      if data['version_prepare'] is not None:
+        if prepare_version_higher(data, vsn_file_current, vsn_file):
+          operation = 'prepare-upgrade'
+          descr = 'Prepare upgrade to ' + data['version_prepare']
+        else:
+          operation = 'update'
+          descr = 'Current ' + cv + ' is same as requested'
+      else: # 
+        operation = 'update'
+        descr = 'Current ' + cv + ' is same as requested'
     else:
-      seq = data['versions_sequence']
-      cv_indx = seq.index(cv)
-      v_indx = seq.index(data['version'])
-      if cv_indx > v_indx:
-        if os.path.isfile(vsn_file):
+      if version_higher(data, vsn_file_current, vsn_file):
+        if installed(data,data['version']):
           operation = 'rollback'
           descr = 'Rollback ' + cv + ' to ' + data['version'] 
         else:
           operation = 'install'
           descr = 'Install ' + data['version'] + ' - downgrades are not supported' 
-      elif cv_indx < v_indx:
+      elif version_higher(data, vsn_file_current, vsn_file):
         if os.path.isfile(vsn_file):
           operation = 'rollforward'
           descr = 'Rollforward ' + cv + ' to ' + data['version']
@@ -34,6 +39,42 @@ def operation(data, vsn_file_current, vsn_file):
     operation = 'install'
     descr = 'Install ' + data['version']
   return operation, descr, cv
+
+def current_version(vsn_file_current):
+  if os.path.isfile(vsn_file_current):
+    return open(vsn_file_current, 'r').read().rstrip()
+  else:
+    return None
+
+# Return true if version is already present on filesystem
+# - when a version file can be found
+def installed(data,version):
+  vsn_file = version_file(data,version) 
+  return os.path.isfile(vsn_file)
+
+# Return true when current and requested version are equal
+def version_equal(data, vsn_file_current, vsn_file):
+  cv = current_version(vsn_file_current)
+  return cv == data['version']
+
+# Return true when requested version is higher
+def version_higher(data, vsn_file_current, vsn_file):
+  cv = current_version(vsn_file_current)
+  seq = data['versions_sequence']
+  cv_indx = seq.index(cv)
+  v_indx = seq.index(data['version'])
+  return cv_indx < v_indx
+
+def prepare_version_higher(data, vsn_file_current, vsn_file):
+  cv = current_version(vsn_file_current)
+  seq = data['versions_sequence']
+  cv_indx = seq.index(cv)
+  v_indx = seq.index(data['version_prepare'])
+  return cv_indx < v_indx
+
+# Return true when requested version is lower
+def version_lower(data, vsn_file_current, vsn_file):
+  return not version_higher(data, vsn_file_current, vsn_file)
 
 def database_version(data,vsn):
   if vsn is None:
@@ -93,6 +134,9 @@ def lcm_info(data):
   fcts[role + '_home_version_app'] = home_version_app(data,data['version'])    
   fcts[role + '_home_link_home'] = home_link_home(data)
   fcts[role + '_home_link_app'] = home_link_app(data)
+  if data['version_prepare'] is not None:
+    fcts[role + '_home_version_prepare'] = home_version(data,data['version_prepare'])
+    fcts[role + '_home_version_home_prepare'] = home_version_home(data,data['version_prepare'])
   if data['database'] is not None:
     fcts[role + '_database_name_version'] = database_version(data,data['version'])
     fcts[role + '_database_name_version_backup'] = database_version_backup(data,data['version'])
@@ -109,6 +153,7 @@ def main():
   fields = {"role": {"required": True, "type": "str"},
     "home": {"required": True, "type": "str"},
     "version": {"required": True, "type": "str"},
+    "version_prepare": {"required": False, "type": "str"},
     "versions_sequence": {"required": True, "type": "list"},
     "database": {"required": False, "type": "str"}}
 

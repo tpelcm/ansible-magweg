@@ -15,8 +15,9 @@
   lcm_info:
     role: '{{ item }}'
     version: "{{ vars[item + '_version'] }}"
+    version_prepare: "{{ vars[item + '_version_prepare']|default(omit) }}"
     home: "{{ vars[item + '_home'] }}"
-    database: "{{ vars[item + '_database_name'] | default(omit) }}"
+    database: "{{ vars[item + '_database_name']|default(omit) }}"
     versions_sequence: "{{ vars[item + '_versions_sequence'] }}"
   with_items: '{{ lcm_roles_node }}'
 
@@ -43,5 +44,7 @@
       - "{{ item }}_home_link_app: {{ vars[item + '_home_link_app']|default('not defined') }}"
       - "{{ item }}_home_link_app: {{ vars[item + '_home_link_app']|default('not defined') }}"
       - "{{ item }}_home_backup: {{ vars[item + '_home_backup']|default('not defined') }}"      
-      - "{{ item }}_home_backup_version: {{ vars[item + '_home_backup_version']|default('not defined') }}"      
+      - "{{ item }}_home_backup_version: {{ vars[item + '_home_backup_version']|default('not defined') }}"  
+      - "{{ item }}_home_version_prepare: {{ vars[item + '_home_version_prepare']|default('not defined') }}"      
+      - "{{ item }}_home_version_home_prepare: {{ vars[item + '_home_version_home_prepare']|default('not defined') }}"  
   with_items: '{{ lcm_roles_node }}'

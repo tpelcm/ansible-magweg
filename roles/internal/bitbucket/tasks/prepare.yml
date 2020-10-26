@@ -1,0 +1,10 @@
+---
+- name: Prepare new install folder
+  file:
+    path: "{{ bitbucket_home_version_prepare }}"
+    state: directory
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}"    
+
+- name: Prepare home dir
+  command: "rsync -az --delete --recursive {{ bitbucket_home_version_home }}/ {{ bitbucket_home_version_home_prepare }}/"

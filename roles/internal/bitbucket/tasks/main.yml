@@ -6,11 +6,17 @@
     - bitbucket-systemctl-daemon-reload
     - bitbucket-systemctl-restart
 
-#- include: debug.yml
 - include: database.yml
   when: bitbucket_database_type == 'postgresql'
+
 - include: install.yml
+
 - include: configuration.yml
+
 - include: jmx.yml
   when: bitbucket_jmx.enable == True
+
 - include: service.yml
+
+- include: prepare.yml
+  when: bitbucket_lcm['operation'] == 'prepare-upgrade'  
