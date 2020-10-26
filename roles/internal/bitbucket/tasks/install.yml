@@ -4,19 +4,6 @@
     name: "{{ item }}"
   with_items: "{{ bitbucket_packages[ansible_distribution] }}"
   
-- name: add bitbucket owner
-  user:
-    name: "{{ bitbucket_owner }}"
-    shell: /bin/bash
-    system: true
-
-- name: home directory
-  file:
-    path: "{{ bitbucket_home }}"
-    state: directory
-    group: "{{ bitbucket_owner }}"
-    owner: "{{ bitbucket_group }}" 
-
 - name: install folder
   file:
     path: "{{ bitbucket_home_version }}"
@@ -30,25 +17,6 @@
    dest: "{{ bitbucket_home }}/reponse.varfile"
    owner: "{{ bitbucket_owner }}"
    src: response.varfile.j2
-
-- name: download installer
-  get_url:
-    url: "{{ bitbucket_versions[bitbucket_version]['url'] }}"
-    dest: "{{ bitbucket_home }}/{{ bitbucket_versions[bitbucket_version]['url']|basename }}"
-    checksum: "{{ bitbucket_versions[bitbucket_version]['checksum'] }}"
-    timeout: 300
-    mode: 1373
-    owner: "{{ bitbucket_owner }}"
-    group: "{{ bitbucket_group }}"
-  register: get_url_result
-  until: get_url_result is succeeded
-  when: bitbucket_lcm['operation'] in ['upgrade','install'] 
-
-- name: remove installer
-  file:
-    path: "{{ bitbucket_home }}/{{ bitbucket_versions[bitbucket_version]['url']|basename }}"
-    state: absent
-  when: bitbucket_lcm['operation'] not in ['upgrade','install'] 
 
 - name: Copy home dir
   command: "rsync -az --delete --recursive {{ bitbucket_home_version_home_current }}/ {{ bitbucket_home_version_home }}/"
@@ -80,16 +48,3 @@
    src: "{{ bitbucket_home_version }}"
    dest: "{{ bitbucket_home_link }}"
    state: link
-
-- name: Cron Job installation
-  template:
-    dest: '/etc/cron.d/reposize.sh'
-    src: bitbucket.reposize.sh.j2
-    mode: 755
-
-- name: Cron Job scheduling
-  cron:
-    name: "Displaying top 10 bitbucket reposize usage"
-    minute: "0"
-    hour: "5"
-    job: /etc/cron.d/reposize.sh

@@ -32,4 +32,3 @@ oracle_schemas:
 
 nfs_mounts:
   - { path: /tpelcm-dumps, src: '{{ nfs_server }}:/nfs/backup/tmp/oracle', opts: rw, fstype: nfs, state: mounted }
-

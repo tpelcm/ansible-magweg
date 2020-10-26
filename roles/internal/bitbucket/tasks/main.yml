@@ -1,4 +1,19 @@
 ---
+- name: add bitbucket owner
+  user:
+    name: "{{ bitbucket_owner }}"
+    shell: /bin/bash
+    system: true
+
+- name: home directory
+  file:
+    path: "{{ bitbucket_home }}"
+    state: directory
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}" 
+
+- include: download.yml
+
 - name: stop for upgrade, rollback or rollfoward
   service: name=bitbucket state=stopped
   when: bitbucket_lcm['operation'] in ['upgrade','rollback','rollforward'] 

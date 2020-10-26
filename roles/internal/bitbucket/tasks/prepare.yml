@@ -7,4 +7,5 @@
     owner: "{{ bitbucket_group }}"    
 
 - name: Prepare home dir
-  command: "rsync -az --delete --recursive {{ bitbucket_home_version_home }}/ {{ bitbucket_home_version_home_prepare }}/"
+  command: "rsync -az --delete --recursive --exclude=shared/search/data {{ bitbucket_home_version_home }}/ {{ bitbucket_home_version_home_prepare }}/"
+  ignore_errors: true # home is being used
