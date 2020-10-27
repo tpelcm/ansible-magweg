@@ -8,3 +8,5 @@ vpass
 *.tar
 *.pyc
 **/local_stuff.yml
+roles/external/ansible-thoteam.nexus3-oss/target/*
+roles/external/ansible-thoteam.nexus3-oss/.*
