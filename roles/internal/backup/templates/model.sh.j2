@@ -20,8 +20,11 @@ fi
 {% endif %}  
 
 echo "Logging to {{ item|role_log_file_path(vars) }}"
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False %}
 {# include _env_oracle.sh.j2 or _env_postgresql.sh.j2 (default) #}
 {% include './templates/_env_' + vars[item + '_database_type']|default('postgresql') + '.sh.j2' %}
+{% endif %}
 
 if [[ $1 == "before" ]]
 then
