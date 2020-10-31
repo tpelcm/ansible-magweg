@@ -1,8 +1,11 @@
 ---
 bitbucket_home: /opt/bitbucket
+bitbucket_scripts: /opt/bitbucket/scripts
+bitbucket_mailto: "not-reply@example.com"
 
-bitbucket_version: 5.10.1
+# bitbucket_version: 5.10.1
 # bitbucket_version_prepare: 7.6.0
+bitbucket_version: 7.6.0
 
 bitbucket_jvm_minimum_memory: 512m
 bitbucket_jvm_maximum_memory: 1g

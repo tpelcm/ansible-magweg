@@ -23,7 +23,7 @@ done
 
 {# Show header #}
 echo -e "\nHostname: ${NODE}"
-echo -e "Top 10 repository storage gebruik:\n"
+echo -e "Top 10 repository storage usage:\n"
 
 cat ${TMPFILE} | sort -rnk 1 | head -10 
 

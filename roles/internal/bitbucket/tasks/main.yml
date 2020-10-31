@@ -35,3 +35,12 @@
 
 - include: prepare.yml
   when: bitbucket_lcm['operation'] == 'prepare-upgrade'  
+
+- name: scripts directory
+  file:
+    path: "{{ bitbucket_scripts }}"
+    state: directory
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}"
+    
+- include: jobs.yml
