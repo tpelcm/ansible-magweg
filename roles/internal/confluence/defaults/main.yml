@@ -9,6 +9,7 @@ confluence_cataline_opts: -Dconfluence.browser.language.enabled=false
 confluence_jvm_reserved_code_cache_size: 384m
 
 confluence_web_port: 8090
+confluence_web_port_https: 8443
 confluence_rmi_port: 8000
 
 confluence_https:

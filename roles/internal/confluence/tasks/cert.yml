@@ -1,31 +1,35 @@
 ---
 - name: Generate server private key
   openssl_privatekey:
-    path: "/opt/confluence/https.key"
+    path: "/opt/confluence/confluence/home/https.key"
+
 
 - openssl_csr:
-    path: "/opt/confluence/https.csr"
-    privatekey_path: "/opt/confluence/https.key"
+    path: "/opt/confluence/confluence/home/https.csr"
+    privatekey_path: "/opt/confluence/confluence/home/https.key"
     country_name: "NL"
-    organization_name: "TPE"
-    email_address: "tpe@politie.nl"
-    common_name: "confluence.ontwikkel.local"
+    organization_name: ""
+    email_address: ""
+    common_name: "tomcat"
 
-- name: Generate server certificate.
+- name: Generate a Self Signed OpenSSL certificate.
   openssl_certificate:
-    path: "/opt/confluence/https.cert"
-    csr_path: "/opt/confluence/https.csr"
+    path: /opt/confluence/confluence/home/https.crt
+    privatekey_path: /opt/confluence/confluence/home/https.key
+    csr_path: /opt/confluence/confluence/home/https.csr
     provider: selfsigned
-    #vars:
-    #  ansible_python_interpreter: /usr/bin/python3
 
-- name: Create a key store for the given certificate (lookup)
-  java_keystore:
-    name: https
-    certificate: "{{lookup('file', '/opt/confluence/https.cert') }}"
-    private_key: "{{lookup('file', '/opt/confleunce/https.key') }}"
-    password: changeit
-    dest: /opt/confluence/keystore.jks
+- name: Import SSL certificate to a keystore, create it if it doesn't exist
+  java_cert:
+    cert_path: "/opt/confluence/confluence/home/https.crt"
+    keystore_path: "/opt/confluence/confluence/home/.keystore"
+    keystore_pass: changeit
+    keystore_create: yes
+    cert_alias: tomcat
+    executable: /opt/confluence/confluence/app/jre/bin/keytool
+
+
+
 
 
 

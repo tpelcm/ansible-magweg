@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!-- {{ ansible_managed }} -->
+<!-- redirectPort="{{ confluence_proxy_port }}" -->
 <Server port="8000" shutdown="SHUTDOWN" debug="0">
     <Service name="Tomcat-Standalone">
-        <Connector port="{{ confluence_web_port }}" 
+        <Connector port="{{ confluence_web_port }}"
                    connectionTimeout="20000"
                    redirectPort="{{ confluence_proxy_port }}"
                    maxThreads="48" minSpareThreads="10"
@@ -27,6 +28,8 @@
                    clientAuth="false" sslProtocols="TLSv1,TLSv1.1,TLSv1.2"
                    sslEnabledProtocols="TLSv1,TLSv1.1,TLSv1.2" SSLEnabled="true"
                    URIEncoding="UTF-8" keystorePass="changeit"
+                   keystoreFile="/opt/confluence/confluence/home/.keystore"
+                   keyAlias="tomcat"
                    proxyName="{{ confluence_proxy_name }}"
                    proxyPort="{{ confluence_proxy_port }}"
         />
