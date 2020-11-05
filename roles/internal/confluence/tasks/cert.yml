@@ -41,7 +41,7 @@
     keystore_pass: changeit
     keystore_create: yes
     state: present
-    executable: "/opt/confluence/confluence/app/jre/bin/keytool"
+    executable: "{{ confluence_home_version_app }}/jre/bin/keytool"
 
 #- name: Import SSL certificate to a keystore, create it if it doesn't exist
 #  java_cert:
