@@ -1,0 +1,66 @@
+---
+- name: Generate server private key
+  openssl_privatekey:
+    path: "{{ confluence_home_version_home }}/https.key"
+
+
+- openssl_csr:
+    path: "{{ confluence_home_version_home }}/https.csr"
+    privatekey_path: "{{ confluence_home_version_home }}/https.key"
+    country_name: "NL"
+    organization_name: ""
+    email_address: ""
+    common_name: "tomcat"
+
+- name: Generate a Self Signed OpenSSL certificate.
+  openssl_certificate:
+    path: "{{ confluence_home_version_home }}/https.crt"
+    privatekey_path: "{{ confluence_home_version_home }}/https.key"
+    csr_path: "{{ confluence_home_version_home }}/https.csr"
+    provider: selfsigned
+
+- name: Generate PKCS#12 file
+  openssl_pkcs12:
+    action: export
+    path: "{{ confluence_home_version_home }}/ansible.p12"
+    friendly_name: tomcat
+    privatekey_path: "{{ confluence_home_version_home }}/https.key"
+    certificate_path: "{{ confluence_home_version_home }}/https.crt"
+    state: present
+    passphrase: changeit
+
+
+- name: Import SSL certificate to JKS keystore
+  java_cert:
+    pkcs12_path: "{{ confluence_home_version_home }}/ansible.p12"
+    pkcs12_alias: tomcat
+    pkcs12_password: changeit
+    cert_alias: tomcat
+    keystore_path: "{{ confluence_home_version_home }}/.keystore"
+    keystore_type: "JKS"
+    keystore_pass: changeit
+    keystore_create: yes
+    state: present
+    executable: "/opt/confluence/confluence/app/jre/bin/keytool"
+
+#- name: Import SSL certificate to a keystore, create it if it doesn't exist
+#  java_cert:
+#    cert_path: "{{ confluence_home_version_home }}/https.crt"
+#    cert_alias: tomcat
+#    keystore_path: "{{ confluence_home_version_home }}/.keystore"
+#    keystore_pass: changeit
+#    keystore_create: yes
+#    executable: "/opt/confluence/confluence/app/jre/bin/keytool"
+
+- name: chown confluence home version
+  file:
+    dest: "{{ confluence_home_version_home }}"
+    owner: "{{ confluence_owner }}"
+    group: "{{ confluence_group }}"
+    recurse: yes
+
+
+
+
+#keystoreFile="<MY_CERTIFICATE_LOCATION>"
+
