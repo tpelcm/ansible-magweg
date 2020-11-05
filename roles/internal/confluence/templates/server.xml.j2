@@ -5,7 +5,7 @@
     <Service name="Tomcat-Standalone">
         <Connector port="{{ confluence_web_port }}"
                    connectionTimeout="20000"
-                   redirectPort="{{ confluence_proxy_port }}"
+                   redirectPort="{{ confluence_web_port_https }}"
                    maxThreads="48" minSpareThreads="10"
                    enableLookups="false"
                    acceptCount="10"
@@ -14,26 +14,23 @@
                    useBodyEncodingForURI="true"
                    compression="on"
                    compressableMimeType="text/html,text/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript"
-                   secure="true"
-                   scheme="https"
-                   proxyName="{{ confluence_proxy_name }}"
-                   proxyPort="{{ confluence_proxy_port }}"
                    />
-{% if confluence_https['enable'] == True %}
-        <Connector port="{{ confluence_https['port'] }}" maxHttpHeaderSize="8192"
-                   maxThreads="150" minSpareThreads="25"
+        <Connector port="{{ confluence_web_port_https }}" maxHttpHeaderSize="8192"
+                   maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
                    protocol="org.apache.coyote.http11.Http11NioProtocol"
                    enableLookups="false" disableUploadTimeout="true"
                    acceptCount="100" scheme="https" secure="true"
-                   clientAuth="false" sslProtocols="TLSv1,TLSv1.1,TLSv1.2"
-                   sslEnabledProtocols="TLSv1,TLSv1.1,TLSv1.2" SSLEnabled="true"
+                   clientAuth="false" sslProtocol="TLS"
+                   sslEnabledProtocols="TLSv1.2" SSLEnabled="true"
+                   useBodyEncodingForURI="true"
+                   compression="on"
+                   compressableMimeType="text/html,text/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript"
                    URIEncoding="UTF-8" keystorePass="changeit"
-                   keystoreFile="/opt/confluence/confluence/home/.keystore"
+                   keystoreFile="{{ confluence_home_version_home }}/.keystore"
                    keyAlias="tomcat"
                    proxyName="{{ confluence_proxy_name }}"
                    proxyPort="{{ confluence_proxy_port }}"
         />
-{% endif %}
         <Engine name="Standalone" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false">
                 <Context path="{{ confluence_web_context }}" docBase="../confluence" reloadable="false" useHttpOnly="true">

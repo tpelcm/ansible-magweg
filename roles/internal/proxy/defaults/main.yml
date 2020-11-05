@@ -1,5 +1,5 @@
 ---
-  proxy_allowd_ips_file: /etc/squid-allowed-ips.txt
+proxy_allowd_ips_file: /etc/squid-allowed-ips.txt
 proxy_allowed_ips: []
 
 proxy_upstream_always_direct_file: /etc/squid-upstream-always-direct-ips.txt
