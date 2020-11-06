@@ -26,6 +26,8 @@
   with_items:
     - xpath: /x:web-app/x:security-constraint/x:web-resource-collection/x:web-resource-name
       value: Restricted URLs
+    - xpath: /x:web-app/x:security-constraint/x:web-resource-collection/x:url-pattern
+      value: /*
     - xpath: /x:web-app/x:security-constraint/x:user-data-constraint/x:transport-guarantee
       value: CONFIDENTIAL
   notify: confluence-systemctl-restart
