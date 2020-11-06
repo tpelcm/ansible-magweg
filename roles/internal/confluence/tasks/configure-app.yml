@@ -16,13 +16,19 @@
   notify: confluence-systemctl-restart
 
 - name: web.xml
-  template:
-    dest: "{{ confluence_home_version_app }}/confluence/WEB-INF/web.xml"
-    owner: "{{ confluence_owner }}"
-    group: "{{ confluence_group }}"
-    src: web.xml.j2
+  xml:
+    path: "{{ confluence_home_version_app }}/confluence/WEB-INF/web.xml"
+    value: "{{ item.value }}"
+    xpath: "{{ item.xpath }}"
+    pretty_print: yes
+    namespaces:
+      x: http://xmlns.jcp.org/xml/ns/javaee
+  with_items:
+    - xpath: /x:web-app/x:security-constraint/x:web-resource-collection/x:web-resource-name
+      value: Restricted URLs
+    - xpath: /x:web-app/x:security-constraint/x:user-data-constraint/x:transport-guarantee
+      value: CONFIDENTIAL
   notify: confluence-systemctl-restart
-
 
 - name: Xms, Xmx and other CATALINA_OPTS in setenv.sh
   replace:
