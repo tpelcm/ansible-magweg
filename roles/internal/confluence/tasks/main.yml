@@ -23,5 +23,6 @@
 
 - include: install.yml
 - include: cert.yml
+- include: firewalld.yml
 - include: jmx.yml
 - include: service.yml

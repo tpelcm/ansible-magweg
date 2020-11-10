@@ -1,0 +1,11 @@
+- name: start service firewalld
+  systemd:
+    name: firewalld
+    state: restarted
+
+- name: permit traffic in default zone on port 8443/tcp
+  firewalld:
+    port: 8443/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
