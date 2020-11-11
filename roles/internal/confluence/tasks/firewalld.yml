@@ -5,7 +5,7 @@
 
 - name: permit traffic in default zone on port 8443/tcp
   firewalld:
-    port: 8443/tcp
+    port: "{{ confluence_web_port_https }}/tcp" 
     permanent: yes
     state: enabled
     immediate: yes
