@@ -1,8 +1,22 @@
 ---
-- name: Create NFS directories
+- include_tasks: "install-{{ ansible_os_family }}.yml"
+
+- name: Ensure directories to export exist
   file:
-    path: '{{ item.split()[0] }}'
+    path: '{{ item.strip().split()[0] }}'
     state: directory
     recurse: yes
     mode: 0755
   with_items: '{{ nfs_exports }}'
+
+- name: Exports file
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    mode: 0644
+  notify: nfs-reload
+
+- name: Ensure nfs is running.
+  service: "name={{ nfs_server_daemon[ansible_os_family] }} state=started enabled=yes"
+  when: nfs_exports|length
+

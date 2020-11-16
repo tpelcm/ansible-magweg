@@ -1,0 +1,9 @@
+---
+- name: nfs-reload
+  command: 'exportfs -ra'
+
+- name: nfs-restart
+  service:
+    name: "{{ nfs_server_daemon[ansible_os_family] }}"
+    state: "restarted"
+    enabled: true
