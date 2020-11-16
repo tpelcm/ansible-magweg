@@ -3,7 +3,7 @@ dependencies:
   - {role: lcm,                     tags: ansible }
   - {role: lvm,                     tags: lvm }
   - {role: ansible-agent,           tags: ansible }
-#  - {role: robertdebock.bootstrap,  tags: ansible }
+  - {role: robertdebock.bootstrap,  tags: ansible }
   - {role: ansible-apt,             tags: apt, when: ansible_os_family == 'Debian' }
   - {role: ajsalminen.hosts,        tags: network }
 #  - {role: ansible-hostname,        tags: hostname }
