@@ -89,8 +89,8 @@ sonarqube_versions:
         checksum: bf504ebd0062a56e6da5545187e302b34717ae3e6ec5fc71b781b73bd35261b7
       java_plugin: # was web plugin
         pattern: sonar-java-plugin-*.jar
-        url: https://binaries.sonarsource.com/Distribution/sonar-java-plugin/sonar-java-plugin-6.0.2.20657.jar
-        checksum: e162d66f8768bb86ac0af90e29adf0659a8ba3547edf112d807de2148ee5a0eb
+        url: https://binaries.sonarsource.com/Distribution/sonar-java-plugin/sonar-java-plugin-6.3.2.22818.jar
+        checksum: 7d8ac6a8f240ca72b17e9f2902c91cb25f3913d79abf27c25a971e570a7a8c23
       javascript_plugin:
         pattern: sonar-javascript-plugin-*.jar
         url: https://binaries.sonarsource.com/Distribution/sonar-javascript-plugin/sonar-javascript-plugin-6.2.0.12043.jar
