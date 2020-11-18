@@ -22,5 +22,7 @@
   when: confluence_database_type == 'postgresql'
 
 - include: install.yml
+- include: cert.yml
+- include: firewalld.yml
 - include: jmx.yml
 - include: service.yml
