@@ -80,17 +80,6 @@ confluence_manual_upgrade: no
 # Session timeout.
 confluence_session_timeout: "300"
 
-# Confluence inital setup
-confluence_setup:
-  display-name: Confluence
-  base-url: https://sh.1.1.1.3.nip.io/confluence
-  license: ''
-  admin:
-    username: admin
-    password: supersecure
-    display-name: Andy Kaufman
-    mail: andy.kaufman@cicd.io
-
 confluence_reverse_proxy:
   enable: yes
   secure: 'true'
