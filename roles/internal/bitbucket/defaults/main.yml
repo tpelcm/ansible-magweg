@@ -105,9 +105,13 @@ bitbucket_versions:
     url: https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-7.6.0-x64.bin
     checksum: sha256:bcb6d73581f21ce6f8171bb415b3d798114df3589276442e3107c342397bf871
     installer_user: bitbucket
+  7.8.0:
+    url: https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-7.8.0-x64.bin
+    checksum: sha256:8f9e90f1aa29238393f4c83379fb71cf838cf3696d2a112326f5b1c5bd7d34eb
+    installer_user: bitbucket
 
 bitbucket_packages:
   RedHat: ['fontconfig']
   CentOS: ['dejavu-sans-fonts','fontconfig']
   
-bitbucket_versions_sequence: ['5.10.1','7.0.1','7.6.0']
+bitbucket_versions_sequence: ['5.10.1','7.0.1','7.6.0', '7.8.0']

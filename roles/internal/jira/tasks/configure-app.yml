@@ -21,7 +21,6 @@
       replace: "JVM_SUPPORT_RECOMMENDED_ARGS=\"{{ jira_jvm_support_recommended_args }}\""
     - regexp: ".?JIRA_HOME=\".*?\"" 
       replace: "JIRA_HOME=\"{{ jira_home_version_home }}\""
-  no_log: true
   notify: jira-systemctl-restart
 
 - name: server.xml
