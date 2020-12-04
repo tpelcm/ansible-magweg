@@ -1,3 +1,0 @@
----
-dependencies:
-  - {role: geerlingguy.nfs,         tags: nfs }

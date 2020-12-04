@@ -1,0 +1,10 @@
+---
+- name: tomcat.yml | Tomcat nodes
+  hosts: tomcat
+  become: yes
+
+  roles:
+    - { role: common,               tags: ["common"] }
+    - { role: java,                 tags: ["java"] }
+    - { role: robertdebock.tomcat,  tags: ["tomcat"] } 
+

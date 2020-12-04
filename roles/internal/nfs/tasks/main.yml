@@ -1,8 +1,0 @@
----
-- name: Create NFS directories
-  file:
-    path: '{{ item.split()[0] }}'
-    state: directory
-    recurse: yes
-    mode: 0755
-  with_items: '{{ nfs_exports }}'
