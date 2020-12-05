@@ -1,0 +1,28 @@
+---
+lvm_roles:
+  docker: # geerlingguy.docker
+    size: '60g'
+    path: '/var/lib/docker'  
+
+desktop_volumes:
+  - akaufman-desktop
+  - tclifton-desktop  
+
+desktop_containers:
+  akaufman-desktop:
+    desktop_version: 0.1.5
+    desktop_image: "onknows/desktop"
+    command: /tini -- /usr/local/bin/vncserver-docker-desktop
+    hosts: 
+      db: 1.1.1.2
+    volumes:
+      - "akaufman-desktop:/home/vagrant"
+      - "/etc/environment:/etc/environment"
+  tclifton-desktop:
+    hosts: 
+      db: 1.1.1.2
+    volumes:
+      - "tclifton-desktop:/home/vagrant"
+
+desktop_version: 0.1.4
+desktop_image: onknows/desktop

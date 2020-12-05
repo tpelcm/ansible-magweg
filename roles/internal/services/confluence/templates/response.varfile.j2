@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+
+app.confHome={{ confluence_home_version_home }}
+app.install.service$Boolean=false
+{% if confluence_lcm_operation == 'upgrade' %}
+backupConfluence$Boolean=false
+{% endif %}
+existingInstallationDir={{ confluence_home_version_app }}
+httpPort$Long={{ confluence_web_port }}
+launch.application$Boolean=false
+portChoice=custom
+rmiPort$Long={{ confluence_rmi_port }}
+sys.adminRights$Boolean=true
+{% if confluence_lcm_operation == 'upgrade' %}
+sys.confirmedUpdateInstallationString=true
+{% else %}
+sys.confirmedUpdateInstallationString=false
+{% endif %}
+sys.installationDir={{ confluence_home_version_app }}
+sys.languageId=en

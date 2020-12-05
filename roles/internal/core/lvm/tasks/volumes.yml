@@ -1,0 +1,29 @@
+---
+- name: Logical volumes
+  lvol:
+    vg: "{{ lvm_vg }}"
+    lv: "{{ item }}"
+    size: "{{ lvm_roles[item]['size'] }}"
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Create filesystem
+  filesystem:
+    fstype: "{{ lvm_fstype }}"
+    dev: "/dev/mapper/{{ lvm_vg }}-{{ item|replace('-', '--') }}"
+    resizefs: yes
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Mount dirs
+  file:
+    path: "{{ lvm_roles[item]['path'] }}"
+    state: directory
+  with_items: "{{ lvm_roles_node }}"
+
+- name: Mount 
+  mount:
+    path: "{{ lvm_roles[item]['path'] }}"
+    src: "/dev/mapper/{{ lvm_vg }}-{{ item|replace('-', '--') }}"
+    fstype: "{{ lvm_fstype }}"
+    opts: "{{ lvm_roles[item]['opts']|default(omit)}}"
+    state: mounted
+  with_items: "{{ lvm_roles_node }}"

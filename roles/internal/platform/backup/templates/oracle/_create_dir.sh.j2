@@ -1,0 +1,21 @@
+
+create=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+whenever sqlerror exit sql.sqlcode;
+create or replace directory {{ role|role_dump_dir_name(vars) }} as '{{ role|role_dump_dir_remote(vars) }}';
+exit;
+EOF
+)
+
+yell $create
+
+dir=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+set pagesize 0 feedback off verify off heading off echo off;
+select directory_name from dba_directories where directory_name ='{{ role|role_dump_dir_name(vars) }}';
+exit;
+EOF
+)
+
+if [ "{{ role|role_dump_dir_name(vars) }}" != "$dir" ]
+then
+  die "Failed to create directory {{ role|role_dump_dir_name(vars) }} as {{ role|role_dump_dir_remote(vars) }}"
+fi

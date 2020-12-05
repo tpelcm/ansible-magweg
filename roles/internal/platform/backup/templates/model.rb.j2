@@ -1,0 +1,63 @@
+# encoding: utf-8
+##
+# Backup v5.x Configuration
+# {{ ansible_managed }}
+#
+# Documentation: http://backup.github.io/backup
+# Issue Tracker: https://github.com/backup/backup/issues
+##
+
+{% for schdl in backup['schedules_default'] %}
+
+GenericBackup.new(:{{ item|backup_name_underscored(vars,schdl) }}, '{{ item }} - {{ inventory_hostname }}') do
+    
+  logfile = '{{ item|role_log_file_path(vars) }}'
+
+  before do
+    File.delete(logfile) if File.exists?(logfile)
+    `/etc/backup/hooks/{{ item }}.sh before {{ schdl }}`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Error in #{self.trigger}-before"
+    end
+  end  
+
+{% include './templates/_model_rb_database.rb.j2' %} 
+
+{% if vars[item + '_home'] is defined and 
+      backup_roles[item]['incremental']|default(False) == False %}
+  archive :home do |archive|
+    archive.root '{{ item|role_archive_root(vars) }}'
+    archive.add '.'
+{%     if backup_roles[item]['tar_options'] is defined %}
+    archive.tar_options '{{ backup_roles[item]['tar_options'] }}'
+{%     endif %}
+  end
+{% endif %}
+
+{% if vars[item + '_database_host'] is defined and
+     backup_roles[item]['skip_database']|default(False) == False and
+     vars[item + '_database_type']|default('postgresql') == 'postgresql' and
+     backup_roles[item]['incremental']|default(False) == True %}
+  # Storing db backup in home for incremental backup
+  store_with RSync do |rs|
+    rs.path = '{{ item|role_dump_dir(vars) }}'
+  end
+{%  endif %}
+
+{% if backup_roles[item]['incremental']|default(False) == False %}
+  store_with Local do |local|
+    local.path = '{{ backup_archives }}/{{ inventory_hostname }}'
+    local.keep = {{ backup_roles[item]['keep'][schdl] }}
+  end
+{% endif %}
+
+  after do 
+    `/etc/backup/hooks/{{ item }}.sh after {{ schdl }}`
+    if $? != 0
+      Logger.error File.read(logfile) if File.exists?(logfile)
+      raise "Error in #{self.trigger}-after"
+    end
+  end
+end
+{% endfor %}

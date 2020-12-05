@@ -1,0 +1,45 @@
+---
+- name: Check JDK
+  stat:
+    path: "{{ jdk_version|java_keystore }}"
+  register: keystore_stat
+
+- debug:
+    msg: |+
+      Importing / updating certificate {{ item['url'] }}
+      into {{ jdk_version|java_keystore }}
+  with_items: "{{ cacerts_import_certs_urls }}"
+  when: keystore_stat.stat.exists
+
+- name: "Import bundles in JDK cacert"
+  java_cert:
+    cert_alias: "{{ item['name'] }}"
+    cert_path: "/tmp/{{ item['url']|basename }}" 
+    keystore_path: "{{ jdk_version|java_keystore }}"
+    keystore_pass: "changeit" # TODO
+    executable: "{{ jdk_version|java_keytool }}"
+    state: present
+  with_items: "{{ cacerts_import_certs_urls }}"
+  # notify: "{{ cacerts_roles[role].notify|default(omit) }}" # TODO
+  when: keystore_stat.stat.exists
+  ignore_errors: yes
+
+# Does not seem to work currently!
+- name: "Import trusted sites in JDK cacert"
+  java_cert:
+    cert_alias: "{{ item['name'] }}"
+    cert_url: "{{ item['url'] }}"
+    cert_port: "{{ item['port'] }}"
+    keystore_path: "{{ jdk_version|java_keystore }}"
+    keystore_pass: "changeit" # TODO
+    executable: "{{ jdk_version|java_keytool }}"
+    state: present
+  with_items: "{{ cacerts_trusted_sites }}"
+  # notify: "{{ cacerts_roles[role].notify|default(omit) }}"
+  when: keystore_stat.stat.exists
+  register: jdk_trusted_sites # cmd, msg, rc
+  ignore_errors: yes
+  environment:
+    https_proxy: "{{ cacerts_java_cert_proxy|default(omit) }}"
+#- debug:
+#    msg: "jdk_trusted_sites: {{ jdk_trusted_sites }}"

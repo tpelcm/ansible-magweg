@@ -1,0 +1,9 @@
+---
+- name: config.json for users
+  template:
+    dest: "{{ docker_proxy_users[item]['path']|default('/home/' + item + '/config.json') }}"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    src: config.json.j2
+  with_items: "{{ docker_proxy_users }}" 
+  notify: restart docker

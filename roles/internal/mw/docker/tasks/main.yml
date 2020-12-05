@@ -1,0 +1,17 @@
+---
+- include: proxy_for_containers.yml
+  when: docker_proxy_http is defined and docker_proxy_users is defined
+
+- file: 
+    path: "/etc/systemd/system/docker.service.d"
+    state: directory
+  when: docker_proxy_http is defined
+
+- name: Proxy config Docker service
+  template:
+    dest: "/etc/systemd/system/docker.service.d/http-proxy.conf"
+    src: http-proxy.conf.j2
+  when: docker_proxy_http is defined
+  notify:
+    - systemctl-daemon-reload
+    - restart docker

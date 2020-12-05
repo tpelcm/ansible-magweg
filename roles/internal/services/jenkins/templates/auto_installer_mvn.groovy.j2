@@ -1,0 +1,35 @@
+import jenkins.*;
+import jenkins.model.*;
+import hudson.*;
+import hudson.model.*;
+
+{% for mvn in jenkins_maven_installations %}
+mavenName = "{{ mvn['name'] }}"
+mavenVersion = "{{ mvn['version'] }}"
+
+println("Checking Maven installations...")
+// Grab the Maven "task" (which is the plugin handle).
+mavenPlugin = Jenkins.instance.getExtensionList(hudson.tasks.Maven.DescriptorImpl.class)[0]
+
+// Check for a matching installation.
+mavenInstall = mavenPlugin.installations.find {
+   install -> install.name.equals(mavenName)
+}
+
+// If no match was found, add an installation.
+if(mavenInstall == null) {
+   println("No Maven install found. Adding...")
+   newMavenInstall = new hudson.tasks.Maven.MavenInstallation(mavenName, null,
+    [new hudson.tools.InstallSourceProperty([new hudson.tasks.Maven.MavenInstaller(mavenVersion)])]
+)
+
+   mavenPlugin.installations += newMavenInstall
+   mavenPlugin.save()
+
+   println("Maven install added.")
+} else {
+   println("Maven install found. Done.")
+}
+{% endfor %}
+
+

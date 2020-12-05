@@ -1,0 +1,35 @@
+---
+- name: Remove Oracle dump dir
+  file:
+    state: absent
+    path: "{{ item|role_dump_dir(vars) }}"
+
+- name: Create Oracle dump dir
+  file:
+    state: directory
+    path: "{{ item|role_dump_dir(vars) }}"
+    mode: 0777
+    recurse: yes
+
+- name: Extract Oracle dump dir tar
+  unarchive:
+    src: "{{ backup_restore[item]['db_tar'] }}"
+    remote_src: yes
+    dest: "{{ item|role_dump_dir(vars) }}"
+  when: backup_restore[item]['db_tar'] is defined
+
+- name: Drop existing schema ( if it exists ) 
+  command: "{{ item|role_script_path('drop_schema.sh') }}"
+  when: 
+    backup_restore[item]['db_tar'] is defined or 
+    backup_roles[item]['incremental'] == True
+  environment:
+    TPELCM_CONFIRM: 'Y'
+
+- name: Run database import
+  command: "{{ item|role_script_path('impdp.sh') }}"
+  when: 
+    backup_restore[item]['db_tar'] is defined or 
+    backup_roles[item]['incremental'] == True
+  environment:
+    TPELCM_CONFIRM: 'Y'

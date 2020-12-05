@@ -1,0 +1,57 @@
+---
+# Terminate and block sessions to the database on restore
+# A database cannot be dropped with active sessions
+- include: ../../postgresql/tasks/terminate-block-sessions.yml
+  vars:
+    terminate_database: "{{ vars[item + '_database_name_version']  }}"
+    lcm_role_upgrade: "{{ item }}"
+  when: backup_restore[item]['db_tar'] is defined
+
+- name: Drop database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    maintenance_db: postgres 
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port:  "{{ vars[item + '_database_port'] }}"
+    state: absent
+  when: backup_restore[item]['db_tar'] is defined
+
+- name: Create database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    lc_collate: "{{ vars[item + '_database_lc_collate']|default('en_US.UTF-8') }}"
+    lc_ctype: "{{ vars[item + '_database_lc_ctype']|default('en_US.UTF-8') }}"
+    encoding: "{{ vars[item + '_database_encoding']|default('UTF-8') }}"
+    template: 'template0'
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port:  "{{ vars[item + '_database_port'] }}"
+    owner: "{{ vars[item + '_database_username'] }}"
+    state: present
+  when: backup_restore[item]['db_tar'] is defined
+
+- include: ../../postgresql/tasks/allow-sessions.yml 
+  vars:
+    allow_database: "{{ vars[item + '_database_name_version']  }}"
+    lcm_role_upgrade: "{{ item }}"    
+  when: backup_restore[item]['db_tar'] is defined
+
+- name: Restore database
+  postgresql_db:
+    name: "{{ vars[item + '_database_name_version']  }}"
+    login_host: "{{ vars[item + '_database_host'] }}"
+    login_password: "{{ vars[item + '_database_admin_password'] }}"
+    login_user: "{{ vars[item + '_database_admin_username'] }}"
+    port: "{{ vars[item + '_database_port'] }}"
+    state: restore
+    target: "{{ backup_restore[item]['db_tar'] }}"
+  when: backup_restore[item]['db_tar'] is defined
+  register: db_restore
+  failed_when: "'ERROR' in db_restore.stderr"  
+
+#- name: db_restore
+#  debug:
+#    var: db_restore

@@ -1,0 +1,80 @@
+---
+- name: Oracle owner
+  user:
+    name: "{{ oracle_owner }}"
+    shell: /bin/bash
+    system: true
+
+- name: Directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    group: "{{ oracle_owner }}"
+    owner: "{{ oracle_owner }}"
+  with_items:
+    - "{{ oracle_home }}"
+    - "{{ oracle_script_dir }}"
+
+- pip:
+    name: docker-compose
+    version: 1.9.0
+    state: present
+    extra_args: --upgrade pip
+
+- name: Log into docker.io
+  docker_login:
+    registry: docker.io
+    username: "{{ oracle_docker_login.user_name }}"
+    password: "{{ oracle_docker_login.password }}"
+    reauthorize: yes
+
+- name: NFS volume mount
+  docker_volume:
+    driver: local
+    driver_options:
+      type: nfs4
+      o: addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600
+      device: :/nfs/backup/tmp/oracle
+    volume_name: oracle-dumps
+
+#- name: Create dump volume
+#  command:
+#    cmd: "docker volume create --driver local --opt type=nfs4 --opt o=addr=1.1.1.3,rw,bg,hard,nointr,rsize=32768,wsize=32768,proto=tcp,timeo=600 --opt device=:/nfs/backup/tmp/oracle oracle-dumps"
+
+- docker_image:
+    name: "{{ oracle_image }}"
+    source: pull
+
+- docker_container:
+    name: "oracle"
+    image: "{{ oracle_image }}"
+    volumes: 
+      - "{{ oracle_script_dir }}:{{ oracle_script_dir }}"
+      - "oracle-dumps:/tpelcm-dumps"
+    ports:
+     - "1521:1521"
+     - "5500:5500" # XML DB
+    restart_policy: unless-stopped
+
+- stat:
+    path: "/home/vagrant"
+  register: vagrant_home
+
+- include: scripts.yml
+- include: vagrant.yml
+  when: vagrant_home.stat.exists
+
+- name: Wait while database is starting
+  command: "docker exec -i oracle {{ oracle_script_dir }}/pdb.sh"
+  register: result
+  until: result.stdout.find("ORCLPDB1") != -1
+  retries: 10
+  delay: 10
+
+- include: create_database.yml
+  with_items: "{{ oracle_pluggable_databases }}"
+  when: oracle_pluggable_databases is defined
+
+- include: create_schemas.yml
+  with_items: "{{ oracle_schemas }}"
+  when: oracle_schemas is defined

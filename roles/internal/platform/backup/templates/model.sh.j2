@@ -1,0 +1,67 @@
+#!/bin/bash
+# {{ ansible_managed }}
+#
+# Hooks file for {{ item }} with before and after hook 
+# This hook file is called from /etc/backup/models/{{ item }}.rb 
+#
+{% include './templates/_model_sh_comments.sh.j2' %}
+{% include './templates/_helpers.sh.j2' %} 
+
+if [ $# -eq 0 ]
+then
+    echo "No arguments supplied!" 
+    echo "First argument should be: 'before' or 'after'"
+    echo "Second argument should be the schedule: {{ backup['schedules_default']|join(', ') }}"
+    exit 1
+fi
+
+{% if backup_roles[item]['incremental']|default(None) == True %}  
+{%   include './templates/_rsnapshot_helpers.sh.j2' %}
+{% endif %}  
+
+echo "Logging to {{ item|role_log_file_path(vars) }}"
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False %}
+{# include _env_oracle.sh.j2 or _env_postgresql.sh.j2 (default) #}
+{% include './templates/_env_' + vars[item + '_database_type']|default('postgresql') + '.sh.j2' %}
+{% endif %}
+
+if [[ $1 == "before" ]]
+then
+  yell "{{ item }} before hook $(date)"
+{% include './templates/_model_sh_prepare.sh.j2' %}
+
+{# stop services or containers #}
+{% include './templates/_model_sh_stop.sh.j2' %}
+
+{# create backup using using snapshots #}
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+{%   include './templates/_model_sh_snapshot_create.sh.j2' %}
+{%   include './templates/_model_sh_snapshot_create_db.sh.j2' %}
+{%   include './templates/_model_sh_start.sh.j2' %}
+{% endif %}
+
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False and
+      vars[item + '_database_type']|default('postgresql') == 'oracle' %}
+  # dump oracle database to {{ item|role_dump_dir(vars) }}
+  try {{ item|role_script_path('exp.sh') }}
+{% endif %}
+fi
+
+if [[ $1 == "after" ]]
+then
+  yell "{{ item }} after hook $(date)"
+{# perform backup using rsnapshot #}
+{% if backup_roles[item]['incremental']|default(None) == True %}
+{%   include './templates/_model_sh_rsnapshot.sh.j2' %}
+{% endif %}
+
+{# when not using snapshot start services now #}
+{% if backup_roles[item]['snapshot']|default(None) != True %}
+{%   include './templates/_model_sh_start.sh.j2' %}
+{% endif %}
+
+{%   include './templates/_model_sh_cleanup.sh.j2' %}
+fi
+

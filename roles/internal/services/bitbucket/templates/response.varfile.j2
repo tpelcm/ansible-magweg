@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+
+app.bitbucketHome={{ bitbucket_home_version_home }}
+app.defaultInstallDir={{ bitbucket_home_version_app }}
+httpPort={{ bitbucket_web_port }}
+{% if bitbucket_lcm['operation'] == 'install' %}
+app.install.service$Boolean=false
+executeLauncherAction$Boolean=false
+installation.type=INSTALL
+{% endif %}
+{% if bitbucket_lcm['operation'] == 'upgrade' %}
+launch.application$Boolean=false
+installation.type=UPGRADE
+{% endif %}
+launch.application$Boolean=false
+sys.adminRights$Boolean=true
+sys.installationDir={{ bitbucket_home_version_app }}
+sys.languageId=en
+container.configuration.ignore$Boolean=true
+confirm.disable.plugins$Boolean=true

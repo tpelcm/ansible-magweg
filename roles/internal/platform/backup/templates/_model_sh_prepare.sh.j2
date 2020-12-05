@@ -1,0 +1,31 @@
+  try mountpoint -q {{ backup_mount }}
+{% if backup_roles[item]['incremental']|default(None) == True %}
+  # Generate unique id for rsnapshot / incremental backup
+  snapshot_id=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c15; echo)
+  echo "$snapshot_id" > {{ vars[item + '_home_version'] }}/{{ backup_rsnapshot_id_file }}
+  yell "snapshot_id: $snapshot_id "
+{% endif %}
+
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+  # Cleanup old mounts
+  umount {{ vars[item+'_home_backup'] }} 2> /dev/null | true
+  lvdisplay {{ lvm_vg }}/{{ item }}-snapshot &>/dev/null
+  if [ $? -eq 0 ]
+  then
+    yell "Snapshot volume still exists!"
+    try lvremove -f /dev/{{ lvm_vg }}/{{ item }}-snapshot
+  fi
+{% endif %}
+
+{% if vars[item + '_database_host'] is defined and
+      backup_roles[item]['skip_database']|default(False) == False and
+      ( vars[item + '_database_type']|default('postgresql') == 'oracle' or 
+       backup_roles[item]['incremental']|default(None) == True ) %}
+  # Create a dump directory
+  if [ -d "{{ item|role_dump_dir(vars) }}" ]; then
+    yell "Removing old dump directory"
+    try rm -rf {{ item|role_dump_dir(vars) }}
+  fi
+  try mkdir --parents {{ item|role_dump_dir(vars) }}
+  try chmod 0777 {{ item|role_dump_dir(vars) }}
+{% endif %}

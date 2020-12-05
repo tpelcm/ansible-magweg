@@ -1,0 +1,17 @@
+---
+- name: Cron Job installation
+  template:
+    dest: "/opt/bitbucket/scripts/reposize.sh"
+    src: jobs/bitbucket.reposize.sh.j2
+    mode: 500
+
+# create a cron_file under /etc/cron.d
+- name: Cron Job scheduling
+  cron:
+    name: "Displaying top 10 bitbucket reposize usage"
+    minute: "0"
+    hour: "5"
+    weekday: 1-5
+    job: '/opt/bitbucket/scripts/reposize.sh | mailx -s "Bitbucket PROD reposizes" {{ bitbucket_mailto }}'
+    user: root
+    cron_file: reposize

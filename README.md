@@ -2,6 +2,23 @@
 
 This purpose of this repository is to automate Life Cycle Management (LCM) procedures using Ansible.
 
+<!-- MarkdownTOC -->
+
+- Products
+- Getting Started
+    - Ansible
+    - Vagrant
+    - VirtualBox
+    - Setup project directory
+    - Provision proxy node
+    - Provision
+    - LDAP
+- License
+
+<!-- /MarkdownTOC -->
+
+## Products
+
 | Product   | Level | Link |Description | 
 |----------|:-----:|---|---|
 | [SonarQube](roles/internal/sonarqube)| III | [https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/) | default `admin` with pw `admin` or `akaufman` |
@@ -12,13 +29,15 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
 | [Jenkins](roles/internal/jenkins)| I |[https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/) | `admin` with pw `supersecret` |
 | [Sites](roles/internal/sites)| II | [https://sh.1.1.1.3.nip.io/sites/](https://sh.1.1.1.3.nip.io/sites/) | Host static sites using Apache|
 | [AWX](roles/internal/awx)| I | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)<sup>1</sup> |Open Source Ansible Tower. AWX is very much work in progress, see [README](roles/internal/AWX) for info. Login `admin` with pw `secret`|
+| [Guacamole](https://guacamole.apache.org/)| I | [https://sh.1.1.1.3.nip.io/desktop/](https://sh.1.1.1.3.nip.io/desktop/) | Use Docker based desktops in your browser.|
 
 <sup><sub>1. AWX doesn't support changing web context - it needs to run from root.</sub></sup>  
 <sup><sub>2. Jira and Confluence setup cannot be automated. You have to use the wizard to setup the database, admin account etc.</sub></sup>
 
-Capability Levels
+_Capability Levels_
+
 | Level   | Description | 
-|----------|-------|
+|----------|-----|
 |I - Basic Install|Automated application provisioning and configuration management|
 |II - Full Lifecycle|Upgrade,rollback, rollforward, backup, restore|
 |III - Insights|Basic monitoring, JMX, etc|
@@ -41,6 +60,7 @@ This repository includes a number of supporting products / components that are t
 The repository also includes plays / roles for test and development purposes. See for example 
 - [opendj.yml](plays/opendj.yml) play and [opendj/](roles/internal/opendj) role. This creates a simple LDAP server based on OpenDJ.
 - [env.yml](plays/env.yml) play and [env](roles/internal/env) role. This role was added to configure an environment for a [PetClinic](https://github.com/spring-projects/spring-petclinic) example project. At this point it creates for example LDAP groups and accounts.
+- [oracle.yml](plays/oracle.yml) play creates Oracle Database 12c Enterprise Edition based on [Docker container](https://hub.docker.com/_/oracle-database-enterprise-edition). 
 
 This repository is created and maintained as a monolithic repository. External roles from Galaxy and GitHub are copied into this repository. Aside from that it tries to follow [Ansible Best Practices](ANSIBLEBESTPRACTICES.md) as much as possible.
 
@@ -73,7 +93,7 @@ Git clone this repository for example to `~/ansible`. Create a file `~/ansible/v
 
 Cd into the __vagrant__ directory and provision the proxy node
 
-    vagrant up proxy 
+    vagrant up proxy
 
 Vagrant up will fail at some point because the __group_vars__ directory is not found by Vagrant. Vagrant uses a dynamic inventory file `.vagrant/provisioners/ansible/inventory` and Ansible searches the location of this file for the __group_vars__ and __host_vars__.
 
@@ -81,56 +101,68 @@ Create two links for __group_vars__ and __host_vars__ directory in the directory
 
     rake vagrant:group_host_vars 
 
-Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
+### Provision proxy node
+
+Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. 
+
+Now that links __group_vars__ and __host_vars__ are accesible to Ansible, provision and reload the proxy.
+
+    vagrant provision proxy
+    vagrant reload proxy
+
+Note: many plays are executed on the __proxy__ node. To speed up provision you can limit provision to a single play e.g. to limit plays to __reverse-proxy__ play using `PLAY` environment variable as follows
+
+    PLAY=reverse-proxy vagrant provision proxy
+
+If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
 
     ---
     proxy_port: 3128
     proxy_host: '1.1.1.3'
     proxy_no_proxy: 'nip.io' # comma separated list
 
+You can also manually disable the proxy server by editing `/etc/environment`.
 
 ### Provision
 
-After creating the links you can start provisioning one ore more services:
+After the __group_vars__ and __host_vars__ links have been created, you can start provisioning nodes. At a minimum you will need the `proxy` and `postgresql` node. 
 
-| Service   | Link      | Accounts|
-|----------|-------------|-------------|
-| SonarQube |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
-| Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
-| Dimension |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
-| Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
-| Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
-| Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
-| Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+| Node | Service(s)   | Link      | Comments|
+|----------|-------------|-------------|-------------|
+| __proxy__ | Forward and reverse proxy, NFS server, OpenDJ server, Mailrelay | | |
+| __postgresql__ | PostgreSQL server | | |
+| __oracle__ | Oracle Database 12c Enterprise Edition | | See [role](roles/internal/oracle-database) for more information.|
+| __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
+| __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
+| __sites__ | Static "dimension" site |[https://sh.1.1.1.3.nip.io/dimension/](https://sh.1.1.1.3.nip.io/dimension/)| `admin` with pw `supersecret` |
+| __jenkins__ | Jenkins | [https://sh.1.1.1.3.nip.io/jenkins/](https://sh.1.1.1.3.nip.io/jenkins/)| `admin` with pw `supersecret` |
+| __confluence__ | Confluence | [https://sh.1.1.1.3.nip.io/confluence/](https://sh.1.1.1.3.nip.io/confluence/)| `admin` with pw `secret` |
+| __jira__ | Jira | [https://sh.1.1.1.3.nip.io/jira/](https://sh.1.1.1.3.nip.io/jira/)| `admin` with pw `secret` |
+| __bitbucket__ | Bitbucket | [https://sh.1.1.1.3.nip.io/bitbucket/](https://sh.1.1.1.3.nip.io/bitbucket/)| `admin` with pw `secret` |
+| __awx__ | AWX | [https://awx.1.1.1.3.nip.io/](https://awx.1.1.1.3.nip.io/)| |
+| __bastion__ | Guacamole | [https://sh.1.1.1.3.nip.io/desktop/](https://sh.1.1.1.3.nip.io/desktop/)|  |
 
-LDAP accounts
+_LDAP accounts_
+
 | Account   | Password | Role |
 |----------|-------------|-------------|
 | `akaufman`   | `secrets` | admin |
 
-Accounts en groups are in [host_vars/env.yml](host_vars/env.yml).
+Accounts en groups are in [group_vars/env.yml](group_vars/env.yml).
 
-#### Proxy
+To provision a node use standard Vagrant commands see `vagrant --help` for example to provision _SonarQube_ for a first time: 
 
-    vagrant up proxy
+```bash
+    vagrant up proxy # fails 
+    rake vagrant:group_host_vars # create symbolic links  
+    vagrant provision proxy
+    vagrant reload proxy
+    vagrant provision postgresql
+    vagrant up sonarqube
+```
 
-The proxy plays include some test plays opendj and env.
+After __proxy__ and __postgresql__ are up and running you can provision other nodes using `vagrant up <node>`. To run the Ansible provisioner after nodes have been created using `vagrant up` you use `vagrant provision <node>`. See `vagrant --help` for more information.
 
-#### SonarQube ( optional )
-
-    vagrant provision postgresql sonarqube
-
-#### Nexus ( optional )
-
-    vagrant provision nexus
-
-#### Jenkins ( optional )
-
-    vagrant provision jenkins
-
-#### Bitbucket ( optional )
-
-    vagrant provision bitbucket
 
 ### LDAP
 

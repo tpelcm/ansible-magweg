@@ -1,6 +1,0 @@
----
-- debug:
-    var: bitbucket_lcm['operation']
-
-- debug: 
-    var: bitbucket_versions

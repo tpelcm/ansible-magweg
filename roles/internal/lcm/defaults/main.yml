@@ -1,3 +1,0 @@
----
-lcm_roles: ['sonarqube', 'nexus', 'bitbucket', 'jira','confluence','myapp']
-lcm_write_version_file: no

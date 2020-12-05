@@ -4,6 +4,10 @@ reverse_proxy_vhosts:
     server_name: sh.1.1.1.3.nip.io 
     port: 443
     proxy_verify: false
+    proxy_guacamole:
+      context: /desktop
+      port: 8080
+      ip: 1.1.1.14
     proxy_passes:
       - name: sonarqube
         proxy_pass: /sonarqube https://1.1.1.4/sonarqube
@@ -16,7 +20,7 @@ reverse_proxy_vhosts:
       - name: bitbucket
         proxy_pass: /bitbucket http://1.1.1.11:7990/bitbucket
       - name: confluence
-        proxy_pass: /confluence http://1.1.1.12:8090/confluence
+        proxy_pass: /confluence https://1.1.1.12:8443/confluence
       - name: jira
         proxy_pass: /jira http://1.1.1.13:8080/jira
       - name: dimension-with-key

@@ -1,0 +1,24 @@
+---
+- name: bitbucket.properties
+  template:
+    dest: "{{ bitbucket_home_version_home }}/shared/bitbucket.properties"
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"
+    src: bitbucket.properties.j2
+  notify: bitbucket-systemctl-restart
+
+- name: env file BITBUCKET_HOME etc
+  template:
+   dest: /etc/profile.d/bitbucket.sh
+   src: bitbucket.sh.j2
+
+- name: Extra libraries
+  get_url:
+    checksum: "{{ item.checksum }}"
+    dest: "{{ bitbucket_home_version_home }}/shared/plugins/installed-plugins/{{ item.url|basename }}"
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"
+    url: "{{ item.url }}"
+  with_items: "{{ bitbucket_libraries }}" 
+  notify: bitbucket-systemctl-restart
+  ignore_errors: yes

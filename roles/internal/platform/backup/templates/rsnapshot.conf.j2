@@ -1,0 +1,26 @@
+# {{ ansible_managed }}
+# This file requires tabs between elements!
+config_version	1.2
+snapshot_root	{{ item|role_rsnapshot_root(vars) }}
+cmd_rm	/usr/bin/rm
+cmd_rsync	/usr/bin/rsync
+cmd_logger	/usr/bin/logger
+{% for schdl in backup['schedules_default'] %}
+{%   if backup_roles[item]['keep'][schdl]|default(0) > 0 %}
+retain	{{ backup['rsnapshot_levels_map'][schdl] }}	{{ backup_roles[item]['keep'][schdl] }}
+{%   endif %}
+{% endfor %}
+verbose	2
+loglevel	3
+lockfile	/var/run/rsnapshot.pid
+{% if backup_roles[item]['snapshot']|default(None) == True %}
+backup	{{ vars[item + '_home_backup_version'] }}	home
+{% else %}
+backup	{{ vars[item + '_home_version'] }}	home
+{% endif %}
+{% if vars[item + '_database_host'] is defined %}
+{%   if backup_roles[item]['skip_database']|default(False) == False %}
+backup	{{ item|role_dump_dir(vars) }}	database
+{%   endif %}
+{% endif %}
+rsync_long_args	--delete --numeric-ids --delete-excluded

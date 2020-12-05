@@ -1,0 +1,46 @@
+---
+- name: Create root directory
+  file:
+    path: "{{ desktop_home }}"
+    state: directory
+    mode: 400
+
+- template:
+    dest: "{{ desktop_home }}/set-vnc-password.sh"
+    src: set-vnc-password.sh.j2
+    mode: 755
+
+- pip:
+    name: docker-compose
+    version: 1.9.0
+    state: present
+    extra_args: --upgrade pip
+
+- docker_image:
+    name: "{{ desktop_image }}:{{ desktop_version }}"
+    source: pull
+
+- docker_volume:
+    name: "{{ item }}"
+  with_items: "{{ desktop_volumes }}"
+
+- docker_container:
+    name: "{{ item }}"
+    image: "{{ desktop_containers[item]['desktop_image']|default(desktop_image) }}:{{ desktop_containers[item]['desktop_version']|default(desktop_version) }}"
+    networks:
+      - name: "{{ desktop_network }}"
+    volumes: "{{ desktop_containers[item]['volumes']|default(omit) }}"
+    env: "{{ desktop_env }}"
+    command: "{{ desktop_containers[item]['command']|default('/usr/local/bin/vncserver-docker-desktop') }}"
+    etc_hosts: "{{ desktop_containers[item].hosts|default(omit) }}"
+    #ports:
+    # - "5901:5901"
+    # - "2222:22"
+    restart_policy: unless-stopped
+  with_items: "{{ desktop_containers }}"
+
+- name: Set passwords
+  shell: "{{ desktop_home }}/set-vnc-password.sh {{ item }}"
+  with_items: "{{ desktop_containers }}"
+  changed_when: false
+  # TODO more robust changed_when, failed_when

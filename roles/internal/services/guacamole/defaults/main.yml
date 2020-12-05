@@ -1,0 +1,49 @@
+---
+guacamole_home: /opt/guacamole
+guacamole_version: 1.1.0
+guacamole_owner: guacamole
+guacamole_debug: false
+
+guacamole_daemon_repo: guacamole/guacd 
+guacamole_daemon_name: guacd
+
+guacamole_web_repo: guacamole/guacamole
+guacamole_web_name: guacamole
+guacamole_web_port: 8080
+
+guacamole_database_username: guacamole
+guacamole_database_password: supersecure
+
+guacamole_database_host: db
+guacamole_database_port: 5432
+guacamole_database_name: guacamole
+guacamole_database_admin_username: ansible
+guacamole_database_admin_password: supersecure
+guacamole_database_template: template0
+
+guacamole_web_settings:
+  POSTGRES_ABSOLUTE_MAX_CONNECTIONS: "0"
+  POSTGRES_DEFAULT_MAX_CONNECTIONS: "0"
+  POSTGRES_DEFAULT_MAX_GROUP_CONNECTIONS: "0"
+  POSTGRES_DEFAULT_MAX_CONNECTIONS_PER_USER: "0"
+  POSTGRES_DEFAULT_MAX_GROUP_CONNECTIONS_PER_USER: "0"
+  POSTGRES_HOSTNAME: "{{ guacamole_database_host }}"
+#  POSTGRES_PORT: "{{ guacamole_database_port }}" # Ansible magic - this won't work
+  POSTGRES_PORT: "5432"
+  POSTGRES_PASSWORD: "{{ guacamole_database_password }}"
+  POSTGRES_DATABASE: "{{ guacamole_database_name_version }}"
+  POSTGRES_USER: "{{ guacamole_database_username }}"
+  LDAP_HOSTNAME: "1.1.1.3"
+  LDAP_ENCRYPTION_METHOD: "none" # none, ssl, starttls
+  LDAP_USER_BASE_DN: "ou=people,dc=cicd,dc=tech"
+  LDAP_GROUP_BASE_DN: "ou=groups,dc=cicd,dc=tech"
+  LDAP_SEARCH_BIND_DN: "cn=Directory Manager,cn=Root DNs,cn=config"
+  LDAP_SEARCH_BIND_PASSWORD: "sportsbar"
+  LDAP_USERNAME_ATTRIBUTE: "uid"
+  LDAP_PORT: "389"
+  GUACD_HOSTNAME: "guacd"  
+
+#guacamole_container_extra_hosts:
+#  db: 1.1.1.2
+
+guacamole_versions_sequence: ['1.1.0']

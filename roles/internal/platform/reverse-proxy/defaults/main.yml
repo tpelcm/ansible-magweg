@@ -1,0 +1,41 @@
+---
+reverse_proxy_server_admin: admin@tpelcm.tech
+reverse_proxy_log_level: warn # debug, info, notice, warn, error, crit,
+
+reverse_proxy_proxy_timout: 300
+reverse_proxy_ssl_session_cache_timeout: 300
+
+reverse_proxy_vhosts: []
+#reverse_proxy_vhosts:
+#  sh:
+#    server_name: sonarqube.tech
+#    ssl_cert_url:
+#    ssl_bundle_url:
+#    ssl_pk_url:
+#    port: 8443
+#    proxy_passes:
+#      sq:
+#        proxy_pass: /sonarqube https://1.1.1.4/sonarqube/
+#        #proxy_pass_reverse: /sonarqube https://1.1.1.4/sonarqube/
+
+apache_create_vhosts: no
+apache_remove_default_vhost: true
+
+reverse_proxy_etc_ssl_private:
+  Debian: /etc/ssl/private/
+  RedHat: /etc/ssl/
+
+reverse_proxy_etc_ssl_certs:
+  Debian: /etc/ssl/certs/
+  RedHat: /etc/ssl/
+
+https_log_dir:
+  Debian: /var/log/apache2/
+  RedHat: /var/log/httpd/
+
+#reverse_proxy_global_favicon: favicon-blue.ico
+reverse_proxy_redirect_matches: []
+#reverse_proxy_redirect_matches: 
+#  - ^/$ http://www.google.com
+
+# reverse_proxy_environment: staging

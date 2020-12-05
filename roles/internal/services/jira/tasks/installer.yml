@@ -1,0 +1,11 @@
+---
+- name: Run installer 
+  command: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }} -q -varfile {{ jira_home }}/response.varfile"
+  become: yes
+  become_method: sudo
+  become_user: "{{ jira_versions[jira_version]['installer_user']|default('root') }}"
+  notify:
+    - lcm-version-file
+    - jira-systemctl-daemon-reload
+    - jira-systemctl-restart
+  when: jira_manual_upgrade == False

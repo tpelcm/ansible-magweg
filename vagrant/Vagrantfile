@@ -18,6 +18,7 @@ ansible_groups = {
   'bitbucket' => ['bitbucket'],
   'confluence' => ['confluence'],
   'jira' => ['jira'],
+  'desktop' => ['bastion'],
   'awx' => ['awx'],
   'opendj' => ['proxy'],
   'env' => ['proxy'],
@@ -25,8 +26,7 @@ ansible_groups = {
   # 'backup' => %w(sonarqube nexus), # TODO
   'all:vars' => { 'sudo_include_sudoersd' => 'yes' },
   'postgresql:vars' => { 'hostvar' => 'abc' },
-  'sonarqube:vars' => { 'sonarqube_database_host' => '1.1.1.2' },
-  'nfs:vars' => { 'nfs_exports' => ['/nfs/backup *(rw,sync,no_root_squash)'] }
+  'sonarqube:vars' => { 'sonarqube_database_host' => '1.1.1.2' }
 }
 # ansible_host_vars = { 'postgresql' => { 'xyz' => 80 } }
 
@@ -34,24 +34,28 @@ ansible_groups = {
 nodes = {}
 nodes['sonarqube'] = { 'ip' => '1.1.1.4', 'plays' => %w(sonarqube), 'memory' => 1024 * 4 }
 nodes['postgresql'] = {  'ip' => '1.1.1.2', 'plays' => %w(postgresql) }
-nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay env) }
+nodes['proxy'] = {  'ip' => '1.1.1.3', 'plays' => %w(proxy reverse-proxy nfs opendj mailrelay env), 'data-disk' => true }
 nodes['awx'] = {  'ip' => '1.1.1.5', 'plays' => %w(awx), 'memory' => 1024 * 4, 'cpus' => 4, 'data-disk' => true  }
 nodes['nexus'] = {  'ip' => '1.1.1.7', 'plays' => %w(nexus), 'memory' => 1024 * 4, 'cpus' => 4 }
 nodes['jenkins'] = { 'ip' => '1.1.1.9', 'plays' => %w(jenkins), 'memory' => 1024 * 4 }
 nodes['sites'] = { 'ip' => '1.1.1.10', 'plays' => %w(sites) }
-nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4 }
+nodes['bitbucket'] = {  'ip' => '1.1.1.11', 'plays' => %w(bitbucket), 'memory' => 1024 * 4, 'data-disk' => true }
 nodes['confluence'] = { 'ip' => '1.1.1.12', 'plays' => %w(confluence), 'memory' => 1024 * 4, 'data-disk' => true }
 nodes['jira'] = { 'ip' => '1.1.1.13', 'plays' => %w(jira), 'memory' => 1024 * 4, 'data-disk' => true }
-# nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp) }
-# nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp) }
+nodes['bastion'] = { 'ip' => '1.1.1.14', 'plays' => %w(desktop), 'memory' => 1024 * 4, 'data-disk' => true }
+nodes['oracle'] = {  'ip' => '1.1.1.15', 'plays' => %w(oracle), 'memory' => 1024 * 4, 'data-disk' => true }
+nodes['myapp'] = { 'ip' => '1.1.1.5', 'plays' => %w(myapp), 'data-disk' => true }
+# nodes['myapp2'] = { 'ip' => '1.1.1.6', 'plays' => %w(myapp), 'data-disk' => true }
+
 
 Vagrant.configure(2) do |config|
   config.vm.synced_folder '.', '/vagrant'
   nodes.each do |n, a|
     bx = a['box'] || vagrant_box
-    shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
-    shell_provision = 'sudo yum update -y && sudo yum -y install python && echo PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin | sudo tee /etc/environment > /dev/null' if bx.include? 'centos'
-
+    unless vm_exists? n
+      shell_provision = 'sudo apt-get update && sudo apt-get -y install python'
+      shell_provision = 'sudo yum update -y && sudo yum -y install python && echo PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin | sudo tee /etc/environment > /dev/null' if bx.include? 'centos'
+    end
     config.vm.define n do |cfg|
       cfg.vm.hostname = n # .e.g. sonarqube
       cfg.vm.box = bx
@@ -62,8 +66,9 @@ Vagrant.configure(2) do |config|
         vb.cpus = a['cpus'] || 2
         add_disk(vb, 1, 120 * 1024, "cicd-data-#{n}.vdi", 'IDE Controller') if a['data-disk'] == true
       end
-      cfg.vm.provision 'shell', inline: shell_provision
-      a['plays'].each do |p|
+      cfg.vm.provision 'shell', inline: shell_provision if shell_provision
+      plays = ENV['PLAY'] ? [ENV['PLAY']] : a['plays']
+      plays.each do |p|
         cfg.vm.provision 'ansible' do |ansible|
           ansible.config_file = 'ansible.cfg'
           ansible.playbook = "../plays/#{p}.yml"
@@ -87,4 +92,8 @@ def add_disk(vb_provider, port = 2, size = 120 * 1024, filename = nil, controlle
     vb_provider.customize ['createhd', '--filename', disk, '--format', 'VDI', '--size', size]
   end
   vb_provider.customize ['storageattach', :id, '--storagectl', controller, '--port', port, '--device', 0, '--type', 'hdd', '--medium', disk]
+end
+
+def vm_exists?(vm_name='default', provider='virtualbox')
+  File.exists?(File.join(File.dirname(__FILE__),".vagrant/machines/#{vm_name}/#{provider}/vagrant_cwd"))
 end

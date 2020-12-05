@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Atlassian JIRA
+After=network.target
+
+[Service]
+Type=forking
+User={{ jira_owner }}
+ExecStart={{ jira_home_link_app }}/bin/start-jira.sh
+ExecStop={{ jira_home_link_app }}/bin/stop-jira.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+---
+- name: download installer
+  get_url:
+    url: "{{ bitbucket_versions[bitbucket_version]['url'] }}"
+    dest: "{{ bitbucket_home }}/{{ bitbucket_versions[bitbucket_version]['url']|basename }}"
+    checksum: "{{ bitbucket_versions[bitbucket_version]['checksum'] }}"
+    timeout: 300
+    mode: 1373
+    owner: "{{ bitbucket_owner }}"
+    group: "{{ bitbucket_group }}"
+  register: get_url_result
+  until: get_url_result is succeeded
+  when: bitbucket_lcm['operation'] in ['upgrade','install','prepare-upgrade'] 
+
+- name: remove installer
+  file:
+    path: "{{ bitbucket_home }}/{{ bitbucket_versions[bitbucket_version]['url']|basename }}"
+    state: absent
+  when: bitbucket_lcm['operation'] not in ['upgrade','install','prepare-upgrade'] 

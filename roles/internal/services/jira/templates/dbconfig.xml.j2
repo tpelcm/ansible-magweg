@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- {{ ansible_managed }} -->
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type>{{ jira_database_type_config }}</database-type>
+{% if jira_database_schema != 'nil' %}
+  <schema-name>{{ jira_database_schema }}</schema-name>
+{% endif %}
+  <jdbc-datasource>
+{% if jira_database_url is defined %}
+    <url>{{ jira_database_url }}</url>
+{% else %}
+    <url>jdbc:postgresql://{{ jira_database_host }}:{{ jira_database_port}}/{{ jira_database_name_version }}</url>
+{% endif %}
+    <driver-class>{{ jira_database_driver_class }}</driver-class>
+    <username>{{ jira_database_username }}</username>
+    <password>{{ jira_database_password }}</password>
+    <pool-min-size>20</pool-min-size>
+    <pool-max-size>20</pool-max-size>
+    <pool-max-wait>30000</pool-max-wait>
+    <validation-query>{{ jira_database_validation_query }}</validation-query>
+    <min-evictable-idle-time-millis>60000</min-evictable-idle-time-millis>
+    <time-between-eviction-runs-millis>300000</time-between-eviction-runs-millis>
+    <pool-max-idle>20</pool-max-idle>
+    <pool-remove-abandoned>true</pool-remove-abandoned>
+    <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>
+    <pool-test-on-borrow>false</pool-test-on-borrow>
+    <pool-test-while-idle>true</pool-test-while-idle>
+{% if jira_datababse_setbigstringtryclob == True %}
+    <connection-properties>SetBigStringTryClob=true</connection-properties>
+{% endif %}
+  </jdbc-datasource>
+</jira-database-config>

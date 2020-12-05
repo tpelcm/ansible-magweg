@@ -1,0 +1,33 @@
+import jenkins.model.*
+import hudson.model.*
+import hudson.tasks.*
+import hudson.tools.*
+import java.security.*
+
+def inst = Jenkins.getInstance()
+def desc = inst.getDescriptor("hudson.model.JDK")
+
+jdks = [:]
+{% for j in jenkins_auto_installers['jdk-tool'] %}
+jdks['{{ j }}'] = []
+{%   for i in jenkins_auto_installers['jdk-tool'][j] %}
+jdks['{{ j }}'] << ['label':'{{ i['label'] }}','url':'{{ i['url'] }}','subdirectory':'{{ i['subdirectory'] }}']
+{%   endfor %}
+{% endfor %}
+
+def installers = [];
+
+for (j in jdks) {
+  println 'JDK: ' + j.getKey()
+  zipexs = []
+  for (i in j.getValue()) {
+    println '  url: ' + i['url']
+    zipexs.add(new ZipExtractionInstaller(i['label'], i['url'], i['subdirectory']))
+  }
+  installerSource = new InstallSourceProperty(zipexs)
+  installer = new hudson.model.JDK(j.getKey(),"",[installerSource])
+  installers.add(installer)
+}
+
+desc.setInstallations(installers.toArray(new hudson.model.JDK[0]))
+desc.save()

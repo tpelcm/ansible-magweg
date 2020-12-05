@@ -1,4 +1,16 @@
 ---
 proxy_port: 3128
 proxy_host: '1.1.1.3'
-proxy_no_proxy: 'nip.io' # comma separated list
+proxy_no_proxy: 'localhost,127.0.0.0/8,nip.io,docker-registry.somecorporation.com,1.1.1.0/26'
+
+docker_proxy_http: "http://{{ proxy_host }}:{{ proxy_port }}"
+docker_proxy_https: "http://{{ proxy_host }}:{{ proxy_port }}"
+docker_proxy_no: "{{ proxy_no_proxy }}"
+
+desktop_env:
+  HTTP_PROXY: "http://{{ proxy_host }}:{{ proxy_port }}"
+  HTTPS_PROXY: "http://{{ proxy_host }}:{{ proxy_port }}"
+  NO_PROXY: "{{ proxy_no_proxy }}"
+  http_proxy: "http://{{ proxy_host }}:{{ proxy_port }}"
+  https_proxy: "http://{{ proxy_host }}:{{ proxy_port }}"
+  no_proxy: "{{ proxy_no_proxy }}"

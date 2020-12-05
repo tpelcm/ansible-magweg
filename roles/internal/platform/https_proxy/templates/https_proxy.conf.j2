@@ -1,0 +1,43 @@
+
+ProxyRequests Off
+ProxyPreserveHost On
+
+SSLSessionCache shmcb:/var/cache/mod_ssl/scache(512000)
+SSLSessionCacheTimeout 300
+# SSLMutex default
+Mutex default
+SSLRandomSeed startup file://dev/urandom 256
+SSLRandomSeed connect builtin
+SSLCryptoDevice builtin
+
+<VirtualHost *:{{ https_proxy_roles[item].proxy_port }}>
+    ServerAdmin admin@{{ https_proxy_roles[item].hostname }}
+    ServerName {{ https_proxy_roles[item].hostname }}
+
+    SSLEngine on
+    SSLProxyEngine on
+    SSLProtocol -ALL +TLSv1.2
+    SSLHonorCipherOrder On
+    SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+
+    SSLCertificateFile {{ https_proxy_etc_ssl_certs[ansible_os_family] }}{{ https_proxy_roles[item].hostname }}.pem
+    SSLCertificateKeyFile {{ https_proxy_etc_ssl_private[ansible_os_family] }}https_proxy.pem
+
+    DocumentRoot /var/www/html
+
+    <Directory />
+	    AllowOverride all
+	    Allow from all
+    </Directory>
+
+    ProxyPass {{ https_proxy_roles[item].context }} http://localhost:{{ https_proxy_roles[item].port }}{{ https_proxy_roles[item].context }}
+    ProxyPassReverse {{ https_proxy_roles[item].context }} http://localhost:{{ https_proxy_roles[item].port }}{{ https_proxy_roles[item].context }}
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    ErrorLog {{ https_log_dir[ansible_os_family] }}ssl-{{ https_proxy_roles[item].hostname }}.log
+    CustomLog {{ https_log_dir[ansible_os_family] }}ssl-{{ https_proxy_roles[item].hostname }}.log combined
+
+</VirtualHost>                                  

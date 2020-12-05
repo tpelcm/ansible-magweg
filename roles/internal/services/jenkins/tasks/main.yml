@@ -1,0 +1,24 @@
+---
+- name: Add system message
+  jenkins_script:
+    url: "{{ jenkins_url }}"
+    validate_certs: no
+    user: "{{ jenkins_admin_username }}"
+    password: "{{ jenkins_admin_password }}"
+    script:  "{{ lookup('file', 'scripts/set_system_message.groovy') }}"
+    args:
+      system_message: "{{ jenkins_system_message }}"
+  register: script_result
+  changed_when: "'changed' in script_result.output"
+
+- name: Init scripts
+  template:
+    dest: "/var/lib/jenkins/init.groovy.d/{{ item }}"
+    owner: "jenkins"
+    group: "jenkins"
+    src: "{{ item }}.j2"
+  notify: restart jenkins
+  with_items: 
+    - configuration.groovy
+    - auto_installer_jdk.groovy
+    - auto_installer_mvn.groovy

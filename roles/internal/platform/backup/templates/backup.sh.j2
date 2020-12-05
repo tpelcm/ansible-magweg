@@ -1,0 +1,7 @@
+#!/bin/bash
+# {{ ansible_managed }}
+{{ backup_script_before if backup_script_before is defined }}
+{% for rl in backup_roles_node %}
+{%   if backup_roles[rl]['keep'][item] > 0 %}
+/opt/backup/bin/backup perform --trigger {{ rl|backup_name_underscored(vars,item) }} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null{%   endif%}
+{% endfor %}

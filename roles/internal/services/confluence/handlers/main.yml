@@ -1,0 +1,19 @@
+---
+- name: confluence-systemctl-daemon-reload
+  systemd:
+    daemon_reload: true
+  changed_when: false
+  ignore_errors: true
+  when: confluence_manual_upgrade == False
+
+- name: confluence-systemctl-restart
+  service:
+    name: "confluence"
+    state: "restarted"
+    enabled: true
+  loop: "{{ ansible_play_hosts }}"
+  delegate_to: "{{ item }}"
+  run_once: true
+  changed_when: false
+  ignore_errors: true
+  when: confluence_manual_upgrade == False

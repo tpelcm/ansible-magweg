@@ -6,3 +6,6 @@
   roles:
     - { role: common,             tags: ["common"] }
     - { role: reverse-proxy,      tags: ["reverse-proxy"] }
+
+  vars:
+    apache_create_vhosts: no

@@ -1,0 +1,6 @@
+# {{  ansible_managed }}
+
+[Service]
+Environment="HTTP_PROXY={{ docker_proxy_http }}"
+Environment="HTTPS_PROXY={{ docker_proxy_https }}"
+Environment="NO_PROXY={{ docker_proxy_no }}"

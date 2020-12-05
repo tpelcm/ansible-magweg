@@ -1,0 +1,24 @@
+---
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ jira_home }}"
+
+- include: download.yml
+  when: jira_lcm['operation'] in ['upgrade','install'] 
+
+- name: stop for upgrade, rollback or rollfoward
+  service: name=jira state=stopped
+  when: jira_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - jira-systemctl-daemon-reload
+    - jira-systemctl-restart
+
+- include: ../../postgresql/tasks/database.yml 
+  when: jira_database_type == 'postgresql'
+
+- include: install.yml
+- include: jmx.yml
+- include: service.yml

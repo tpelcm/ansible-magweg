@@ -1,7 +1,0 @@
-#!/bin/bash
-# {{ ansible_managed }}
-{% for rl in backup_roles_node %}
-{%   if backup_roles[rl]['keep'][item] > 0 %}
-/opt/backup/bin/backup perform --trigger {{ rl }}_{{ item }}_{{ vars[rl + '_version'] | replace('.','_') | replace('-','_') }} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null
-{%   endif%}
-{% endfor %}

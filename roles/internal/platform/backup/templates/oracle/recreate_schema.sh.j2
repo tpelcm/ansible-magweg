@@ -1,0 +1,24 @@
+#!/bin/bash
+# {{ ansible_managed }}
+# {{ vars[role + '_database_username'] }} Oracle Data Pump export script 
+
+{% include './templates/_helpers.sh.j2' %}
+
+{% include './templates/_env_oracle.sh.j2' %}
+
+{% include './templates/_hooks_sh_confirm.sh.j2' %}
+
+{% include './templates/oracle/_kill_sessions.sh.j2' %}
+
+sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+drop user {{ vars[role + '_database_username'] }} cascade;
+create user {{ vars[role + '_database_username'] }} identified by "{{ vars[role + '_database_password'] }}"
+default tablespace {{ vars[role + '_database_username'] }}
+temporary tablespace temp;
+
+alter user {{ vars[role + '_database_username'] }} quota unlimited on {{ vars[role + '_database_username'] }};
+grant connect, resource, create session to {{ vars[role + '_database_username'] }};
+grant create table, create sequence, create trigger to {{ vars[role + '_database_username'] }};
+
+exit;
+EOF

@@ -1,0 +1,16 @@
+#!/bin/bash
+# {{ ansible_managed }}
+{% include './templates/_environment.j2' %}
+
+sqlplus "/as sysdba" << EOF
+whenever sqlerror exit sql.sqlcode;
+set echo off 
+set heading off
+
+alter session set container = {{ item['name'] }};
+
+select '=='||USERNAME||'==' from all_users;
+
+exit;
+EOF
+

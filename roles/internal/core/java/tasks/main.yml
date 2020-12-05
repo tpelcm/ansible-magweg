@@ -1,0 +1,4 @@
+---
+- include: install.yml
+  when: adoptopenjdk.version != False
+    

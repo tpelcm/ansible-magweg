@@ -1,0 +1,12 @@
+---
+- name: run installer 
+  command: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }} -q -varfile {{ confluence_home }}/reponse.varfile"
+  become: yes
+  become_method: sudo
+  become_user: "{{ confluence_versions[confluence_version]['installer_user']|default('root') }}"
+  # become_flags: '-s /bin/sh'
+  notify:
+    - lcm-version-file
+    - confluence-systemctl-daemon-reload
+    - confluence-systemctl-restart
+  when: confluence_manual_upgrade == False

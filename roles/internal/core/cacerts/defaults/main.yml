@@ -1,0 +1,35 @@
+---
+cacerts_roles_supported: ['jira', 'confluence', 'bitbucket']
+cacerts_keystore_pass: changeit
+
+cacerts_roles:
+  jira:
+    keystore_path: "{{ jira_home_version_app|default(omit) }}/jre/lib/security/cacerts"
+    keystore_pass: "{{ cacerts_keystore_pass }}"
+    notify: jira-systemctl-restart
+    executable: "{{ jira_home_version_app|default(omit) }}/jre/bin/keytool"
+  confluence:
+    keystore_path: "{{ confluence_home_version_app|default(omit) }}/jre/lib/security/cacerts"
+    keystore_pass: "{{ cacerts_keystore_pass }}"
+    notify: confluence-systemctl-restart
+    executable: "{{ confluence_home_version_app|default(omit) }}/jre/bin/keytool"
+  bitbucket:
+    keystore_path: "{{ bitbucket_home_version_app|default(omit) }}/jre/lib/security/cacerts"
+    keystore_pass: "{{ cacerts_keystore_pass }}"
+    notify: bitbucket-systemctl-restart
+    executable: "{{ bitbucket_home_version_app|default(omit) }}/jre/bin/keytool"
+
+cacerts_trusted_sites: []
+#cacerts_trusted_sites:
+#  - name: google-keystore-alias 
+#    url: google.com
+#    port: 443
+
+cacerts_import_certs_urls: []
+#cacerts_import_certs_urls:
+#  - name: mycompanybundle
+#    url: https://example.com/SectigoRSADVBundle.crt
+
+# Workaround for bug in java_cert
+# See https://github.com/ansible/ansible/issues/54481
+cacerts_java_cert_proxy: 1.1.1.3:3128 # no protocol http

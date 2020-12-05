@@ -1,0 +1,4 @@
+update pg_database SET datallowconn = 'false' WHERE datname = ':v1';
+select pg_terminate_backend(pid) from pg_stat_activity where datname = ':v1';
+create database :v2 with owner :v3 template :v1;
+update pg_database SET datallowconn = 'true' WHERE datname = ':v1';

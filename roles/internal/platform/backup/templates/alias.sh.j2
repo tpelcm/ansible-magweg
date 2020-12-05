@@ -1,0 +1,10 @@
+# {{ ansible_managed }} 
+{% for rl in backup_roles_node %}
+{%  for schdl in backup['schedules_default'] %}
+{%    if backup_roles[rl]['keep'][schdl] > 0 %}
+alias {{ backup_alias_prefix }}-{{ rl }}-backup-{{ schdl }}="/opt/backup/bin/backup perform --trigger {{ rl|backup_name_underscored(vars,schdl) }} --config-file /etc/backup/config.rb --log-path=/var/log > /dev/null"
+{%    endif %}
+{%   endfor %}
+{% endfor %}
+
+

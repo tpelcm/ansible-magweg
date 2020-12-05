@@ -1,0 +1,10 @@
+---
+- name: Download installer
+  get_url:
+    url: "{{ confluence_versions[confluence_version]['url'] }}"
+    dest: "{{ confluence_home }}/{{ confluence_versions[confluence_version]['url']|basename }}"
+    checksum: "{{ confluence_versions[confluence_version]['checksum'] }}"
+    timeout: 3000
+    mode: 1373
+  register: get_url_result
+  until: get_url_result is succeeded

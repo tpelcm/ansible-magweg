@@ -1,0 +1,16 @@
+#!/bin/bash
+# {{ ansible_managed }}
+{% include './templates/_environment.j2' %}
+
+sqlplus "/as sysdba" << EOF
+whenever sqlerror exit sql.sqlcode;
+set echo off
+set heading off
+create pluggable database {{ item['name'] }} admin user {{ item['admin'] }} identified by "{{ item['password'] }}"
+create_file_dest='/ORCL/u01/app/oracle/';
+alter pluggable database all open;
+alter pluggable database all save state;
+alter session set container = {{ item['name'] }};
+grant dba to {{ item['admin'] }};
+exit;
+EOF

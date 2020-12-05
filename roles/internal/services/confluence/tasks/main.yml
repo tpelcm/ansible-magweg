@@ -1,0 +1,28 @@
+---
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ confluence_home }}"
+
+- include: download.yml
+  when: confluence_lcm['operation'] in ['upgrade','install'] 
+
+- name: stop for upgrade, rollback or rollfoward
+  service: name=confluence state=stopped
+  when: confluence_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - confluence-systemctl-daemon-reload
+    - confluence-systemctl-restart
+
+- include: ../../postgresql/tasks/database.yml 
+  vars:
+      lcm_role_upgrade: "confluence"
+  when: confluence_database_type == 'postgresql'
+
+- include: install.yml
+- include: cert.yml
+- include: firewalld.yml
+- include: jmx.yml
+- include: service.yml

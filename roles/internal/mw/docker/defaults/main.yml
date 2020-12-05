@@ -1,0 +1,8 @@
+---
+#docker_proxy_http:
+#docker_proxy_https:
+#docker_proxy_no:
+#docker_proxy_users:
+#  vagrant:
+#  root:
+#    path: ['/root/.docker/config.json']

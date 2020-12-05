@@ -1,0 +1,14 @@
+---
+- name: systemd service
+  template:
+    src: bitbucket.service.j2
+    dest: /etc/systemd/system/bitbucket.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: 
+    - bitbucket-systemctl-daemon-reload
+    - bitbucket-systemctl-restart  
+
+- name: ensure service running and set to start on boot
+  service: name=bitbucket state=started enabled=yes

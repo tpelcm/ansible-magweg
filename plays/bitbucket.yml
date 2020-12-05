@@ -5,13 +5,15 @@
 
   roles:
     - { role: common,                       tags: ["common"] }
-    - { role: postgresql-client,            tags: ["bitbucket", "postgresql"] }    
-    - { role: java,                         tags: ["bitbucket", "java"] }
+    - { role: postgresql-client,            tags: ["database"], when: bitbucket_database_type == 'postgresql' }
+    - { role: oracle-client,                tags: ["database"], when: bitbucket_database_type == 'oracle' }
     - { role: geerlingguy.git,              tags: ["bitbucket"] }
     - { role: bitbucket,                    tags: ["bitbucket"] }
-    - { role: backup,                       tags: ["common", "backup"] }
+    - { role: backup,                       tags: ["backup"] }
 
   vars:
     git_install_from_source: true
     git_version: "2.16.2"
     git_install_from_source_force_update: true
+    adoptopenjdk:
+      version: false # use embedded java

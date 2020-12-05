@@ -1,0 +1,20 @@
+---
+- name: Extract home tar
+  unarchive:
+    src: "{{ backup_restore[item]['home_tar'] }}"
+    remote_src: yes
+    dest: "{{ backup_restore[item]['tmp'] }}/home"
+  when: backup_restore[item]['home_tar'] is defined
+  with_items: '{{ backup_restore }}'
+
+- name: Restore files
+  command: "rsync -az --delete --recursive {{ backup_restore[item]['rsync-src'] }} {{ backup_restore[item]['rsync-target'] }}"
+  when: backup_restore[item]['home_tar'] is defined or backup_roles[item]['incremental'] == True
+  with_items: '{{ backup_restore }}'
+
+- name: Delete folders
+  file:
+    state: absent
+    path: "{{ backup_restore[item]['remove_folder_expanded'] }}"
+  with_items: '{{ backup_restore }}'
+  when: backup_restore[item]['remove_folder_expanded'] is defined

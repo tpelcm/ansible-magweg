@@ -1,0 +1,35 @@
+---
+- name: Backup model  
+  template:
+    dest: '/etc/backup/models/{{ item }}.rb'
+    src: model.rb.j2
+  with_items: '{{ backup_roles_node }}'
+
+- name: Before and after hook
+  template:
+    dest: '/etc/backup/hooks/{{ item }}.sh'
+    src: model.sh.j2
+    mode: 755
+  with_items: '{{ backup_roles_node }}'
+
+- name: Config folder 
+  file:
+    path: "{{ item|role_script_path }}"
+    state: directory
+    mode: 0700
+    recurse: yes
+  with_items: '{{ backup_roles_node }}'
+
+- name: Scripts folder 
+  file:
+    path: "{{ item|role_script_path }}"
+    state: directory
+    mode: 0700
+  with_items: '{{ backup_roles_node }}'
+
+- include_tasks: "model_scripts.yml"
+  vars:
+    role: "{{ item }}"
+  when: vars[item + '_database_type']|default('postgresql') == 'oracle'
+  with_items: '{{ backup_roles_node }}'
+  

@@ -1,0 +1,6 @@
+---
+- name: Rsnapshot config files  
+  template:
+    dest: "{{ item|role_rsnapshot_config_path(vars) }}"
+    src: rsnapshot.conf.j2
+  with_items: '{{ backup_roles_node }}'

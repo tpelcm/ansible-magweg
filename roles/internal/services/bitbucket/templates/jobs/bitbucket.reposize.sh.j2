@@ -1,0 +1,34 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+{# variables #}
+{# won't need this variable NODE=`hostname` #}
+{# REPODIR="/data1/atlassian/bitbucket-home/shared/data/repositories/*" #}
+export REPODIR="{{ bitbucket_home_version_home }}/shared/data/repositories/*"
+export TMPFILE="/tmp/reposizing.$$"
+export ADMIN="monitoring-email-address-goes-here"
+export NODE={{ inventory_hostname }}
+{# OPTION="NODETAIL" this script will not employ any option, just run using cron#}
+
+
+{# Main loop - get size and show details#}
+for REPO in `ls -d ${REPODIR}`
+do
+  SIZE=$(du -sm ${REPO} | awk '{print $1}')
+  NUMBER=$(echo ${REPO} | awk -F '/' '{print $NF}')
+  PROJECTNAME=$(grep 'project = ' ${REPO}/repository-config | awk -F ' = ' '{print $2}')
+  REPONAME=$(grep 'repository = ' ${REPO}/repository-config | awk -F ' = ' '{print $2}')
+  echo -e "${SIZE} Mb \t ${PROJECTNAME}/${REPONAME} (${NUMBER})" >> ${TMPFILE}
+done
+
+{# Show header #}
+echo -e "\nHostname: ${NODE}"
+echo -e "Top 10 repository storage usage:\n"
+
+cat ${TMPFILE} | sort -rnk 1 | head -10 
+
+{# cleaning up #}
+if [ -f ${TMPFILE} ]
+then
+   /bin/rm ${TMPFILE}
+fi 

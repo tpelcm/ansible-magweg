@@ -1,0 +1,7 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+{% for db in oracle_pluggable_databases %}
+alias {{ oracle_alias_prefix }}-{{ db['name'] }}-create="docker exec -i oracle {{ oracle_script_dir }}/{{ db['name'] }}-create.sh"
+{% endfor %}
+alias {{ oracle_alias_prefix }}-oracle-pluggable-databases="docker exec -i oracle {{ oracle_script_dir }}/pdb.sh"

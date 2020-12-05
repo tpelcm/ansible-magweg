@@ -1,0 +1,28 @@
+---
+#- name: Stop for LCM
+#  service: name=guacamole state=stopped
+#  when: guacamole_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+
+- name: Add linux user
+  user:
+    name: "{{ guacamole_owner }}"
+    comment: guacamole
+    shell: /bin/bash
+
+- name: Create root directory
+  file:
+    path: "{{ guacamole_home }}"
+    state: directory
+    group: "{{ guacamole_owner }}"
+    owner: "{{ guacamole_owner }}"
+
+- name: Create install folder
+  file:
+    path: "{{ guacamole_home_version }}"
+    state: directory
+    group: "{{ guacamole_owner }}"
+    owner: "{{ guacamole_owner }}" 
+  register: install_symlink
+
+- include: database.yml
+- include: install.yml

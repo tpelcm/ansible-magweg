@@ -1,0 +1,109 @@
+---
+c2_alias_prefix: tpelcm
+c2_alias_editor: nano
+
+c2_alias_roles: 
+  - myapp
+  - proxy
+  - opendj
+  - nexus
+  - postfix
+  - nfs
+  - reverse-proxy
+  - postgresql
+  - monit
+  - sonarqube
+  - confluence
+  - jira
+  - jenkins
+  - bitbucket
+
+c2_alias:
+  roles:
+    myapp:
+      logs: ["/var/log/myapp/myapp.log"]
+      configs: 
+        - "/etc/systemd/system/myapp.service"
+    proxy:
+      logs: ["/var/log/squid/*.log","/var/log/squid/squid.out"]
+      configs: 
+        - "{{ squid_config_directory | default(omit) }}/{{ squid_config_file | default(omit) }}"
+        - "{{ proxy_allowd_ips_file | default(omit) }}"
+        - "{{ proxy_upstream_always_direct_file | default(omit) }}"
+    opendj:
+      logs: 
+        - /opt/opendj/logs/server.out
+        - /opt/opendj/logs/errors
+        - /opt/opendj/logs/access
+      configs: 
+        - /etc/systemd/system/opendj.service
+    nexus:
+      logs: ["{{ nexus_data_dir | default(omit) }}/log/*.log"]
+      configs: 
+        - /etc/systemd/system/nexus.service
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/jetty/jetty-https.xml"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus-default.properties"
+        - "{{ nexus_home | default(omit) }}/nexus-latest/etc/nexus.properties"
+    bitbucket:
+      logs: 
+        - "{{ bitbucket_home_link_home|default(omit)}}/log/*.log "
+      configs: 
+        - /etc/systemd/system/bitbucket.service
+        - "{{ bitbucket_home_link_home|default(omit)}}/shared/bitbucket.properties"
+    postfix:
+      logs: ['/var/log/maillog']
+      configs:
+        - /etc/postfix/main.cf
+    postgresql:
+      logs: ["/var/lib/pgsql/9.6/data/pg_log/*.log"]
+      configs: 
+        - "/var/lib/pgsql/{{ postgresql_version|default(omit) }}/data/pg_hba.conf"
+        - "/var/lib/pgsql/{{ postgresql_version|default(omit) }}/data/postgresql.conf"
+    nfs:
+      logs: []
+      configs:
+        - /etc/exports
+    reverse-proxy:
+      logs: []
+      configs:
+        - /etc/httpd/conf.d/reverse_proxy.conf
+    confluence: 
+      logs: 
+        - "/opt/confluence/confluence/app/logs/*.log"
+        - "/opt/confluence/confluence/app/logs/catalina.out"
+      configs:
+        - /opt/confluence/confluence/app/confluence/WEB-INF/classes/confluence-init.properties
+        - /etc/systemd/system/confluence.service
+        - /opt/confluence/confluence/home/confluence.cfg.xml
+        - /opt/confluence/confluence/app/conf/server.xml
+        - /opt/confluence/confluence/app/bin/setenv.sh
+        - /opt/confluence/confluence/home/synchrony-args.properties
+        - /opt/confluence/confluence/app/confluence/WEB-INF/web.xml        
+    monit:
+      logs: ["{{ monit_log | default(omit) }}"]
+      configs:
+        - /etc/monitrc
+        - /etc/monit.d/diskspace
+    sonarqube:
+      logs: ["/opt/sonarqube/sonarqube/logs/*.log"]
+      configs:
+        - /opt/sonarqube/sonarqube/conf/sonar.properties
+        - /etc/security/limits.conf
+        - /usr/lib/sysctl.d/100-sonarqube.conf
+        - /etc/sysctl.conf
+    jira:
+      logs:
+        - "{{ jira_home|default(omit) }}/jira/home/log/*.log"
+        - /opt/jira/jira/app/logs/catalina.out
+      configs:
+        - "{{ jira_home|default(omit) }}/jira/app/atlassian-jira/WEB-INF/classes/jira-application.properties"
+        - "{{ jira_home|default(omit) }}/jira/home/dbconfig.xml"
+        - "{{ jira_home|default(omit) }}/jira/app/conf/server.xml"
+        - "{{ jira_home|default(omit) }}/jira/home/jira-config.properties"
+        - "{{ jira_home|default(omit) }}/jira/app/bin/setenv.sh"
+        - /etc/systemd/system/jira.service
+    jenkins:
+      logs:
+        - /var/lib/jenkins/jenkins.log
+      configs:
+        - /etc/init.d/jenkins

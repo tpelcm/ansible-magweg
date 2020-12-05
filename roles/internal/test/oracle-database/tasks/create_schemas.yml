@@ -1,0 +1,9 @@
+---
+- name: Check if schema exists
+  command: "docker exec -i oracle {{ oracle_script_dir }}/{{ item['pdb'] }}-schemas.sh"
+  register: result
+
+- name: Create schema
+  command: "docker exec -i oracle {{ oracle_script_dir }}/{{ item['name'] }}-create-schema.sh"
+  register: result_create
+  when: result.stdout.find("==" + item['name']|upper + "==") == -1

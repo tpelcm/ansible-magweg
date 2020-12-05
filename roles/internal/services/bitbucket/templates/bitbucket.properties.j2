@@ -1,0 +1,42 @@
+
+setup.displayName={{ bitbucket_setup['display-name'] }}
+setup.baseUrl={{ bitbucket_setup['base-url'] }}
+setup.license={{ bitbucket_setup['license']|replace("\n", "\\\n") }}
+setup.sysadmin.username={{ bitbucket_setup['admin']['username'] }}
+setup.sysadmin.password={{ bitbucket_setup['admin']['password'] }}
+setup.sysadmin.displayName={{ bitbucket_setup['admin']['display-name'] }}
+setup.sysadmin.emailAddress={{ bitbucket_setup['admin']['mail'] }}
+{% if bitbucket_personal_repos == False %}
+feature.personal.repos=false
+{% endif %}
+{% if bitbucket_jmx.enable == True %}
+jmx.enabled=true
+{% endif %}
+{% if bitbucket_database_jdbc_custom_config is defined %}
+{{ bitbucket_database_jdbc_custom_config | join('\n') }}
+{% elif bitbucket_database_type == 'oracle' %}
+jdbc.driver=oracle.jdbc.driver.OracleDriver
+jdbc.url=jdbc:oracle:thin:@//{{ bitbucket_database_host }}:{{ bitbucket_database_port }}/{{ bitbucket_database_name }}
+jdbc.user={{ bitbucket_database_username }}
+jdbc.password={{ bitbucket_database_password }}
+{% elif bitbucket_database_type == 'postgresql' %}
+jdbc.driver=org.postgresql.Driver
+jdbc.url=jdbc:postgresql://{{ bitbucket_database_host }}:{{ bitbucket_database_port }}/{{ bitbucket_database_name_version }}
+jdbc.user={{ bitbucket_database_username }}
+jdbc.password={{ bitbucket_database_password }}
+{% else %}
+# unsupported bitbucket_database_type: {{ bitbucket_database_type }}
+{% endif %}
+server.context-path={{ bitbucket_web_context }}
+server.port={{ bitbucket_web_port }}
+{% if bitbucket_reverse_proxy.enable  %}
+server.secure={{ bitbucket_reverse_proxy.secure }}
+server.scheme={{ bitbucket_reverse_proxy.scheme }}
+server.proxy-port={{ bitbucket_reverse_proxy.port }}
+server.proxy-name={{ bitbucket_reverse_proxy.hostname }}
+# server.ssl.key-store=
+# server.ssl.key-store-password=<password value>
+# server.ssl.key-password=<password value>
+# https://confluence.atlassian.com/bitbucketserver/securing-bitbucket-server-with-tomcat-using-ssl-776640127.html
+{% endif %}
+# plugin.mirroring.upstream.url=https://bitbucket.company.com

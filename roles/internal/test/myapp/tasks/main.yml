@@ -1,0 +1,107 @@
+---
+- name: stop for upgrade, rollback or rollfoward
+  #service: name=myapp state=stopped
+  debug:
+    msg: "TODO stop service" 
+  when: myapp_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - myapp-systemctl-daemon-reload
+    - myapp-systemctl-restart
+
+- include: ../../postgresql/tasks/database.yml 
+
+- name: Table
+  postgresql_table:
+    db: "{{ myapp_database_name_version }}"
+    login_host: "{{ myapp_database_host }}"
+    login_password: "{{ myapp_database_admin_password }}"
+    login_user: "{{ myapp_database_admin_username }}"
+    owner: "{{ myapp_database_username }}"
+    name: myapp_table
+    columns:
+    - story text
+
+- name: Add linux user
+  user:
+    name: '{{ myapp_owner }}'
+    comment: MyApp
+    shell: /bin/bash
+
+- name: Create root directory
+  file:
+    path: "{{ myapp_home }}"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}' 
+
+- name: Create log directory
+  file:
+    path: "/var/log/myapp"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'
+
+- name: Create install folder
+  file:
+    path: "{{ myapp_home_version }}"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'    
+
+- name: Install
+  copy:
+    content: "myapp={{ myapp_version }}"
+    dest: "{{ myapp_home_version }}/myapp.txt"
+  notify:
+    - lcm-version-file
+
+- name: Create a data folder
+  file:
+    path: "{{ myapp_home_version }}/data"
+    state: directory
+    group: '{{ myapp_owner }}'
+    owner: '{{ myapp_owner }}'    
+
+- name: Copy data dir ( part of upgrade )
+  command: "rsync -az --delete --recursive --exclude='VERSION' {{ myapp_home_version_current }}/data/ {{ myapp_home_version }}/data/"
+  when: myapp_lcm['operation'] == 'upgrade' 
+  notify:
+    - lcm-version-file
+
+- name: Create symbolic link install
+  file:
+   src: "{{ myapp_home_version }}"
+   dest: "{{ myapp_home }}/{{ myapp_home|basename }}"
+   state: link
+
+- name: App scripts
+  template:
+    dest: "{{ myapp_home_version }}/{{ item }}.sh"
+    src: '{{ item }}.sh.j2'
+    group: "myapp"
+    mode: "755"
+    owner: "myapp"
+  with_items: 
+    - insert
+    - select
+    - delete
+    - start
+    - stop
+  notify: myapp-systemctl-restart
+
+- name: Password file
+  copy:
+   content: "*:*:*:{{ myapp_database_username }}:{{ myapp_database_password }}"
+   dest: "/home/myapp/.pgpass"
+   group: "myapp"
+   owner: "myapp"
+   mode: "0600"
+
+- package:
+    name: "{{ item }}"
+    state: "present"
+  with_items: 
+    - tree
+    - words
+
+- include: service.yml

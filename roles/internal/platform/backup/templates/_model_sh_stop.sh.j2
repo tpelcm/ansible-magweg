@@ -1,0 +1,7 @@
+
+{% if backup_roles[item]['stop_start_service']|default(False) != False %}
+  try systemctl stop {{ backup_roles[item]['stop_start_service'] }}
+{% endif %}
+{% if backup_roles[item]['stop_start_containers']|default(False) != False %}
+  try docker stop {{ backup_roles[item]['stop_start_containers']|reverse|join(' ') }}
+{% endif %}

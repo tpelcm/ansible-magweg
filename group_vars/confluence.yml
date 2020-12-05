@@ -1,24 +1,43 @@
 ---
-confluence_database_host: 1.1.1.2
 confluence_version: 6.14.3
-#confluence_version: 7.4.0
+# confluence_version: 6.15.10
+# confluence_version: 7.4.0
+# confluence_version: 7.4.3
 
-# confluence_database_jdbc_custom_config: []
+confluence_libraries:
+  - url: https://github.com/javamelody/jira-confluence-javamelody/releases/download/1.83.0/jira-confluence-javamelody-1.83.0.jar
+    checksum: sha256:2007bf47db63690f61a919cc828332d1d852c283c48137e07db608dd3c82e65e
 
-# adoptopenjdk:
-#  version: "jdk8_222b10_oj9" # jdk11_0411_oj9
+confluence_manual_upgrade: no
 
-#confluence_versions: 
-#  6.14.3:
-#    #jdk: "{{ adoptopenjdk_java_home }}" # BUG in 5.10.1 installer does not work with pre-installed Java
-#  7.4.0:
-#    #jdk: "{{ adoptopenjdk_java_home }}"      
-# adoptopenjdk_java_home_etc_environment: no
+backup_roles:
+  confluence:
+    stop_start_service: confluence
+    keep: { daily: 3, weekly: 2, monthly: 0, manual: 1 }
+    snapshot: no
+    incremental: yes
+    backup_lvm_snapshot_size: 2G
+    # backup_admin_user: custom_role_admin_user
+    # backup_admin_user_password: custom_role_admin_password
 
-#backup_restore: 
-#  confluence:
-#    path_pattern: '*'
-#    folder: home
-#    remove_folder: home/shared/search/data/nodes
-#    force: false
-#    stop_start_service: confluence
+# backup_restore: 
+#   confluence:
+#      path_pattern: '*'
+#      folder: home
+#      remove_folder: home/shared/search/data/nodes
+#      force: no
+#      stop_start_service: confluence
+
+backup_restore_dry_run: false
+
+# PostgreSQL settings
+confluence_database_host: 1.1.1.2
+
+# Oracle settings
+#confluence_database_host: 1.1.1.15
+#confluence_database_port: "1521"
+#confluence_database_username: CONFLUENCE
+#confluence_database_password: secret
+#confluence_database_name: CONFLUENCE.localdomain
+#confluence_database_type: oracle
+# confluence_database_ojdbc_jar_url: https://example.com/ojdbc8.jar

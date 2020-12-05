@@ -1,0 +1,26 @@
+---
+myapp_home: /opt/myapp
+
+myapp_version: 0.1.0
+myapp_owner: myapp
+
+myapp_database_username: myapp
+myapp_database_password: supersecure
+
+myapp_database_host: localhost
+myapp_database_port: "5432"
+myapp_database_name: myapp
+myapp_database_admin_username: ansible
+myapp_database_admin_password: supersecure
+myapp_database_template: template0
+
+myapp_python_library: python-psycopg2
+
+# Facts set by lcm role - only
+# myapp_database_name_version: myapp_6_7
+# myapp_home_version: /opt/myapp/myapp_6_7
+
+myapp_versions_sequence: ['0.1.0', '0.1.1']
+
+# TODO support yes
+myapp_manual_upgrade: no

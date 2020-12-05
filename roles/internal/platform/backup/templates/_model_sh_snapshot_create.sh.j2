@@ -1,0 +1,5 @@
+
+  # Create LVM snapshot
+  try lvcreate -prw -L{{ backup_roles[item]['backup_lvm_snapshot_size']|default(backup_lvm_snapshot_size) }} -s -n {{ item }}-snapshot /dev/mapper/{{ lvm_vg }}-{{ item }}
+  try mkdir -p {{ vars[item+'_home_backup'] }}
+  try mount {{ backup_mount_options }} /dev/{{ lvm_vg }}/{{ item }}-snapshot {{ vars[item+'_home_backup'] }}

@@ -5,6 +5,7 @@
 
   roles:
     - { role: common,                       tags: ["common"] }
-    - { role: postgresql-client,            tags: ["jira", "postgresql"] }    
+    - { role: postgresql-client,            tags: ["jira", "postgresql"], when: jira_database_type == 'postgresql' }
+    - { role: oracle-client,                tags: ["jria", "oracle"], when: jira_database_type == 'oracle' }
     - { role: jira,                         tags: ["jira"] }
     - { role: backup,                       tags: ["common", "backup"] }

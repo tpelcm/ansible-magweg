@@ -1,0 +1,25 @@
+#!/bin/bash
+# {{ ansible_managed }}
+# {{ vars[role + '_database_username'] }} Oracle Data Pump export script 
+
+{% include './templates/_helpers.sh.j2' %}
+
+{% include './templates/_env_oracle.sh.j2' %}
+
+{% include './templates/oracle/_create_dir.sh.j2' %}
+
+{% include './templates/_hooks_sh_confirm.sh.j2' %}
+
+dump_schema=$(cat {{ role|role_schema_file(vars) }})
+try impdp "{{ role|role_oracle_connect(vars) }}" {{ role|impdp_options(vars) }}
+
+yell "Change {{ role|role_schema_name(vars) }} password after impdp"
+sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+whenever sqlerror exit sql.sqlcode;
+set echo off 
+set heading off
+alter user {{ role|role_schema_name(vars) }} identified by "{{ vars[role + '_database_password'] }}" ;
+exit;
+EOF
+
+yell "Database imported to {{ role|role_schema_name(vars) }}"

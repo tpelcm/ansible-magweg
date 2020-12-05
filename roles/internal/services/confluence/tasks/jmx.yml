@@ -1,0 +1,9 @@
+--- 
+- name: jmx.access
+  copy:
+    content: "monitorRole={{ confluence_jmx.password }}"
+    dest: "{{ confluence_home_version_home }}/shared/jmx.access"
+    group: "{{ confluence_owner }}"
+    owner: "{{ confluence_group }}" 
+    mode: "400"
+  when: confluence_jmx.enable == True

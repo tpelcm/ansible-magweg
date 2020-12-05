@@ -1,6 +1,0 @@
----
-- name: Backup model rb 
-  template:
-    dest: '/etc/backup/models/{{ item }}.rb'
-    src: model.rb.j2
-  with_items: '{{ backup_roles_node }}'

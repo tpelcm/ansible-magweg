@@ -23,7 +23,8 @@ squid_ssh_proxy_port: 22
 
 postfix_mail_name: ESMTP Mailrelay CICD Platform
 
-postfix_mynetworks: 1.1.1.0/28 # 1.1.1.0 -> 1.1.1.15
-# postfix_mynetworks: 1.1.1.2, 1.1.1.3
+postfix_mynetworks: 
+  - 1.1.1.0/28 # 1.1.1.0 -> 1.1.1.15
+  - 1.1.1.2
 postfix_relayhost: "[10.0.2.2]:2525"
 postfix_relay_domains: sh.1.1.1.3.nip.io

@@ -1,0 +1,113 @@
+---
+- name: Backup roles for node
+  set_fact: backup_roles_node="{{ backup_roles_supported | intersect(ansible_role_names_cleaned) }}"
+
+- name: Check backup installed
+  stat: 
+    path: "/opt/backup/bin"
+  register: backup_bin
+
+- include_tasks: "setup-{{ ansible_os_family }}.yml"
+
+- name: Create backup dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+  with_items: 
+    - /etc/backup
+    - /etc/backup/models
+    - /etc/backup/scripts
+    - /etc/backup/hooks    
+
+- name: Generate example config file
+  command: /opt/backup/bin/backup generate:config --config-file=/etc/backup/config-example.rb
+  args:
+    creates: /etc/backup/config-example.rb
+
+- name: Config rb
+  template:
+    src: config.rb.j2
+    dest: /etc/backup/config.rb
+
+- include_tasks: "models.yml"
+- include_tasks: "rsnapshot.yml"
+- include_tasks: "alias.yml"
+
+- name: Cron
+  template:
+   dest: '/etc/cron.d/backup-{{ item }}'
+   src: cron.j2
+  when: backup['schedules'][item] is defined and backup_cron_jobs == True
+  with_items: "{{ backup['schedules_default'] }}" 
+
+- name: Disable cron jobs
+  file:
+   path: '/etc/cron.d/backup-{{ item }}'
+   state: absent
+  when: backup['schedules'][item] is not defined or backup_cron_jobs == False
+  with_items: "{{ backup['schedules_default'] }}" 
+
+- name: Daily, weekly etc scripts
+  template:
+   dest: '/etc/backup/scripts/backup_{{ item }}.sh'
+   src: backup.sh.j2
+   mode: 0755
+  when: backup['schedules'][item] is defined
+  with_items: "{{ backup['schedules_default'] }}" 
+
+- name: Sql scripts
+  template:
+   dest: '/etc/backup/scripts/{{ item }}'
+   src: "{{ item }}.j2"
+  with_items: 
+    - "db_snapshot.sql" 
+    - "db_snapshot_drop.sql"
+
+- name: Packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: 
+    - rsync
+    - rsnapshot
+
+- name: Restore facts
+  restore_info:
+    backup_archives: '{{ backup_archives }}'
+    backup_snapshots: '{{ backup_snapshots }}'
+    role: '{{ item }}'
+    path_pattern: '{{ backup_restore[item]["path_pattern"] }}'
+    force: '{{ backup_restore[item]["force"] }}'
+    database: "{{ vars[item+'_database_name'] is defined }}"
+    database_type: "{{ vars[item+'_database_type']|default('postgresql') }}"    
+    home: "{{ vars[item + '_home'] }}"
+    home_version: "{{ vars[item+'_home_version']|default(omit) }}"
+    home_backup_version: "{{ vars[item+'_home_backup_version']|default(omit) }}"
+    incremental: "{{ vars['backup_roles'][item]['incremental']|default(false) }}"
+    tmp: "{{ backup_tmp }}/{{ inventory_hostname }}-{{ item }}"
+    folder: '{{ backup_restore[item]["folder"] }}'   
+    remove_folder: '{{ backup_restore[item]["remove_folder"] | default(omit, true) }}'
+    backup_rsnapshot_id_file: '{{ backup_rsnapshot_id_file }}'
+    backup_rsnapshot_backup_db_folder: '{{ backup_rsnapshot_backup_db_folder }}'
+    backup_name_underscored: '{{ item|backup_name_underscored(vars) }}' # no schedule
+  with_items: '{{ backup_restore }}'
+  when: backup_restore is defined  
+  
+- name: Backup restore facts
+  debug:
+    var: backup_restore
+  when: backup_restore is defined    
+
+- name: Backup restore facts additional
+  debug:
+    msg: 
+      - "backup_restore_db: {{ backup_restore_db }}"
+      - "backup_restore_home: {{ backup_restore_home }}"
+  when: backup_restore is defined
+
+- include_tasks: "restore.yml"
+  when: 
+    backup_restore is defined and 
+    ( backup_restore_home == True or 
+    backup_restore_db == True )

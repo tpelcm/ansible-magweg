@@ -1,0 +1,34 @@
+---
+oracle_client_rpms:
+#  basic:
+#    name: oracle-instantclient12.2-basic
+#    url: https://somewhere-but-not-at-oracle/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
+#  basiclite:
+#    name: oracle-instantclient12.2-basiclite
+#    url: https://somewhere-but-not-at-oracle/oracle-instantclient12.2-basiclite-12.2.0.1.0-1.x86_64.rpm
+#  sqlplus:
+#    name: oracle-instantclient12.2-sqlplus
+#    url: https://somewhere-but-not-at-oracle/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
+#  tools:
+#    name: oracle-instantclient12.2-tools 
+#    url: https://somewhere-but-not-at-oracle/oracle-instantclient12.2-tools-12.2.0.1.0-1.x86_64.rpm
+  basic:
+    name: oracle-instantclient19.8-basic
+    url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-basic-19.8.0.0.0-1.x86_64.rpm
+  basiclite:
+    name: oracle-instantclient19.8-basiclite
+    url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-basiclite-19.8.0.0.0-1.x86_64.rpm
+  sqlplus:
+    name: oracle-instantclient19.8-sqlplus
+    url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-sqlplus-19.8.0.0.0-1.x86_64.rpm
+  tools:
+    name: oracle-instantclient19.8-tools 
+    url: https://download.oracle.com/otn_software/linux/instantclient/19800/oracle-instantclient19.8-tools-19.8.0.0.0-1.x86_64.rpm
+
+oracle_client_bin_path: /usr/lib/oracle/19.8/client64/bin
+oracle_client_lib_path: /usr/lib/oracle/19.8/client64/lib
+
+oracle_client_installs: ['basic','sqlplus','tools']
+
+#oracle_repo_package: oracle-release-el7
+#oracle_repo_key_url: https://yum.oracle.com/RPM-GPG-KEY-oracle-ol7

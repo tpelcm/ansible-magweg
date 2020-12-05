@@ -1,0 +1,11 @@
+import jenkins.model.*
+import hudson.model.*
+import hudson.tasks.*
+import hudson.tools.*
+import java.security.*
+
+def inst = Jenkins.getInstance()
+def desc = inst.getDescriptor("hudson.model.JDK")
+
+inst.setLabelString("{{ jenkins_label_linux_nodes }}")
+inst.save()

@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+{% if jira_lcm['operation'] != 'upgrade' %}
+app.jiraHome={{ jira_home_version_home }}
+{% endif %}
+{% if jira_lcm['operation'] != 'upgrade' %}
+httpPort$Long={{ jira_web_port }}
+rmiPort$Long={{ jira_rmi_port }}
+{% endif %}
+app.install.service$Boolean=false
+executeLauncherAction$Boolean=false
+{% if jira_lcm['operation'] == 'upgrade' %}
+existingInstallationDir={{ jira_home_version_app }}
+backupJira$Boolean=false
+readyForUpgradeLinux$Boolean=true
+sys.adminRights$Boolean=true
+{% endif %}
+launch.application$Boolean=false
+{% if jira_lcm['operation'] == 'upgrade' %}
+sys.confirmedUpdateInstallationString=true
+{% else %}
+sys.confirmedUpdateInstallationString=false
+{% endif %}
+sys.installationDir={{ jira_home_version_app }}
+sys.languageId=en

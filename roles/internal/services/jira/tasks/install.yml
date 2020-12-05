@@ -1,0 +1,54 @@
+---
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+  with_items: "{{ jira_packages[ansible_distribution] }}" 
+
+- name: Home
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: 
+    - "{{ jira_home_version }}"
+    - "{{ jira_home_version_home }}"    
+
+- name: Create symbolic link install
+  file:
+    src: "{{ jira_home_version }}"
+    dest: "{{ jira_home_link }}"
+    state: link
+
+- name: response file
+  template:
+   dest: "{{ jira_home }}/response.varfile"
+   src: response.varfile.j2
+
+- name: Copy home dir
+  command: "rsync -az --delete --recursive --exclude='VERSION' {{ jira_home_version_current }}/ {{ jira_home_version }}/"
+  when: jira_lcm['operation'] == 'upgrade'
+  notify:
+    - lcm-version-file  
+
+- include: installer.yml 
+  when: jira_lcm['operation'] == 'install'
+
+- include: configure-home.yml
+
+- include: installer.yml 
+  when: jira_lcm['operation'] == 'upgrade'
+
+- include: configure-app.yml
+
+- name: chown jira home version 
+  file: 
+    dest: "{{ jira_home }}" 
+    owner: "{{ jira_owner }}"
+    group: "{{ jira_group }}"
+    recurse: yes
+  when: jira_lcm['operation'] in ['upgrade','install']
+  
+- name: remove installer
+  file:
+    path: "{{ jira_home }}/{{ jira_versions[jira_version]['url']|basename }}"
+    state: absent
+  when: jira_lcm['operation'] not in ['upgrade','install'] 

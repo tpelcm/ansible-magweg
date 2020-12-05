@@ -1,0 +1,22 @@
+---
+oracle_home: /opt/oracle
+oracle_script_dir: /opt/oracle/container-scripts
+oracle_owner: oracle
+oracle_image: store/oracle/database-enterprise:12.2.0.1
+
+oracle_docker_login:
+    user_name: myusername
+    password: mypassword
+
+# use uppercase and underscores for name and admin
+#oracle_pluggable_databases:
+#  - name: JIRA
+#    admin: jira_dba
+#    password: supersecret
+
+# TODO oracle_schemas:
+#  - name: JIRA
+#    pdb: JIRA
+#    password: supersecret
+
+oracle_alias_prefix: tpelcm

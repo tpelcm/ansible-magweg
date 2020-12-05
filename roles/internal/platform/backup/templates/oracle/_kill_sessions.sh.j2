@@ -1,0 +1,18 @@
+
+sids=$(sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+set pagesize 0 feedback off verify off heading off echo off;
+select sid || ',' || serial# from v\$session where username = '{{ vars[role + '_database_username'] }}';
+exit;
+EOF
+)
+
+# Kill any {{ role }} Oracle sessions
+for s in $sids; do
+  yell "Killing Oracle session $s"
+
+sqlplus -s "{{ role|role_oracle_connect(vars) }}" << EOF
+set pagesize 0 feedback off verify off heading off echo off;
+alter system kill session '$s' IMMEDIATE;
+exit;
+EOF
+done

@@ -1,0 +1,46 @@
+---
+- name: add bitbucket owner
+  user:
+    name: "{{ bitbucket_owner }}"
+    shell: /bin/bash
+    system: true
+
+- name: home directory
+  file:
+    path: "{{ bitbucket_home }}"
+    state: directory
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}" 
+
+- include: download.yml
+
+- name: stop for upgrade, rollback or rollfoward
+  service: name=bitbucket state=stopped
+  when: bitbucket_lcm['operation'] in ['upgrade','rollback','rollforward'] 
+  notify:
+    - bitbucket-systemctl-daemon-reload
+    - bitbucket-systemctl-restart
+
+- include: database.yml
+  when: bitbucket_database_type == 'postgresql'
+
+- include: install.yml
+
+- include: configuration.yml
+
+- include: jmx.yml
+  when: bitbucket_jmx.enable == True
+
+- include: service.yml
+
+- include: prepare.yml
+  when: bitbucket_lcm['operation'] == 'prepare-upgrade'  
+
+- name: scripts directory
+  file:
+    path: "{{ bitbucket_scripts }}"
+    state: directory
+    group: "{{ bitbucket_owner }}"
+    owner: "{{ bitbucket_group }}"
+    
+- include: jobs.yml

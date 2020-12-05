@@ -1,6 +1,0 @@
----
-- debug:
-    var: jira_lcm['operation']
-
-- debug: 
-    var: jira_versions

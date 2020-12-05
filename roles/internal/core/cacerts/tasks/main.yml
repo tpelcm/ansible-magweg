@@ -1,0 +1,29 @@
+---
+- name: Get roles
+  set_fact: cacerts_roles_node="{{ cacerts_roles_supported | intersect(ansible_role_names_cleaned) }}"
+
+- name: "Download for import"
+  get_url:
+    url: "{{ item['url'] }}"
+    dest: "/tmp/{{ item['url']|basename }}"
+  with_items: "{{ cacerts_import_certs_urls }}"
+
+- name: "Import certs for roles"
+  include: role.yml
+  with_items: "{{ cacerts_roles_node }}"
+  vars:
+    role: "{{ role_item }}"
+  loop_control:
+    loop_var: role_item # prevent variable collision
+
+- name: "Import certs for JDK"
+  include: jdk.yml
+  with_items: "{{ adoptopenjdk.versions }}"
+  when: adoptopenjdk is defined and adoptopenjdk.versions is defined
+  vars:
+    role: "{{ jdk_version }}"
+  loop_control:
+    loop_var: jdk_version
+
+- name: "Import certs for OS"
+  include: os.yml
