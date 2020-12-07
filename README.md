@@ -10,7 +10,7 @@ This purpose of this repository is to automate Life Cycle Management (LCM) proce
     - Vagrant
     - VirtualBox
     - Setup project directory
-    - Provision proxy node
+    - Provision a first service
     - Provision
     - LDAP
 - License
@@ -76,7 +76,9 @@ Add the Ansible repository and install [Ansible](https://ansible.com).
     sudo add-apt-repository ppa:ansible/ansible
     sudo apt-get install ansible
 
-This repository has been used with Python 2.7.15 and Ansible 2.8.3.
+This repository has been used with:
+1. Ansible 2.8.3 and Python 2.7.15. 
+2. Ansible 2.10.3 and Python 3.6.9.  
 
 ### Vagrant
 
@@ -89,48 +91,35 @@ This repository has been used with Python 2.7.15 and Ansible 2.8.3.
 
 ### Setup project directory
 
-Git clone this repository for example to `~/ansible`. Create a file `~/ansible/vpass` with content `secret` in root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
+Git clone this repository for example to `~/ansible`. 
 
-Cd into the __vagrant__ directory and provision the proxy node
+git clone 
+cd ~/ansible
 
-    vagrant up proxy
+Note: if you run a vagrant command for example `vagrant status` a [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) password stored in the file `~/ansible/vpass` with content `secret` in root of the repository directory. This is used by Ansible vault for encrypting and decrypting [secrets](SECRETS.md). 
 
-Vagrant up will fail at some point because the __group_vars__ directory is not found by Vagrant. Vagrant uses a dynamic inventory file `.vagrant/provisioners/ansible/inventory` and Ansible searches the location of this file for the __group_vars__ and __host_vars__.
+### Provision a first service
 
-Create two links for __group_vars__ and __host_vars__ directory in the directory where Vagrant created the dynamic inventory file . There is a rake task you can use to create these two links
+To get started, create for example the __bitbucket__ service. For this you will also need the __proxy__ node and the __db__ node. So the command becomes 
 
-    rake vagrant:group_host_vars 
+    vagrant up proxy db bitbucket
 
-### Provision proxy node
+The __db__ node contains the PostgreSQL database used by Bitbucket. The __proxy__ has a Apache2 reverse _proxy server_ that will be used to access Bitbucket using self-signed certificates. 
 
-Creating the proxy first and correctly is a critical first step because all outbound internet traffic goes through this proxy. 
+Note: the __proxy__ node also includes a _forward proxy_ server based on Squid. If you want to use this _forward proxy_ you can enable it by removing `proxy_skip` of by setting it to `false` as shown below in proxy.yml](group_vars/all/proxy.yml).
 
-Now that links __group_vars__ and __host_vars__ are accesible to Ansible, provision and reload the proxy.
+    proxy_skip: false # remove / false to enable forward proxy
 
-    vagrant provision proxy
-    vagrant reload proxy
-
-Note: many plays are executed on the __proxy__ node. To speed up provision you can limit provision to a single play e.g. to limit plays to __reverse-proxy__ play using `PLAY` environment variable as follows
-
-    PLAY=reverse-proxy vagrant provision proxy
-
-If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [proxy.yml](group_vars/all/proxy.yml).
-
-    ---
-    proxy_port: 3128
-    proxy_host: '1.1.1.3'
-    proxy_no_proxy: 'nip.io' # comma separated list
-
-You can also manually disable the proxy server by editing `/etc/environment`.
+If there are issues in provision phase, you can disable the proxy server temporarily by disabling the proxy configuration in [.
 
 ### Provision
 
-After the __group_vars__ and __host_vars__ links have been created, you can start provisioning nodes. At a minimum you will need the `proxy` and `postgresql` node. 
+Additionally create other nodes shown below. At a minimum you will need the `proxy` and `postgresql` node. 
 
 | Node | Service(s)   | Link      | Comments|
 |----------|-------------|-------------|-------------|
 | __proxy__ | Forward and reverse proxy, NFS server, OpenDJ server, Mailrelay | | |
-| __postgresql__ | PostgreSQL server | | |
+| __db__ | PostgreSQL server | | |
 | __oracle__ | Oracle Database 12c Enterprise Edition | | See [role](roles/internal/oracle-database) for more information.|
 | __sonarqube__ | SonarQube server |[https://sh.1.1.1.3.nip.io/sonarqube/](https://sh.1.1.1.3.nip.io/sonarqube/)| default `admin` with pw `admin` or `akaufman` |
 | __nexus__ | Nexus     |[https://sh.1.1.1.3.nip.io/nexus/](https://sh.1.1.1.3.nip.io/nexus/)   | `admin` with pw `secret` or `akaufman`|
@@ -148,20 +137,15 @@ _LDAP accounts_
 |----------|-------------|-------------|
 | `akaufman`   | `secrets` | admin |
 
-Accounts en groups are in [group_vars/env.yml](group_vars/env.yml).
+Accounts en groups are in configured in [host_vars/proxy.yml](host_vars/proxy.yml).
 
 To provision a node use standard Vagrant commands see `vagrant --help` for example to provision _SonarQube_ for a first time: 
 
 ```bash
-    vagrant up proxy # fails 
-    rake vagrant:group_host_vars # create symbolic links  
-    vagrant provision proxy
-    vagrant reload proxy
-    vagrant provision postgresql
-    vagrant up sonarqube
+    vagrant up proxy db sonarqube
 ```
 
-After __proxy__ and __postgresql__ are up and running you can provision other nodes using `vagrant up <node>`. To run the Ansible provisioner after nodes have been created using `vagrant up` you use `vagrant provision <node>`. See `vagrant --help` for more information.
+To run the Ansible provisioner after nodes have been created using `vagrant up` you use `vagrant provision <node>`. See `vagrant --help` for more information.
 
 
 ### LDAP
