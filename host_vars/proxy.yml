@@ -1,4 +1,116 @@
 ---
+reverse_proxy_vhosts:
+  sh:
+    server_name: sh.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_guacamole:
+      context: /desktop
+      port: 8080
+      ip: 1.1.1.14
+    proxy_passes:
+      - name: sonarqube
+        proxy_pass: /sonarqube https://1.1.1.4/sonarqube
+      - name: nexus
+        proxy_pass: /nexus http://1.1.1.7:8081/nexus nocanon
+        proxy_pass_reverse: /nexus http://1.1.1.7:8081/nexus
+      - name: jenkins
+        proxy_pass: /jenkins http://1.1.1.9:8080/jenkins nocanon
+        proxy_pass_reverse: /jenkins http://1.1.1.9:8080/jenkins
+      - name: bitbucket
+        proxy_pass: /bitbucket http://1.1.1.11:7990/bitbucket
+      - name: confluence
+        proxy_pass: /confluence https://1.1.1.12:8443/confluence
+      - name: jira
+        proxy_pass: /jira http://1.1.1.13:8080/jira
+      - name: dimension-with-key
+        proxy_pass: /dimension-with-key http://1.1.1.10:8080/dimension-with-key
+      - name: dimension
+        proxy_pass: /dimension http://1.1.1.10:8080/dimension
+      - name: angularblog
+        proxy_pass: /angularblog http://1.1.1.10:8080/angularblog
+  awx:
+    server_name: awx.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      - name: awx
+        proxy_pass: / http://1.1.1.5:80/
+    custom_directives:
+      - RewriteEngine on
+      - RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC]
+      - RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
+      - RewriteRule .* ws://1.1.1.5:80%{REQUEST_URI} [P]
+  jira:
+    server_name: jira.1.1.1.3.nip.io 
+    port: 443
+    proxy_verify: false
+    proxy_passes:
+      - name: jira
+        proxy_pass: /jira http://1.1.1.13:8080/jira
+
+#reverse_proxy_global_favicon: favicon-blue.ico
+
+common_packages: 
+  Debian: ['nfs-utils', 'nano', 'python-ldap']
+  RedHat: ['nfs-utils', 'nano', 'python-ldap']
+
+proxy_skip: true
+
+proxy_allowed_ips:
+  - 1.1.1.0/24
+
+proxy_upstream_always_direct_ips:
+  - 1.1.1.1 
+
+# dynamic vars set in a role cannot be used on other roles 
+# so we set squid_config_directory, squid_config_file here
+squid_config_directory: /etc/squid 
+squid_config_file: squid.conf
+squid_conf_include_dir: /etc/squid/conf.d
+
+# Configure upstream proxy server
+# proxy_upstream_server: 10.0.2.2
+# proxy_upstream_port: 8888
+
+#squid_cache_rules:
+#  - acl: localnet
+#    decision: deny
+
+squid_ssh_proxy_port: 22
+
+postfix_mail_name: ESMTP Mailrelay CICD Platform
+
+postfix_mynetworks: 
+  - 1.1.1.0/28 # 1.1.1.0 -> 1.1.1.15
+  - 1.1.1.2
+postfix_relayhost: "[10.0.2.2]:2525"
+postfix_relay_domains: sh.1.1.1.3.nip.io
+
+env_ldap_auth:
+  server_uri: ldap://1.1.1.3:389
+  bind_dn: cn=admin
+  bind_pw: "{{ opendj_password }}"
+
+env_ldap_basedn: dc=cicd,dc=tech
+
+env_users:
+  - {uid: akaufman, cn: Andy Kaufman, givenName: Andy, sn: Kaufman, mail: andy.kaufman@cicd.tech, employeeNumber: 1, userPassword: secret, description: Admin}
+  - {uid: tclifton, cn: Tony Clifton, givenName: Tony, sn: Clifton, mail: tony.clifton@cicd.tech, employeeNumber: 2, userPassword: secret, description: Developer}
+  - {uid: gshapiro, cn: George Shapiro, givenName: George, sn: Shapiro, mail: george.shapiro@cicd.tech, employeeNumber: 3, userPassword: secret, description: User}
+
+env_groups:
+  - {cn: admins, member: ["uid=akaufman,{{ env_ldap_people_base_dn }}"] }
+  - {cn: sonar-administrators, member: ["uid=akaufman,{{ env_ldap_people_base_dn }}"] }
+  - {cn: nx-admin, member: ["uid=akaufman,{{ env_ldap_people_base_dn }}"] }
+
+env_projects:
+  pet:
+    name: Petclinic
+    admins: ['akaufman']
+    # members: ['tclifton', 'akaufman']
+    members: ['tclifton']
+    users: ['gshapiro']
 monit_smtp:
    - host: mailrelay
      address: localhost
@@ -6,8 +118,8 @@ monit_smtp:
      expect_port: "^250.*"
      expect_helo: "^220.*"
 
-proxy_skip: true
-
 nfs_exports:
   - '/nfs/backup *(rw,sync,no_root_squash)'
   - '/nfs/backup/tmp/oracle oracle(rw,sync,no_root_squash)'
+
+nfs_mounts: []

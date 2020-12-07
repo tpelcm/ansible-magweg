@@ -1,6 +1,6 @@
 ---
 - name: nfs-reload
-  command: 'exportfs -ra'
+  command: '/sbin/exportfs -ra'
 
 - name: nfs-restart
   service:

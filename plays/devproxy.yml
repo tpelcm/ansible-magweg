@@ -1,0 +1,19 @@
+---
+- name: devproxy # for dev environments
+  hosts: devproxy
+  become: True
+
+  roles:
+    - { role: common }
+    - { role: java }
+    - { role: opendj }
+    - { role: nfs }    
+    - { role: postfix }
+    - { role: squid }
+    - { role: proxy }
+    - { role: env }
+    - { role: reverse-proxy }
+
+  vars:
+    opendj_url: https://github.com/OpenIdentityPlatform/OpenDJ/releases/download/4.4.3/opendj-4.4.3.zip
+    apache_create_vhosts: no
