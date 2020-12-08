@@ -120,7 +120,11 @@
               address="{{ instance.address | default(tomcat_address) }}"
               protocol="AJP/1.3"
               redirectPort="{{ instance.ssl_connector_port | default(tomcat_ssl_connector_port) }}" />
-
+{% if instance.ajp_secret is defined %}
+              secret="{{ instance.ajp_secret }}"
+{% else %}
+              secretRequired="false"
+{% endif %}
 
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
@@ -163,9 +167,11 @@
         <!-- Access log processes all example.
              Documentation at: /docs/config/valve.html
              Note: The pattern used is equivalent to using pattern="common" -->
-        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
-               prefix="localhost_access_log" suffix=".txt"
-               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+{% if instance.access_log_enabled | default(tomcat_access_log_enabled) %}
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="{{ instance.access_log_directory | default(tomcat_access_log_directory) }}"
+               prefix="{{ instance.access_log_prefix | default(tomcat_access_log_prefix) }}" suffix="{{ instance.access_log_suffix | default(tomcat_access_log_suffix) }}"
+               pattern="{{ instance.access_log_pattern | default(tomcat_access_log_pattern) }}" />
+{% endif %}
 
       </Host>
     </Engine>
