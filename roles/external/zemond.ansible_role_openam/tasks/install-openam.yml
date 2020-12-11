@@ -1,0 +1,35 @@
+---
+- name: Create a directory for openam if it does not exist
+  file:
+    path: /opt/openam
+    state: directory
+    mode: '0755'
+
+- name: Download openam from internet
+  unarchive:
+    src: https://github.com/OpenIdentityPlatform/OpenAM/releases/download/14.4.2/OpenAM-14.4.2.zip
+    dest: /opt/openam
+    remote_src: yes
+
+- name: Copy openam files with owner and permissions
+  synchronize:
+    src: /opt/openam/openam/
+    dest: /opt/openam/
+
+- name: Recursively remove old directory openam
+  file:
+    path: /opt/openam/openam/
+    state: absent
+
+- name: Copy openam file with owner and permissions
+  copy:
+    src: /opt/openam/OpenAM-14.4.2.war
+    dest: /usr/share/tomcat/webapps/openam.war
+    owner: root
+    group: root
+    mode: a+x
+
+- name: Restart service httpd, in all cases
+  service:
+    name: tomcat
+    state: restarted

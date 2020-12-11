@@ -1,0 +1,8 @@
+---
+# tasks file for openam
+
+- include: preinstall.yml
+
+- include: install-apache-tomcat.yml
+
+- include: install-openam.yml
