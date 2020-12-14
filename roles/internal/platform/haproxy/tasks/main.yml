@@ -1,0 +1,24 @@
+---
+- name: Create account
+  user:
+    name: "{{ haproxy_user }}"
+    comment: HAProxy Load Balancer
+    system: yes
+
+- name: Make /var/lib/haproxy
+  file:
+    path: "{{ haproxy_chroot }}"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    state: directory
+
+- name: Check sbin
+  stat:
+    path: "{{ haproxy_bin }}"
+  register: haproxy
+
+- include: install.yml
+  when: haproxy.stat.exists == False
+
+- include: service.yml
+- include: configure.yml

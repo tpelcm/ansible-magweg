@@ -1,0 +1,16 @@
+---
+- name: Configure in place
+  template:
+    src: haproxy.cfg.j2
+    dest: "{{ haproxy_conf }}"
+    mode: 0644
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    validate: "{{ haproxy_bin }} -f %s -c -q"
+  notify: restart haproxy
+
+- name: Ensure HAProxy is started and enabled n boot.
+  service: 
+    name: haproxy 
+    state: started
+    enabled: yes

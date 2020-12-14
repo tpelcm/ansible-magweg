@@ -1,0 +1,9 @@
+---
+- name: Systemd service
+  template:
+    src: haproxy.service.j2
+    dest: /etc/systemd/system/haproxy.service
+    mode: 0755
+#  notify: 
+#    - bitbucket-systemctl-daemon-reload
+#    - bitbucket-systemctl-restart  

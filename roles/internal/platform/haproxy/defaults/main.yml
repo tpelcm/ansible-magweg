@@ -1,0 +1,46 @@
+---
+haproxy_version: 2.3.2
+# haproxy_conf: /etc/haproxy/haproxy.cfg
+haproxy_conf: /etc/haproxy.cfg
+haproxy_make_dir: /tmp/haproxy
+
+haproxy_socket: /var/lib/haproxy/stats
+#haproxy_socket: 
+haproxy_chroot: /var/lib/haproxy
+
+haproxy_user: haproxy
+haproxy_group: haproxy
+
+# Frontend settings.
+haproxy_frontend_name: 'hafrontend'
+haproxy_frontend_bind_address: '*'
+haproxy_frontend_port: 80
+haproxy_frontend_mode: 'http'
+
+# Backend settings.
+haproxy_backend_name: 'habackend'
+haproxy_backend_mode: 'http'
+haproxy_backend_balance_method: 'roundrobin'
+haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
+
+# List of backend servers.
+haproxy_backend_servers: []
+  # - name: app1
+  #   address: 192.168.0.1:80
+  # - name: app2
+  #   address: 192.168.0.2:80
+
+# Extra global vars (see README for example usage).
+haproxy_global_vars: []
+
+haproxy_bin: /usr/local/sbin/haproxy
+
+haproxy_packages:
+  - openssl-devel
+  - systemd-devel
+  - "@Development Tools"
+
+haproxy_versions:
+  2.3.2:
+    url: https://www.haproxy.org/download/2.3/src/haproxy-2.3.2.tar.gz
+    checksum: sha256:99cb73bb791a2cd18898d0595e14fdc820a6cbd622c762f4ed83f2884d038fd5
