@@ -5,9 +5,7 @@ haproxy_conf: /etc/haproxy.cfg
 haproxy_make_dir: /tmp/haproxy
 
 haproxy_socket: /var/lib/haproxy/stats
-#haproxy_socket: 
 haproxy_chroot: /var/lib/haproxy
-
 haproxy_user: haproxy
 haproxy_group: haproxy
 
