@@ -1,6 +1,2 @@
 ---
-# tasks file for openam. Tomcat part removed as we refer for that to other roles
-
-#- include: preinstall.yml
-
 - include: install.yml
