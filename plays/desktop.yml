@@ -6,6 +6,7 @@
   roles:
     - { role: common,                       tags: ["common"] }
     - { role: geerlingguy.docker,           tags: ["docker"] }
+    - { role: postgresql-client,            tags: ["database"] }
     - { role: docker,                       tags: ["docker"] }
     - { role: guacamole,                    tags: ["guacamole"] }
     - { role: desktop,                      tags: ["desktop"] }    
