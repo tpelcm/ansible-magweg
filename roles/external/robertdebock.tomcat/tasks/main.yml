@@ -1,12 +1,15 @@
 ---
 # tasks file for tomcat
+
 - name: include assert.yml
   include_tasks: assert.yml
+  run_once: yes
 
 - name: loop over tomcat_instances
   include: instance.yml
   loop: "{{ tomcat_instances }}"
   loop_control:
+    label: "{{ instance.name }}"
     loop_var: instance
   when:
     - tomcat_instances is defined

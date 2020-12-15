@@ -70,12 +70,31 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
         ajp_port: 8017
         libs:
           - url: "https://search.maven.org/remotecontent?filepath=io/prometheus/simpleclient/0.6.0/simpleclient-0.6.0.jar"
+      - name: "tomcat-access-logs"
+        shutdown_port: 8024
+        non_ssl_connector_port: 8089
+        ssl_connector_port: 8451
+        ajp_port: 8018
+        access_log_enabled: yes
+        access_log_directory: "my-logs"
+        access_log_prefix: my-access-logs
+        access_log_suffix: ".log"
+        access_log_pattern: "%h %l %u %t &quot;%r&quot; %s %b"
+      - name: "tomcat-config-files"
+        shutdown_port: 8025
+        non_ssl_connector_port: 8090
+        ssl_connector_port: 8452
+        ajp_port: 8019
+        config_files:
+          - src: "{{ role_path }}/files/dummy.properties"
+            dest: "./"
+            mode: "0644"
 
   roles:
     - role: robertdebock.tomcat
 ```
 
-The machine may need to be prepared using `molecule/resources/prepare.yml`:
+The machine needs to be prepared in CI this is done using `molecule/resources/prepare.yml`:
 ```yaml
 ---
 - name: prepare
@@ -89,39 +108,6 @@ The machine may need to be prepared using `molecule/resources/prepare.yml`:
     - role: robertdebock.java
 ```
 
-For verification `molecule/resources/verify.yml` runs after the role has been applied.
-```yaml
----
-- name: Verify
-  hosts: all
-  become: yes
-  gather_facts: yes
-
-  vars:
-    _netcat_package:
-      default: nc
-      Alpine: netcat-openbsd
-      Debian: netcat
-      Suse: netcat-openbsd
-    netcat_package: "{{ _netcat_package[ansible_os_family] | default(_netcat_package['default']) }}"
-
-  tasks:
-    - name: install netcat
-      package:
-        name: "{{ netcat_package }}"
-
-    - name: let netcat listen on port 127.0.0.2:8080
-      shell: nc --listen --keep-open 127.0.0.2 8080 &
-
-    - name: see if sensitive information is not exposed
-      uri:
-        url: "http://localhost:8080/"
-        return_content: yes
-      register: this
-      failed_when:
-        - "'successfully installed Tomcat' in this.content"
-```
-
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
 
 ## [Role Variables](#role-variables)
@@ -130,14 +116,6 @@ These variables are set in `defaults/main.yml`:
 ```yaml
 ---
 # defaults file for tomcat
-
-# The explicit version to use when referring to the short name.
-tomcat_version7: 7.0.104
-tomcat_version8: 8.5.56
-tomcat_version9: 9.0.36
-
-# The location where to download Apache Tomcat from.
-tomcat_mirror: "https://archive.apache.org"
 
 # Some "sane" defaults.
 tomcat_name: tomcat
@@ -157,6 +135,13 @@ tomcat_jre_home: /usr
 # so it takes priority over `tomcat_address`.
 tomcat_address: 0.0.0.0
 
+# Configure tomcat access logs
+tomcat_access_log_enabled: yes
+tomcat_access_log_directory: logs
+tomcat_access_log_prefix: localhost_access_log
+tomcat_access_log_suffix: ".txt"
+tomcat_access_log_pattern: "%h %l %u %t &quot;%r&quot; %s %b"
+
 # This role allows multiple installations of Apache Tomcat, each in their own
 # location, potentially of different version.
 # This is done by defining a "tomcat_instances" where "name:" is a unique
@@ -174,15 +159,41 @@ tomcat_instances:
     ssl_connector_port: "{{ tomcat_ssl_connector_port }}"
     shutdown_port: "{{ tomcat_shutdown_port }}"
     ajp_port: "{{ tomcat_ajp_port }}"
+    ajp_secret: ""
     # You can pick an address per instance:
     # address: 127.0.0.1
     java_opts:
       - name: JRE_HOME
         value: "{{ tomcat_jre_home }}"
+    access_log_enabled: "{{ tomcat_access_log_enabled }}"
+    access_log_directory: "{{ tomcat_access_log_directory }}"
+    access_log_prefix: "{{ tomcat_access_log_prefix }}"
+    access_log_suffix: "{{ tomcat_access_log_suffix }}"
+    access_log_pattern: "{{ tomcat_access_log_pattern }}"
 
 # When downloading wars, should the SSL certificate be valid? (Impossible for
 # CentOS 6, so default: no.)
 tomcat_validate_certs: no
+
+# The explicit version to use when referring to the short name.
+tomcat_version7: 7.0.107
+tomcat_version8: 8.5.60
+tomcat_version9: 9.0.40
+
+# The location where to download Apache Tomcat from.
+tomcat_mirror: "https://archive.apache.org"
+
+# If you want to download Tomcat from another location, adjust these parameters
+# to your liking. For "normal" use, this does not require modification.
+_tomcat_unarchive_urls:
+  7:
+    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-7/v{{ tomcat_version7 }}/bin/apache-tomcat-{{ tomcat_version7 }}.tar.gz"
+  8:
+    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-8/v{{ tomcat_version8 }}/bin/apache-tomcat-{{ tomcat_version8 }}.tar.gz"
+  9:
+    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-9/v{{ tomcat_version9 }}/bin/apache-tomcat-{{ tomcat_version9 }}.tar.gz"
+
+tomcat_unarchive_url: "{{ _tomcat_unarchive_urls[tomcat_version].url }}"
 ```
 
 ## [Requirements](#requirements)
@@ -190,16 +201,14 @@ tomcat_validate_certs: no
 - Access to a repository containing packages, likely on the internet.
 - A recent version of Ansible. (Tests run on the current, previous and next release of Ansible.)
 
-The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r requirements.yml`:
+## [Status of requirements](#status-of-requirements)
 
-```yaml
----
-- robertdebock.bootstrap
-- robertdebock.core_dependencies
-- robertdebock.java
-- robertdebock.service
-
-```
+| Requirement | Travis | GitHub |
+|-------------|--------|--------|
+| [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-bootstrap.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-bootstrap) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-bootstrap/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-bootstrap/actions) |
+| [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-core_dependencies.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-core_dependencies) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-core_dependencies/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-core_dependencies/actions) |
+| [robertdebock.java](https://galaxy.ansible.com/robertdebock/java) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-java.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-java) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-java/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-java/actions) |
+| [robertdebock.service](https://galaxy.ansible.com/robertdebock/service) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-service.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-service) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-service/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-service/actions) |
 
 ## [Context](#context)
 
@@ -216,7 +225,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |---------|----|
 |el|7, 8|
 |debian|buster, bullseye|
-|fedora|31, 32|
+|fedora|all|
 |opensuse|all|
 |ubuntu|focal, bionic, xenial|
 
