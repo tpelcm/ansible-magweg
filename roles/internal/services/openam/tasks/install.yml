@@ -6,26 +6,18 @@
 
 # OpenAM won't start without home directory
 # and robertdebock.tomcat does not create tomcat home directory
-#- name: Create home directory for tomcat 
-#  file:
-#    path: /home/tomcat
-#    state: directory
-#    owner: tomcat
-#    group: tomcat
-#    mode: 0755
-
-- name: Download openam
-  get_url:
-    url: "{{ openam_versions[openam_version]['url'] }}"
-    checksum: "{{ openam_versions[openam_version]['checksum'] }}"
-    dest: /opt/tomcat/webapps/openam.war
-    mode: "755"
-  notify: restart tomcat instance
-
-- name: Create home directory for tomcat (as robertdebock.tomcat fails to do so while still creating a tomcat user with this homedir assigned, and openam assumes this) homedir)
+- name: Create home directory for tomcat 
   file:
     path: /home/tomcat
     state: directory
     owner: tomcat
     group: tomcat
     mode: 0755
+
+- name: Download OpenAM war
+  get_url:
+    url: "{{ openam_versions[openam_version]['url'] }}"
+    checksum: "{{ openam_versions[openam_version]['checksum'] }}"
+    dest: /opt/tomcat/webapps/openam.war
+    mode: "755"
+  notify: restart tomcat instance
