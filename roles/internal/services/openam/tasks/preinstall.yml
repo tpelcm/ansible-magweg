@@ -1,5 +1,0 @@
----
-- name: "Install base packages"
-  package:
-    name: "{{ openam_packages }}"
-    state: present
