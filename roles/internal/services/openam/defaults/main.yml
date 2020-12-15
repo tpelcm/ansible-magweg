@@ -1,9 +1,7 @@
 ---
-openam_packages: []
-#  - wget
-#  - net-tools
- 
 openam_version: 14.5.4
+
+openam_packages: []
 
 openam_versions:
   14.5.4:
