@@ -1,7 +1,6 @@
-#defaults file for openam
 ---
-packages:
-  - wget
-  - net-tools
+openam_packages: []
+#  - wget
+#  - net-tools
  
 openam_version: 14.5.4

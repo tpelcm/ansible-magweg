@@ -1,17 +1,5 @@
 ---
-- name: "Upgrade all packages"
-  yum:
-    name: '*'
-    state: latest    
-
 - name: "Install base packages"
-  become: true
-  become_user: root
-  tags:
-    - pkg_install
-  yum:
-    name: "{{ item }}"
+  package:
+    name: "{{ openam_packages }}"
     state: present
-  when: ansible_pkg_mgr == 'yum'
-  with_items: "{{ packages }}"
-  
