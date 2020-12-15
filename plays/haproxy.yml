@@ -1,0 +1,8 @@
+---
+- name: haproxy
+  hosts: haproxy
+  become: True
+
+  roles:
+    - { role: common,                       tags: ["common"] }
+    - { role: haproxy,                      tags: ["haproxy"] }
