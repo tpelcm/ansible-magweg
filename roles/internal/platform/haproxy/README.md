@@ -1,10 +1,8 @@
 # Ansible Role: HAProxy
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-haproxy.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-haproxy)
+Installs HAProxy on RedHat/CentOS 7 Linux servers.
 
-Installs HAProxy on RedHat/CentOS and Debian/Ubuntu Linux servers.
-
-**Note**: This role _officially_ supports HAProxy versions 1.4 or 1.5. Future versions may require some rework.
+**Note**: This role installs HAProxy _from source_ so you can install any version you want and you are not limited to the old and obsolete versions that are available for CentOS 6 and 7.
 
 ## Requirements
 
@@ -27,27 +25,7 @@ The jail directory where chroot() will be performed before dropping privileges. 
 
 The user and group under which HAProxy should run. Only change this if you know what you're doing!
 
-    haproxy_frontend_name: 'hafrontend'
-    haproxy_frontend_bind_address: '*'
-    haproxy_frontend_port: 80
-    haproxy_frontend_mode: 'http'
-
-HAProxy frontend configuration directives.
-
-    haproxy_backend_name: 'habackend'
-    haproxy_backend_mode: 'http'
-    haproxy_backend_balance_method: 'roundrobin'
-    haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
-
-HAProxy backend configuration directives.
-
-    haproxy_backend_servers:
-      - name: app1
-        address: 192.168.0.1:80
-      - name: app2
-        address: 192.168.0.2:80
-
-A list of backend servers (name and address) to which HAProxy will distribute requests.
+Use `haproxy_frontends` to configure frontends and `haproxy_backends` to configure the backends. See example below.
 
     haproxy_global_vars:
       - 'ssl-default-bind-ciphers ABCD+KLMJ:...'
@@ -59,12 +37,47 @@ A list of extra global variables to add to the global configuration section insi
 
 None.
 
-## Example Playbook
+## Example configuration
 
-    - hosts: balancer
-      sudo: yes
-      roles:
-        - { role: geerlingguy.haproxy }
+The example config below configures the following
+1. Redirect all traffic from 80 to 443.
+2. SSL passthrough of all traffic on 443 to reverse proxy 1.1.1.2:443.
+3. SSH passthrough of traffic on 7999 to Bitbucket SSH.
+
+```yaml
+---
+haproxy_frontends:
+  http:
+    bind: "0.0.0.0:80 name 0.0.0.0:80"
+    mode: "http"
+    log: "global"
+    option: "http-keep-alive"
+    timeout client: "30000"
+    default_backend: "redirect_http_https"
+  https:
+    bind: "*:443"
+    mode: "tcp"
+    default_backend: "rproxies"
+  bitbucket:
+    bind: "*:7999"
+    mode: "tcp"
+    default_backend: "bitbucket"
+
+haproxy_backends:
+  redirect_http_https:
+    mode: "http"
+    timeout connect: "30000"
+    timeout server: "30000"
+    retries: "3"
+    option: "httpchk"
+    redirect scheme: "https code 301"
+  rproxies:
+    mode: "tcp"
+    server proxy: "1.1.1.2:443"
+  bitbucket:
+    mode: "tcp"
+    server proxy: "1.1.1.4:7999"
+```
 
 ## License
 
@@ -72,4 +85,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2015 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+This role was created in 2020 by [Onno van der Straaten ](https://www.onknows.com/).
