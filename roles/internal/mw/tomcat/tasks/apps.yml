@@ -1,0 +1,21 @@
+---
+- name: Deploy app
+  block:
+    - name: Properties folder
+      file:
+        path: "{{ app.properties_folder }}"
+        state: directory
+  
+    - name: Java properties
+      template:
+        dest: "{{ app.name|tomcat_properties_file_path(app.properties_folder) }}"
+        owner: tomcat
+        group: tomcat
+        src: java.properties.j2
+
+    - name: Download war
+      get_url:
+        url: "{{ app.source }}"
+        dest: "{{ tomcat_directory }}//{{ app.instance }}/webapps/{{ app.filename }}"
+        validate_certs: no
+  when: app.deploy == True

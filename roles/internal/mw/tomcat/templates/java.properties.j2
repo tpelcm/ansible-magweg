@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+# Application: {{ app.name }} 
+# Tomcat instance: {{ app.instance }} 
+# Properties: {{ app.name|tomcat_properties_file_path(app.properties_folder) }}
+# Environment: {{ inventory_file|ansible_environment }}
+{% for prop in app.properties %}
+{{ prop }}={{ app.properties[prop] }}
+{% endfor %}

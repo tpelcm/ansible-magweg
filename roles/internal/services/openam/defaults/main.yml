@@ -1,7 +1,9 @@
-#defaults file for openam
 ---
-packages:
-  - wget
-  - net-tools
- 
 openam_version: 14.5.4
+
+openam_packages: []
+
+openam_versions:
+  14.5.4:
+    url: https://github.com/OpenIdentityPlatform/OpenAM/releases/download/14.5.4/OpenAM-14.5.4.war
+    checksum: "sha256: 7dff615fc2add75f65bcf27ef09d8cf585e0f38c63c0781d90c79d537647d380"
